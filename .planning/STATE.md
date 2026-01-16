@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 6 — Platform Polish
+**Current focus:** Phase 6 — Platform Polish (COMPLETE)
 
 ## Current Position
 
 Phase: 6 of 6 (Platform Polish)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-16 — Completed 06-01-PLAN.md (Auto-Start at Login)
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-16 — Completed 06-02-PLAN.md (Accessibility UX and Flash Feedback)
 
-Progress: █████████░ 92%
+Progress: ██████████ 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: ~8 min
-- Total execution time: ~1.5 hours
+- Total plans completed: 13
+- Average duration: ~7.5 min
+- Total execution time: ~1.6 hours
 
 **By Phase:**
 
@@ -32,11 +32,11 @@ Progress: █████████░ 92%
 | 3. Keystroke Injection | 2 | ~23 min | ~11 min |
 | 4. Configuration | 2 | ~5 min | ~2.5 min |
 | 5. Configuration UI | 3 | ~21 min | ~7 min |
-| 6. Platform Polish | 1 | ~7 min | ~7 min |
+| 6. Platform Polish | 2 | ~10 min | ~5 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (~6 min), 05-02 (~7 min), 05-03 (~8 min), 06-01 (~7 min)
-- Trend: Consistent ~7 min per plan in recent phases
+- Last 5 plans: 05-02 (~7 min), 05-03 (~8 min), 06-01 (~7 min), 06-02 (~3 min)
+- Trend: Consistent ~5-7 min per plan in recent phases
 
 ## Accumulated Context
 
@@ -75,10 +75,13 @@ Recent decisions affecting current work:
 | auto-launch crate for login items | 06-01 | Cross-platform, used by Tauri internally |
 | MacOSLaunchMode::LaunchAgent | 06-01 | Creates plist in ~/Library/LaunchAgents/ |
 | Use set_macos_launch_mode() API | 06-01 | Avoids deprecated set_use_launch_agent() |
+| ASCII box drawing for permission guidance | 06-02 | Wider terminal compatibility than Unicode |
+| Flash icon placeholder | 06-02 | Mechanism works, user can replace with distinct icon |
+| 4-toggle flash sequence at 100ms | 06-02 | Clear visibility without being distracting (~400ms total) |
 
 ### Pending Todos
 
-None yet.
+None - project complete.
 
 ### Blockers/Concerns
 
@@ -87,5 +90,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 06-01-PLAN.md
+Stopped at: Completed 06-02-PLAN.md (Phase 6 complete, project complete)
 Resume file: None
