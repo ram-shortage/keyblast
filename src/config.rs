@@ -147,6 +147,30 @@ pub fn save_config(config: &Config) -> Result<(), ConfigError> {
     Ok(())
 }
 
+/// Export all macros to a TOML file at the specified path.
+///
+/// Creates a standalone config file containing only the macros array.
+/// Useful for backup or sharing macro collections.
+pub fn export_macros(macros: &[MacroDefinition], path: &std::path::Path) -> Result<(), ConfigError> {
+    let export_config = Config {
+        version: 1,
+        macros: macros.to_vec(),
+    };
+    let content = toml::to_string_pretty(&export_config)?;
+    fs::write(path, content)?;
+    Ok(())
+}
+
+/// Import macros from a TOML file.
+///
+/// Parses a config file and returns the macros array.
+/// Does NOT modify the current config - caller decides how to merge.
+pub fn import_macros(path: &std::path::Path) -> Result<Vec<MacroDefinition>, ConfigError> {
+    let content = fs::read_to_string(path)?;
+    let config: Config = toml::from_str(&content)?;
+    Ok(config.macros)
+}
+
 /// Parse a hotkey string like "ctrl+shift+k" into a HotKey.
 ///
 /// # Supported modifiers (case-insensitive)
