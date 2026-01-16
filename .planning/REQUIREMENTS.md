@@ -27,7 +27,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Configuration
 
-- [ ] **CONF-01**: User's macros persist across app restarts
+- [x] **CONF-01**: User's macros persist across app restarts
 - [ ] **CONF-02**: User can create new macros via tray menu
 - [ ] **CONF-03**: User can edit existing macros via tray menu
 - [ ] **CONF-04**: User can delete macros via tray menu
@@ -86,7 +86,7 @@ Which phases cover which requirements. Updated by create-roadmap.
 | INJT-01 | Phase 3 | Complete |
 | INJT-02 | Phase 3 | Complete |
 | INJT-03 | Phase 3 | Complete |
-| CONF-01 | Phase 4 | Pending |
+| CONF-01 | Phase 4 | Complete |
 | CONF-02 | Phase 5 | Pending |
 | CONF-03 | Phase 5 | Pending |
 | CONF-04 | Phase 5 | Pending |
@@ -105,4 +105,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after Phase 3 completion*
+*Last updated: 2026-01-16 after Phase 4 completion*

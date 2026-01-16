@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - System tray presence with enable/disable toggle
 - [x] **Phase 2: Global Hotkeys** - Hotkey registration that works in any application
 - [x] **Phase 3: Keystroke Injection** - Type macros into the focused application
-- [ ] **Phase 4: Configuration** - Persistent macro storage in TOML
+- [x] **Phase 4: Configuration** - Persistent macro storage in TOML
 - [ ] **Phase 5: Configuration UI** - Create/edit/delete macros via tray menu
 - [ ] **Phase 6: Platform Polish** - macOS/Windows support, auto-start, visual feedback
 
@@ -75,10 +75,11 @@ Plans:
   2. Config file is human-readable (TOML)
   3. Config loads automatically at startup
 **Research**: Unlikely (serde + toml standard patterns)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [x] 04-01: Config data model and TOML file handling
+- [x] 04-02: Wire config loading into app startup
 
 ### Phase 5: Configuration UI
 **Goal**: User-friendly macro management via tray menu
@@ -124,6 +125,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation | 1/1 | Complete | 2026-01-16 |
 | 2. Global Hotkeys | 2/2 | Complete | 2026-01-16 |
 | 3. Keystroke Injection | 2/2 | Complete | 2026-01-16 |
-| 4. Configuration | 0/TBD | Not started | - |
+| 4. Configuration | 2/2 | Complete | 2026-01-16 |
 | 5. Configuration UI | 0/TBD | Not started | - |
 | 6. Platform Polish | 0/TBD | Not started | - |
