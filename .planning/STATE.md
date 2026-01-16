@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 4 — Configuration
+**Current focus:** Phase 4 complete, ready for Phase 5 — Configuration UI
 
 ## Current Position
 
-Phase: 4 of 6 (Configuration)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-16 — Completed 04-01-PLAN.md
+Phase: 4 of 6 (Configuration) - COMPLETE
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-16 — Completed 04-02-PLAN.md
 
-Progress: ██████░░░░ 60%
+Progress: ████████░░ 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 8
 - Average duration: ~8 min
-- Total execution time: ~0.8 hours
+- Total execution time: ~1 hour
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: ██████░░░░ 60%
 | 1. Foundation | 1 | ~15 min | ~15 min |
 | 2. Global Hotkeys | 2 | ~14 min | ~7 min |
 | 3. Keystroke Injection | 2 | ~23 min | ~11 min |
-| 4. Configuration | 1 | ~2 min | ~2 min |
+| 4. Configuration | 2 | ~5 min | ~2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (~8 min), 02-02 (~6 min), 03-01 (~8 min), 03-02 (~15 min), 04-01 (~2 min)
-- Trend: Simple data model plan completed quickly
+- Last 5 plans: 02-02 (~6 min), 03-01 (~8 min), 03-02 (~15 min), 04-01 (~2 min), 04-02 (checkpoint)
+- Trend: Config phase completed quickly with simple data model and wiring
 
 ## Accumulated Context
 
@@ -60,6 +60,8 @@ Recent decisions affecting current work:
 | dirs crate for config paths | 04-01 | Cross-platform config directory detection |
 | Atomic config writes | 04-01 | Temp file + rename prevents corruption on crash |
 | delay_ms defaults to 0 | 04-01 | Instant/bulk typing is the common case |
+| HashMap<u32, MacroDefinition> for lookup | 04-02 | O(1) macro lookup when hotkey triggers |
+| Default example macro creation | 04-02 | Provides template for users to edit |
 
 ### Pending Todos
 
@@ -71,6 +73,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-16T18:42:54Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-01-16
+Stopped at: Completed 04-02-PLAN.md (Phase 4 complete)
 Resume file: None
