@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 5 — Configuration UI
+**Current focus:** Phase 5 complete — Ready for Phase 6 (Platform Polish)
 
 ## Current Position
 
-Phase: 5 of 6 (Configuration UI)
-Plan: 2 of ? in phase
-Status: In progress
-Last activity: 2026-01-16 — Completed 5-02-PLAN.md
+Phase: 5 of 6 (Configuration UI) - COMPLETE
+Plan: 3 of 3 in phase
+Status: Phase complete
+Last activity: 2026-01-16 — Completed 5-03-PLAN.md
 
-Progress: ████████░░ 80%
+Progress: ██████████ 100% (phases 1-5)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: ~8 min
-- Total execution time: ~1.2 hours
+- Total execution time: ~1.4 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: ████████░░ 80%
 | 2. Global Hotkeys | 2 | ~14 min | ~7 min |
 | 3. Keystroke Injection | 2 | ~23 min | ~11 min |
 | 4. Configuration | 2 | ~5 min | ~2.5 min |
-| 5. Configuration UI | 2 | ~13 min | ~6.5 min |
+| 5. Configuration UI | 3 | ~21 min | ~7 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (~15 min), 04-01 (~2 min), 04-02 (checkpoint), 05-01 (~6 min), 05-02 (~7 min)
-- Trend: Config UI phase progressing with menu restructuring complete
+- Last 5 plans: 04-02 (checkpoint), 05-01 (~6 min), 05-02 (~7 min), 05-03 (~8 min)
+- Trend: Configuration UI phase complete with all menu actions functional
 
 ## Accumulated Context
 
@@ -68,6 +68,9 @@ Recent decisions affecting current work:
 | Groups sorted alphabetically, Ungrouped last | 05-02 | Consistent ordering for users |
 | Each macro as submenu with Delete action | 05-02 | Delete via menu, Edit via config file |
 | Menu rebuild via set_menu() | 05-02 | Refresh tray dynamically after config changes |
+| File watcher mpsc channel pattern | 05-03 | Avoids borrow issues; collect events then process |
+| Import merge strategy | 05-03 | Adds new macros by name, skips duplicates |
+| Hot-reload full re-register | 05-03 | Unregisters all then registers fresh for clean state |
 
 ### Pending Todos
 
@@ -80,5 +83,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 5-02-PLAN.md
+Stopped at: Completed 5-03-PLAN.md (Phase 5 complete)
 Resume file: None
