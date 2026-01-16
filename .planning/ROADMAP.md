@@ -58,12 +58,13 @@ Plans:
   1. Triggered macro types text into the currently focused input
   2. Special keys (Enter, Tab, Escape, arrows) work in sequences
   3. User can configure per-macro keystroke delay
-**Research**: Likely (macOS Accessibility permissions, enigo platform behavior)
+**Research**: Complete (03-RESEARCH.md)
 **Research topics**: AXIsProcessTrusted() checking, enigo cross-platform behavior, modifier key state handling
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01: Core injection infrastructure (permission, injector, macro parsing)
+- [ ] 03-02: Integration with event loop and end-to-end testing
 
 ### Phase 4: Configuration
 **Goal**: Persistent macro storage in TOML format
@@ -122,7 +123,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete | 2026-01-16 |
 | 2. Global Hotkeys | 2/2 | Complete | 2026-01-16 |
-| 3. Keystroke Injection | 0/TBD | Not started | - |
+| 3. Keystroke Injection | 0/2 | In Progress | - |
 | 4. Configuration | 0/TBD | Not started | - |
 | 5. Configuration UI | 0/TBD | Not started | - |
 | 6. Platform Polish | 0/TBD | Not started | - |
