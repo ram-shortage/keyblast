@@ -21,9 +21,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Keystroke Injection
 
-- [ ] **INJT-01**: User's macro text is typed into the focused application
-- [ ] **INJT-02**: User can include special keys (Enter, Tab, Escape, arrows) in macros
-- [ ] **INJT-03**: User can set keystroke delay per macro (instant to slow)
+- [x] **INJT-01**: User's macro text is typed into the focused application
+- [x] **INJT-02**: User can include special keys (Enter, Tab, Escape, arrows) in macros
+- [x] **INJT-03**: User can set keystroke delay per macro (instant to slow)
 
 ### Configuration
 
@@ -83,9 +83,9 @@ Which phases cover which requirements. Updated by create-roadmap.
 | HKEY-01 | Phase 2 | Complete |
 | HKEY-02 | Phase 2 | Complete |
 | HKEY-03 | Phase 2 | Complete |
-| INJT-01 | Phase 3 | Pending |
-| INJT-02 | Phase 3 | Pending |
-| INJT-03 | Phase 3 | Pending |
+| INJT-01 | Phase 3 | Complete |
+| INJT-02 | Phase 3 | Complete |
+| INJT-03 | Phase 3 | Complete |
 | CONF-01 | Phase 4 | Pending |
 | CONF-02 | Phase 5 | Pending |
 | CONF-03 | Phase 5 | Pending |
@@ -105,4 +105,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after Phase 2 completion*
+*Last updated: 2026-01-16 after Phase 3 completion*
