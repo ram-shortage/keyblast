@@ -76,6 +76,28 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                             eprintln!("Failed to register test hotkey: {}", e);
                         }
                     }
+
+                    // Test conflict detection - try to register same hotkey again
+                    let duplicate = HotKey::new(
+                        Some(Modifiers::CONTROL | Modifiers::SHIFT),
+                        Code::KeyK,
+                    );
+                    match manager.try_register(duplicate, "duplicate".to_string()) {
+                        hotkey::RegisterResult::ConflictInternal(msg) => {
+                            println!("Conflict test passed: {}", msg);
+                        }
+                        other => {
+                            println!("Unexpected result: {:?}", other);
+                        }
+                    }
+
+                    // Get 3 available hotkey suggestions
+                    let suggestions = manager.suggest_available(3);
+                    println!("Available hotkeys:");
+                    for hk in &suggestions {
+                        println!("  - {}", hotkey::hotkey_display_string(hk));
+                    }
+
                     self.hotkey_manager = Some(manager);
                 }
                 Err(e) => {
