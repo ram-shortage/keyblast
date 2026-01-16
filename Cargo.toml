@@ -1,0 +1,11 @@
+[package]
+name = "keyblast"
+version = "0.1.0"
+edition = "2021"
+description = "A lightweight macro playback application that injects keystrokes via hotkeys"
+license = "MIT"
+
+[dependencies]
+tray-icon = "0.21"
+muda = "0.17"
+image = "0.25"
