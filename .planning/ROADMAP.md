@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Keystroke Injection** - Type macros into the focused application
 - [x] **Phase 4: Configuration** - Persistent macro storage in TOML
 - [x] **Phase 5: Configuration UI** - Create/edit/delete macros via tray menu
-- [ ] **Phase 6: Platform Polish** - macOS/Windows support, auto-start, visual feedback
+- [x] **Phase 6: Platform Polish** - macOS/Windows support, auto-start, visual feedback
 
 ## Phase Details
 
@@ -115,8 +115,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: Auto-start at login functionality (PLAT-03)
-- [ ] 06-02: Accessibility permission UX and tray icon flash (PLAT-04, TRAY-03)
+- [x] 06-01: Auto-start at login functionality (PLAT-03)
+- [x] 06-02: Accessibility permission UX and tray icon flash (PLAT-04, TRAY-03)
 
 ## Progress
 
@@ -130,4 +130,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Keystroke Injection | 2/2 | Complete | 2026-01-16 |
 | 4. Configuration | 2/2 | Complete | 2026-01-16 |
 | 5. Configuration UI | 3/3 | Complete | 2026-01-16 |
-| 6. Platform Polish | 0/2 | Planning complete | - |
+| 6. Platform Polish | 2/2 | Complete | 2026-01-16 |

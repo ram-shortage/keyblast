@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **TRAY-01**: User can see app in system tray with menu
 - [x] **TRAY-02**: User can enable/disable all macros via toggle
-- [ ] **TRAY-03**: User sees visual feedback when macro triggers (tray icon flash)
+- [x] **TRAY-03**: User sees visual feedback when macro triggers (tray icon flash)
 
 ### Global Hotkeys
 
@@ -40,10 +40,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Platform
 
-- [ ] **PLAT-01**: App works on macOS
-- [ ] **PLAT-02**: App works on Windows
-- [ ] **PLAT-03**: User can enable auto-start at login
-- [ ] **PLAT-04**: macOS user is guided through Accessibility permission grant
+- [x] **PLAT-01**: App works on macOS
+- [x] **PLAT-02**: App works on Windows
+- [x] **PLAT-03**: User can enable auto-start at login
+- [x] **PLAT-04**: macOS user is guided through Accessibility permission grant
 
 ## v2 Requirements
 
@@ -79,7 +79,7 @@ Which phases cover which requirements. Updated by create-roadmap.
 |-------------|-------|--------|
 | TRAY-01 | Phase 1 | Complete |
 | TRAY-02 | Phase 1 | Complete |
-| TRAY-03 | Phase 6 | Pending |
+| TRAY-03 | Phase 6 | Complete |
 | HKEY-01 | Phase 2 | Complete |
 | HKEY-02 | Phase 2 | Complete |
 | HKEY-03 | Phase 2 | Complete |
@@ -93,10 +93,10 @@ Which phases cover which requirements. Updated by create-roadmap.
 | CONF-05 | Phase 5 | Complete |
 | CONF-06 | Phase 5 | Complete |
 | ORGN-01 | Phase 5 | Complete |
-| PLAT-01 | Phase 6 | Pending |
-| PLAT-02 | Phase 6 | Pending |
-| PLAT-03 | Phase 6 | Pending |
-| PLAT-04 | Phase 6 | Pending |
+| PLAT-01 | Phase 6 | Complete |
+| PLAT-02 | Phase 6 | Complete |
+| PLAT-03 | Phase 6 | Complete |
+| PLAT-04 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 20 total
@@ -105,4 +105,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after Phase 5 completion*
+*Last updated: 2026-01-16 after Phase 6 completion*
