@@ -2,7 +2,7 @@
 ///
 /// Uses tray-icon and muda crates for cross-platform tray functionality.
 
-use muda::{Menu, MenuEvent, MenuItem, PredefinedMenuItem, CheckMenuItem};
+use muda::{Menu, MenuItem, PredefinedMenuItem, CheckMenuItem};
 use muda::accelerator::Accelerator;
 use tray_icon::{Icon, TrayIcon, TrayIconBuilder};
 
@@ -63,7 +63,3 @@ pub fn create_tray(menu: &Menu) -> TrayIcon {
         .expect("Failed to create tray icon")
 }
 
-/// Get the menu event receiver for handling menu clicks.
-pub fn menu_receiver() -> crossbeam_channel::Receiver<MenuEvent> {
-    MenuEvent::receiver().clone()
-}
