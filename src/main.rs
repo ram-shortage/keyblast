@@ -11,6 +11,7 @@ mod tray;
 
 use std::collections::HashMap;
 use std::process;
+use std::sync::mpsc;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
@@ -18,6 +19,8 @@ use winit::window::WindowId;
 use muda::MenuEvent;
 use tray_icon::TrayIcon;
 use global_hotkey::{GlobalHotKeyEvent, HotKeyState};
+use notify::{RecommendedWatcher, RecursiveMode, Watcher, Event, EventKind};
+use rfd::FileDialog;
 
 /// Custom events for the winit event loop.
 #[derive(Debug)]
@@ -37,6 +40,10 @@ struct KeyBlastApp {
     config: Option<config::Config>,
     /// Map hotkey_id -> macro definition for quick lookup
     macros: HashMap<u32, config::MacroDefinition>,
+    /// File watcher for config hot-reload
+    config_watcher: Option<RecommendedWatcher>,
+    /// Receiver for config file change events
+    config_change_rx: Option<mpsc::Receiver<notify::Result<Event>>>,
 }
 
 impl KeyBlastApp {
@@ -57,12 +64,13 @@ impl KeyBlastApp {
             injector: None,
             config: None,
             macros: HashMap::new(),
+            config_watcher: None,
+            config_change_rx: None,
         }
     }
 
     /// Rebuild the tray menu with current macros.
     /// Call after config changes (import, delete).
-    #[allow(dead_code)]
     fn rebuild_menu(&mut self) {
         if let Some(ref config) = self.config {
             let (menu, menu_ids) = tray::build_menu(self.state.enabled, &config.macros);
@@ -74,6 +82,97 @@ impl KeyBlastApp {
 
             self.menu = menu;
             self.menu_ids = menu_ids;
+        }
+    }
+
+    /// Set up file watcher for config hot-reload.
+    fn setup_config_watcher(&mut self) {
+        let (tx, rx) = mpsc::channel();
+
+        let watcher_result = RecommendedWatcher::new(
+            move |res| {
+                let _ = tx.send(res);
+            },
+            notify::Config::default(),
+        );
+
+        match watcher_result {
+            Ok(mut watcher) => {
+                let config_path = config::config_path();
+                if let Err(e) = watcher.watch(&config_path, RecursiveMode::NonRecursive) {
+                    eprintln!("Failed to watch config file: {}", e);
+                } else {
+                    println!("Watching config file for changes: {}", config_path.display());
+                    self.config_watcher = Some(watcher);
+                    self.config_change_rx = Some(rx);
+                }
+            }
+            Err(e) => {
+                eprintln!("Failed to create config watcher: {}", e);
+            }
+        }
+    }
+
+    /// Check for config file changes (non-blocking).
+    fn check_config_changes(&mut self) {
+        // Collect any modify events first (to avoid borrow issues)
+        let mut should_reload = false;
+        if let Some(ref rx) = self.config_change_rx {
+            // Non-blocking receive - check if there are any pending events
+            while let Ok(result) = rx.try_recv() {
+                if let Ok(event) = result {
+                    // Only reload on modify events (not access, create, etc.)
+                    if matches!(event.kind, EventKind::Modify(_)) {
+                        should_reload = true;
+                    }
+                }
+            }
+        }
+
+        if should_reload {
+            println!("Config file changed, reloading...");
+            self.reload_config();
+        }
+    }
+
+    /// Reload config from disk and re-register hotkeys.
+    fn reload_config(&mut self) {
+        match config::load_config() {
+            Ok(new_config) => {
+                // Unregister all old hotkeys
+                if let Some(ref mut manager) = self.hotkey_manager {
+                    for (_, macro_def) in self.macros.drain() {
+                        if let Some(hotkey) = config::parse_hotkey_string(&macro_def.hotkey) {
+                            let _ = manager.unregister(&hotkey);
+                        }
+                    }
+                }
+
+                // Register new hotkeys
+                for macro_def in &new_config.macros {
+                    if let Some(ref mut manager) = self.hotkey_manager {
+                        if let Some(hotkey) = config::parse_hotkey_string(&macro_def.hotkey) {
+                            match manager.register(hotkey, macro_def.name.clone()) {
+                                Ok(()) => {
+                                    let hotkey_id = hotkey.id();
+                                    self.macros.insert(hotkey_id, macro_def.clone());
+                                    println!("Registered: {} -> {}", macro_def.hotkey, macro_def.name);
+                                }
+                                Err(e) => {
+                                    eprintln!("Failed to register '{}': {}", macro_def.name, e);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                self.config = Some(new_config);
+                self.rebuild_menu();
+                println!("Config reloaded successfully");
+            }
+            Err(e) => {
+                eprintln!("Failed to reload config: {}", e);
+            }
         }
     }
 }
@@ -194,6 +293,9 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
             }
 
+            // Set up file watcher for hot-reload
+            self.setup_config_watcher();
+
             println!("KeyBlast running. Right-click tray icon for menu.");
         }
     }
@@ -246,6 +348,9 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
     }
 
     fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
+        // Check for config file changes (hot-reload)
+        self.check_config_changes();
+
         // Process any pending menu events
         while let Ok(event) = MenuEvent::receiver().try_recv() {
             if event.id == self.menu_ids.toggle {
