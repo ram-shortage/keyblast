@@ -448,6 +448,82 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
 
                 println!("Changes will be applied automatically when you save the file.");
+            } else if event.id == self.menu_ids.export_macros {
+                // Show save file dialog
+                if let Some(path) = FileDialog::new()
+                    .add_filter("TOML", &["toml"])
+                    .set_file_name("keyblast-macros.toml")
+                    .save_file()
+                {
+                    if let Some(ref cfg) = self.config {
+                        match config::export_macros(&cfg.macros, &path) {
+                            Ok(()) => {
+                                println!("Macros exported to: {}", path.display());
+                            }
+                            Err(e) => {
+                                eprintln!("Failed to export macros: {}", e);
+                            }
+                        }
+                    }
+                }
+            } else if event.id == self.menu_ids.import_macros {
+                // Show open file dialog
+                if let Some(path) = FileDialog::new()
+                    .add_filter("TOML", &["toml"])
+                    .pick_file()
+                {
+                    match config::import_macros(&path) {
+                        Ok(imported_macros) => {
+                            println!("Imported {} macros from: {}", imported_macros.len(), path.display());
+
+                            if let Some(ref mut cfg) = self.config {
+                                // Merge imported macros (add new ones, skip duplicates by name)
+                                let existing_names: std::collections::HashSet<_> =
+                                    cfg.macros.iter().map(|m| m.name.clone()).collect();
+
+                                let mut added = 0;
+                                for macro_def in imported_macros {
+                                    if !existing_names.contains(&macro_def.name) {
+                                        // Register the hotkey for the new macro
+                                        if let Some(ref mut manager) = self.hotkey_manager {
+                                            if let Some(hotkey) = config::parse_hotkey_string(&macro_def.hotkey) {
+                                                match manager.register(hotkey, macro_def.name.clone()) {
+                                                    Ok(()) => {
+                                                        let hotkey_id = hotkey.id();
+                                                        self.macros.insert(hotkey_id, macro_def.clone());
+                                                        cfg.macros.push(macro_def);
+                                                        added += 1;
+                                                    }
+                                                    Err(e) => {
+                                                        eprintln!("Failed to register imported macro '{}': {}", macro_def.name, e);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        println!("Skipping duplicate macro: {}", macro_def.name);
+                                    }
+                                }
+
+                                // Save updated config
+                                match config::save_config(cfg) {
+                                    Ok(()) => {
+                                        println!("Added {} new macros, config saved", added);
+                                    }
+                                    Err(e) => {
+                                        eprintln!("Failed to save config after import: {}", e);
+                                    }
+                                }
+
+                                // Rebuild menu to show new macros
+                                self.rebuild_menu();
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to import macros: {}", e);
+                        }
+                    }
+                }
             } else if event.id == self.menu_ids.quit {
                 println!("KeyBlast shutting down.");
                 process::exit(0);
