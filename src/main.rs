@@ -59,6 +59,23 @@ impl KeyBlastApp {
             macros: HashMap::new(),
         }
     }
+
+    /// Rebuild the tray menu with current macros.
+    /// Call after config changes (import, delete).
+    #[allow(dead_code)]
+    fn rebuild_menu(&mut self) {
+        if let Some(ref config) = self.config {
+            let (menu, menu_ids) = tray::build_menu(self.state.enabled, &config.macros);
+
+            // Update the tray icon's menu
+            if let Some(ref tray_icon) = self._tray_icon {
+                tray_icon.set_menu(Some(Box::new(menu.clone())));
+            }
+
+            self.menu = menu;
+            self.menu_ids = menu_ids;
+        }
+    }
 }
 
 impl ApplicationHandler<AppEvent> for KeyBlastApp {
