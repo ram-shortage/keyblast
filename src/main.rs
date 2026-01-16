@@ -353,6 +353,53 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
 
         // Process any pending menu events
         while let Ok(event) = MenuEvent::receiver().try_recv() {
+            // Check if this is a delete macro action (check before static IDs)
+            if let Some(macro_name) = self.menu_ids.delete_macro_ids.get(&event.id) {
+                let macro_name = macro_name.clone();
+                println!("Deleting macro: {}", macro_name);
+
+                if let Some(ref mut cfg) = self.config {
+                    // Find and remove the macro by name
+                    let original_len = cfg.macros.len();
+                    cfg.macros.retain(|m| m.name != macro_name);
+
+                    if cfg.macros.len() < original_len {
+                        // Unregister the hotkey - find the binding
+                        if let Some(ref mut manager) = self.hotkey_manager {
+                            // Find the hotkey id for this macro
+                            let mut id_to_remove = None;
+                            for (&hotkey_id, binding) in self.macros.iter() {
+                                if binding.name == macro_name {
+                                    if let Some(hotkey) = config::parse_hotkey_string(&binding.hotkey) {
+                                        let _ = manager.unregister(&hotkey);
+                                    }
+                                    id_to_remove = Some(hotkey_id);
+                                    break;
+                                }
+                            }
+                            // Remove after iteration
+                            if let Some(id) = id_to_remove {
+                                self.macros.remove(&id);
+                            }
+                        }
+
+                        // Save updated config
+                        match config::save_config(cfg) {
+                            Ok(()) => {
+                                println!("Macro '{}' deleted and config saved", macro_name);
+                            }
+                            Err(e) => {
+                                eprintln!("Failed to save config after delete: {}", e);
+                            }
+                        }
+
+                        // Rebuild menu to reflect changes
+                        self.rebuild_menu();
+                    }
+                }
+                continue; // Skip further processing for this event
+            }
+
             if event.id == self.menu_ids.toggle {
                 // Toggle enabled state
                 self.state.toggle();
@@ -374,6 +421,33 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         }
                     }
                 }
+            } else if event.id == self.menu_ids.edit_config {
+                // Open config file in default editor
+                let config_path = config::config_path();
+                println!("Opening config file: {}", config_path.display());
+
+                #[cfg(target_os = "macos")]
+                {
+                    let _ = std::process::Command::new("open")
+                        .arg(&config_path)
+                        .spawn();
+                }
+
+                #[cfg(target_os = "windows")]
+                {
+                    let _ = std::process::Command::new("cmd")
+                        .args(["/C", "start", "", &config_path.to_string_lossy()])
+                        .spawn();
+                }
+
+                #[cfg(target_os = "linux")]
+                {
+                    let _ = std::process::Command::new("xdg-open")
+                        .arg(&config_path)
+                        .spawn();
+                }
+
+                println!("Changes will be applied automatically when you save the file.");
             } else if event.id == self.menu_ids.quit {
                 println!("KeyBlast shutting down.");
                 process::exit(0);
