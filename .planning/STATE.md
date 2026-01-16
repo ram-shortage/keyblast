@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-16)
 ## Current Position
 
 Phase: 5 of 6 (Configuration UI)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-16 — Phase 4 verified and complete
+Plan: 1 of ? in phase
+Status: In progress
+Last activity: 2026-01-16 — Completed 5-01-PLAN.md
 
-Progress: ███████░░░ 67%
+Progress: ████████░░ 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: ~8 min
-- Total execution time: ~1 hour
+- Total execution time: ~1.1 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: ███████░░░ 67%
 | 2. Global Hotkeys | 2 | ~14 min | ~7 min |
 | 3. Keystroke Injection | 2 | ~23 min | ~11 min |
 | 4. Configuration | 2 | ~5 min | ~2.5 min |
+| 5. Configuration UI | 1 | ~6 min | ~6 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (~6 min), 03-01 (~8 min), 03-02 (~15 min), 04-01 (~2 min), 04-02 (checkpoint)
-- Trend: Config phase completed quickly with simple data model and wiring
+- Last 5 plans: 03-01 (~8 min), 03-02 (~15 min), 04-01 (~2 min), 04-02 (checkpoint), 05-01 (~6 min)
+- Trend: Config UI phase starting smoothly with config layer enhancements
 
 ## Accumulated Context
 
@@ -62,6 +63,8 @@ Recent decisions affecting current work:
 | delay_ms defaults to 0 | 04-01 | Instant/bulk typing is the common case |
 | HashMap<u32, MacroDefinition> for lookup | 04-02 | O(1) macro lookup when hotkey triggers |
 | Default example macro creation | 04-02 | Provides template for users to edit |
+| Group field with skip_serializing_if | 05-01 | Keeps TOML clean when group is unused |
+| Export/import with arbitrary paths | 05-01 | User chooses backup/share locations |
 
 ### Pending Todos
 
@@ -74,5 +77,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 04-02-PLAN.md (Phase 4 complete)
+Stopped at: Completed 5-01-PLAN.md
 Resume file: None
