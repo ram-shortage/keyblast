@@ -185,10 +185,8 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             println!("KeyBlast initializing...");
 
             // Check accessibility permission (macOS)
-            if !permission::check_accessibility_permission() {
-                eprintln!("Warning: Accessibility permission not granted. Keystroke injection may not work.");
-                eprintln!("Grant permission in System Preferences > Privacy & Security > Accessibility");
-            }
+            // Detailed guidance is printed by the permission module if not granted
+            let _ = permission::check_accessibility_permission();
 
             // Initialize keystroke injector
             match injection::KeystrokeInjector::new() {
