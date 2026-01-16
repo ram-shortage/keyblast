@@ -43,7 +43,7 @@ The "keyblast" name reflects the core action: blasting keystrokes into the focus
 
 ## Constraints
 
-- **Tech stack**: Tauri (Rust backend, web frontend) — chosen for small binary size (~5-10MB) and cross-platform support
+- **Tech stack**: Pure Rust — no web frontend, system tray menu only for UI
 - **Distribution**: Standalone executable, no installer required if possible
 - **Connectivity**: Zero network calls, fully offline operation
 - **Platforms**: macOS (primary development), Windows (must work)
@@ -52,7 +52,7 @@ The "keyblast" name reflects the core action: blasting keystrokes into the focus
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Tauri over Electron | Small binary (~5-10MB vs ~100MB+), Rust gives solid low-level keyboard access | — Pending |
+| Pure Rust over Tauri/Electron | No web frontend needed — system tray menu suffices, simpler stack | — Pending |
 | No modifier combos in output | Keeps scope simple, avoids platform-specific edge cases | — Pending |
 | System tray over full window | Macro tool should be invisible until needed | — Pending |
 | Config file over database | Simple, portable, human-readable | — Pending |
