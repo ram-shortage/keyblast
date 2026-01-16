@@ -15,20 +15,29 @@ pub struct MenuIds {
     pub edit_config: muda::MenuId,
     pub export_macros: muda::MenuId,
     pub import_macros: muda::MenuId,
+    pub auto_start: muda::MenuId,
     pub quit: muda::MenuId,
     /// Map from menu item ID to macro name for delete actions
     pub delete_macro_ids: HashMap<muda::MenuId, String>,
 }
 
-/// Load the application icon from the assets directory.
+/// Load the normal application icon.
 pub fn load_icon() -> Icon {
-    let icon_bytes = include_bytes!("../assets/icon.png");
-    let image = image::load_from_memory(icon_bytes)
+    load_icon_from_bytes(include_bytes!("../assets/icon.png"))
+}
+
+/// Load the flash variant icon for visual feedback.
+/// Currently uses the same icon; visual feedback comes from the toggling effect.
+pub fn load_flash_icon() -> Icon {
+    load_icon_from_bytes(include_bytes!("../assets/icon-flash.png"))
+}
+
+fn load_icon_from_bytes(bytes: &[u8]) -> Icon {
+    let image = image::load_from_memory(bytes)
         .expect("Failed to load icon")
         .into_rgba8();
     let (width, height) = image.dimensions();
     let rgba = image.into_raw();
-
     Icon::from_rgba(rgba, width, height).expect("Failed to create icon")
 }
 
@@ -125,6 +134,18 @@ pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, M
     menu.append(&import_item).expect("Failed to add import item");
     menu.append(&PredefinedMenuItem::separator()).expect("Failed to add separator");
 
+    // Auto-start toggle
+    let auto_start_enabled = crate::autostart::is_auto_start_enabled();
+    let auto_start_item = CheckMenuItem::new(
+        "Start at Login",
+        true,
+        auto_start_enabled,
+        None::<Accelerator>,
+    );
+    let auto_start_id = auto_start_item.id().clone();
+    menu.append(&auto_start_item).expect("Failed to add auto-start item");
+    menu.append(&PredefinedMenuItem::separator()).expect("Failed to add separator");
+
     // Quit item
     let quit_item = MenuItem::new("Quit", true, None::<Accelerator>);
     let quit_id = quit_item.id().clone();
@@ -136,6 +157,7 @@ pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, M
         edit_config: edit_config_id,
         export_macros: export_id,
         import_macros: import_id,
+        auto_start: auto_start_id,
         quit: quit_id,
         delete_macro_ids,
     };

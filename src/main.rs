@@ -3,6 +3,7 @@
 /// Sits in the system tray and provides hotkey-triggered keystroke injection.
 
 mod app;
+mod autostart;
 mod config;
 mod hotkey;
 mod injection;
@@ -44,6 +45,16 @@ struct KeyBlastApp {
     config_watcher: Option<RecommendedWatcher>,
     /// Receiver for config file change events
     config_change_rx: Option<mpsc::Receiver<notify::Result<Event>>>,
+    /// Flash counter for visual feedback (counts down)
+    flash_remaining: u8,
+    /// Normal tray icon
+    normal_icon: Option<tray_icon::Icon>,
+    /// Flash tray icon
+    flash_icon: Option<tray_icon::Icon>,
+    /// Current flash state (true = showing flash icon)
+    flash_state: bool,
+    /// Instant of last flash toggle for timing
+    last_flash_toggle: Option<std::time::Instant>,
 }
 
 impl KeyBlastApp {
@@ -56,6 +67,7 @@ impl KeyBlastApp {
                 edit_config: muda::MenuId::new(""),
                 export_macros: muda::MenuId::new(""),
                 import_macros: muda::MenuId::new(""),
+                auto_start: muda::MenuId::new(""),
                 quit: muda::MenuId::new(""),
                 delete_macro_ids: std::collections::HashMap::new(),
             },
@@ -66,6 +78,11 @@ impl KeyBlastApp {
             macros: HashMap::new(),
             config_watcher: None,
             config_change_rx: None,
+            flash_remaining: 0,
+            normal_icon: None,
+            flash_icon: None,
+            flash_state: false,
+            last_flash_toggle: None,
         }
     }
 
@@ -251,6 +268,10 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             self.menu_ids = menu_ids;
             self._tray_icon = Some(tray_icon);
 
+            // Store icons for flash feedback
+            self.normal_icon = Some(tray::load_icon());
+            self.flash_icon = Some(tray::load_flash_icon());
+
             // Initialize hotkey manager and register macros from config
             match hotkey::HotkeyManager::new() {
                 Ok(mut manager) => {
@@ -331,6 +352,10 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                             match injector.execute_sequence(&segments, macro_def.delay_ms) {
                                 Ok(()) => {
                                     println!("Injection complete");
+                                    // Trigger icon flash for visual feedback
+                                    self.flash_remaining = 4; // 2 cycles of on/off
+                                    self.flash_state = false;
+                                    self.last_flash_toggle = Some(std::time::Instant::now());
                                 }
                                 Err(e) => {
                                     eprintln!("Injection failed: {}", e);
@@ -520,6 +545,29 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         Err(e) => {
                             eprintln!("Failed to import macros: {}", e);
                         }
+                    }
+                }
+            } else if event.id == self.menu_ids.auto_start {
+                // Toggle auto-start at login
+                let currently_enabled = autostart::is_auto_start_enabled();
+                match autostart::set_auto_start(!currently_enabled) {
+                    Ok(()) => {
+                        println!(
+                            "Auto-start {}",
+                            if !currently_enabled { "enabled" } else { "disabled" }
+                        );
+                        // Update the checkbox state in menu
+                        for item in self.menu.items() {
+                            if let muda::MenuItemKind::Check(check_item) = item {
+                                if check_item.id() == &self.menu_ids.auto_start {
+                                    check_item.set_checked(!currently_enabled);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to toggle auto-start: {}", e);
                     }
                 }
             } else if event.id == self.menu_ids.quit {

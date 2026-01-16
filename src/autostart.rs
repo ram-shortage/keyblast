@@ -6,6 +6,9 @@
 
 use auto_launch::{AutoLaunch, AutoLaunchBuilder};
 
+#[cfg(target_os = "macos")]
+use auto_launch::MacOSLaunchMode;
+
 /// Create an AutoLaunch instance configured for KeyBlast.
 ///
 /// Uses the current executable path and platform-appropriate launch mode.
@@ -21,7 +24,7 @@ pub fn create_auto_launch() -> Result<AutoLaunch, auto_launch::Error> {
         AutoLaunchBuilder::new()
             .set_app_name(app_name)
             .set_app_path(&app_path)
-            .set_use_launch_agent(true)
+            .set_macos_launch_mode(MacOSLaunchMode::LaunchAgent)
             .build()
     }
 
