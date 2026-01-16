@@ -31,6 +31,7 @@ struct KeyBlastApp {
     menu_ids: tray::MenuIds,
     _tray_icon: Option<TrayIcon>,
     hotkey_manager: Option<hotkey::HotkeyManager>,
+    injector: Option<injection::KeystrokeInjector>,
 }
 
 impl KeyBlastApp {
@@ -44,6 +45,7 @@ impl KeyBlastApp {
             },
             _tray_icon: None,
             hotkey_manager: None,
+            injector: None,
         }
     }
 }
@@ -62,6 +64,23 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             self.menu = menu;
             self.menu_ids = menu_ids;
             self._tray_icon = Some(tray_icon);
+
+            // Check accessibility permission (macOS)
+            if !permission::check_accessibility_permission() {
+                eprintln!("Warning: Accessibility permission not granted. Keystroke injection may not work.");
+                eprintln!("Grant permission in System Preferences > Privacy & Security > Accessibility");
+            }
+
+            // Initialize keystroke injector
+            match injection::KeystrokeInjector::new() {
+                Ok(inj) => {
+                    println!("Keystroke injector initialized");
+                    self.injector = Some(inj);
+                }
+                Err(e) => {
+                    eprintln!("Failed to initialize keystroke injector: {}", e);
+                }
+            }
 
             // Initialize hotkey manager and register test hotkey
             match hotkey::HotkeyManager::new() {
@@ -122,6 +141,32 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                     if let Some(ref manager) = self.hotkey_manager {
                         if let Some(macro_id) = manager.get_macro_id(hotkey_event.id) {
                             println!("Hotkey triggered: {}", macro_id);
+
+                            // Check if macros are enabled
+                            if !self.state.enabled {
+                                println!("Macros disabled, ignoring hotkey");
+                                return;
+                            }
+
+                            // Test macro sequence demonstrating special keys
+                            let test_macro = "Hello from KeyBlast!{Enter}";
+                            let test_delay_ms: u64 = 0; // Instant typing
+
+                            // Inject the macro text
+                            if let Some(ref mut injector) = self.injector {
+                                let segments = injection::parse_macro_sequence(test_macro);
+                                println!("Injecting macro: {}", test_macro);
+                                match injector.execute_sequence(&segments, test_delay_ms) {
+                                    Ok(()) => {
+                                        println!("Injection complete");
+                                    }
+                                    Err(e) => {
+                                        eprintln!("Injection failed: {}", e);
+                                    }
+                                }
+                            } else {
+                                eprintln!("No injector available");
+                            }
                         }
                     }
                 }
