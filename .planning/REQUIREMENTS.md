@@ -15,9 +15,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Global Hotkeys
 
-- [ ] **HKEY-01**: User can register global hotkeys that work in any application
-- [ ] **HKEY-02**: User is warned when assigning a hotkey already in use
-- [ ] **HKEY-03**: User is suggested available hotkey combinations when creating macros
+- [x] **HKEY-01**: User can register global hotkeys that work in any application
+- [x] **HKEY-02**: User is warned when assigning a hotkey already in use
+- [x] **HKEY-03**: User is suggested available hotkey combinations when creating macros
 
 ### Keystroke Injection
 
@@ -80,9 +80,9 @@ Which phases cover which requirements. Updated by create-roadmap.
 | TRAY-01 | Phase 1 | Complete |
 | TRAY-02 | Phase 1 | Complete |
 | TRAY-03 | Phase 6 | Pending |
-| HKEY-01 | Phase 2 | Pending |
-| HKEY-02 | Phase 2 | Pending |
-| HKEY-03 | Phase 2 | Pending |
+| HKEY-01 | Phase 2 | Complete |
+| HKEY-02 | Phase 2 | Complete |
+| HKEY-03 | Phase 2 | Complete |
 | INJT-01 | Phase 3 | Pending |
 | INJT-02 | Phase 3 | Pending |
 | INJT-03 | Phase 3 | Pending |
@@ -105,4 +105,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after Phase 1 completion*
+*Last updated: 2026-01-16 after Phase 2 completion*

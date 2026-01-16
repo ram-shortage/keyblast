@@ -13,7 +13,7 @@ KeyBlast delivers a lightweight hotkey-triggered keystroke injector in 6 phases.
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - System tray presence with enable/disable toggle
-- [ ] **Phase 2: Global Hotkeys** - Hotkey registration that works in any application
+- [x] **Phase 2: Global Hotkeys** - Hotkey registration that works in any application
 - [ ] **Phase 3: Keystroke Injection** - Type macros into the focused application
 - [ ] **Phase 4: Configuration** - Persistent macro storage in TOML
 - [ ] **Phase 5: Configuration UI** - Create/edit/delete macros via tray menu
@@ -44,10 +44,11 @@ Plans:
   2. User sees warning when assigning conflicting hotkey
   3. User is shown available hotkey suggestions when creating macro
 **Research**: Unlikely (global-hotkey well-documented)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [x] 02-01: Core hotkey infrastructure with winit integration
+- [x] 02-02: Conflict detection and hotkey suggestions
 
 ### Phase 3: Keystroke Injection
 **Goal**: Type macros into the focused application
@@ -120,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete | 2026-01-16 |
-| 2. Global Hotkeys | 0/TBD | Not started | - |
+| 2. Global Hotkeys | 2/2 | Complete | 2026-01-16 |
 | 3. Keystroke Injection | 0/TBD | Not started | - |
 | 4. Configuration | 0/TBD | Not started | - |
 | 5. Configuration UI | 0/TBD | Not started | - |
