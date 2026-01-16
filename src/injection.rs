@@ -109,8 +109,8 @@ impl KeystrokeInjector {
         // Release any modifiers held from hotkey activation
         self.release_modifiers()?;
 
-        // Wait briefly to ensure modifiers are released
-        thread::sleep(Duration::from_millis(10));
+        // Wait for modifiers to fully release (macOS needs longer)
+        thread::sleep(Duration::from_millis(50));
 
         if delay_ms == 0 {
             // Fast path: use bulk text() method
@@ -148,8 +148,8 @@ impl KeystrokeInjector {
         // Release any modifiers held from hotkey activation
         self.release_modifiers()?;
 
-        // Wait briefly to ensure modifiers are released
-        thread::sleep(Duration::from_millis(10));
+        // Wait for modifiers to fully release (macOS needs longer)
+        thread::sleep(Duration::from_millis(50));
 
         for segment in segments {
             match segment {
