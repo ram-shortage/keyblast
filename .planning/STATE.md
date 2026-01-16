@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-16)
 ## Current Position
 
 Phase: 6 of 6 (Platform Polish)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-16 — Phase 5 verified and complete
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-16 — Completed 06-01-PLAN.md (Auto-Start at Login)
 
-Progress: █████████░ 83%
+Progress: █████████░ 92%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
+- Total plans completed: 12
 - Average duration: ~8 min
-- Total execution time: ~1.4 hours
+- Total execution time: ~1.5 hours
 
 **By Phase:**
 
@@ -32,10 +32,11 @@ Progress: █████████░ 83%
 | 3. Keystroke Injection | 2 | ~23 min | ~11 min |
 | 4. Configuration | 2 | ~5 min | ~2.5 min |
 | 5. Configuration UI | 3 | ~21 min | ~7 min |
+| 6. Platform Polish | 1 | ~7 min | ~7 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (checkpoint), 05-01 (~6 min), 05-02 (~7 min), 05-03 (~8 min)
-- Trend: Configuration UI phase complete with all menu actions functional
+- Last 5 plans: 05-01 (~6 min), 05-02 (~7 min), 05-03 (~8 min), 06-01 (~7 min)
+- Trend: Consistent ~7 min per plan in recent phases
 
 ## Accumulated Context
 
@@ -71,6 +72,9 @@ Recent decisions affecting current work:
 | File watcher mpsc channel pattern | 05-03 | Avoids borrow issues; collect events then process |
 | Import merge strategy | 05-03 | Adds new macros by name, skips duplicates |
 | Hot-reload full re-register | 05-03 | Unregisters all then registers fresh for clean state |
+| auto-launch crate for login items | 06-01 | Cross-platform, used by Tauri internally |
+| MacOSLaunchMode::LaunchAgent | 06-01 | Creates plist in ~/Library/LaunchAgents/ |
+| Use set_macos_launch_mode() API | 06-01 | Avoids deprecated set_use_launch_agent() |
 
 ### Pending Todos
 
@@ -83,5 +87,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 5-03-PLAN.md (Phase 5 complete)
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None
