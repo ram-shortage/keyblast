@@ -32,6 +32,8 @@ struct KeyBlastApp {
     _tray_icon: Option<TrayIcon>,
     hotkey_manager: Option<hotkey::HotkeyManager>,
     injector: Option<injection::KeystrokeInjector>,
+    /// Trigger count to alternate between instant/slow injection modes
+    trigger_count: u32,
 }
 
 impl KeyBlastApp {
@@ -46,6 +48,7 @@ impl KeyBlastApp {
             _tray_icon: None,
             hotkey_manager: None,
             injector: None,
+            trigger_count: 0,
         }
     }
 }
@@ -148,14 +151,24 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                 return;
                             }
 
-                            // Test macro sequence demonstrating special keys
-                            let test_macro = "Hello from KeyBlast!{Enter}";
-                            let test_delay_ms: u64 = 0; // Instant typing
+                            // Test macro sequence demonstrating special keys (Enter, Tab)
+                            let test_macro = "KeyBlast test:{Enter}Line 2{Tab}tabbed{Enter}";
+
+                            // Alternate between instant (0ms) and slow (20ms) modes
+                            let (test_delay_ms, mode_name) = if self.trigger_count % 2 == 0 {
+                                (0, "instant")
+                            } else {
+                                (20, "slow")
+                            };
+                            self.trigger_count += 1;
 
                             // Inject the macro text
                             if let Some(ref mut injector) = self.injector {
                                 let segments = injection::parse_macro_sequence(test_macro);
-                                println!("Injecting macro: {}", test_macro);
+                                println!(
+                                    "Injecting macro ({}): {}",
+                                    mode_name, test_macro
+                                );
                                 match injector.execute_sequence(&segments, test_delay_ms) {
                                     Ok(()) => {
                                         println!("Injection complete");
