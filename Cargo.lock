@@ -864,6 +864,7 @@ dependencies = [
 name = "keyblast"
 version = "0.1.0"
 dependencies = [
+ "crossbeam-channel",
  "image",
  "muda",
  "tray-icon",
