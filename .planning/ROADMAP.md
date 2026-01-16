@@ -110,17 +110,18 @@ Plans:
   3. User can enable auto-start at login
   4. macOS user is guided through Accessibility permission
   5. Tray icon flashes when macro triggers (visual feedback)
-**Research**: Likely (code signing, notarization, auto-launch mechanisms)
-**Research topics**: auto-launch crate vs custom, Apple notarization requirements, Windows signing
-**Plans**: TBD
+**Research**: Complete (06-RESEARCH.md)
+**Research topics**: auto-launch crate, tray icon flash mechanism, Accessibility permission UX
+**Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: TBD
+- [ ] 06-01: Auto-start at login functionality (PLAT-03)
+- [ ] 06-02: Accessibility permission UX and tray icon flash (PLAT-04, TRAY-03)
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -129,4 +130,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Keystroke Injection | 2/2 | Complete | 2026-01-16 |
 | 4. Configuration | 2/2 | Complete | 2026-01-16 |
 | 5. Configuration UI | 3/3 | Complete | 2026-01-16 |
-| 6. Platform Polish | 0/TBD | Not started | - |
+| 6. Platform Polish | 0/2 | Planning complete | - |
