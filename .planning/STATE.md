@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-16)
 ## Current Position
 
 Phase: 4 of 6 (Configuration)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-16 — Phase 3 verified and complete
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-16 — Completed 04-01-PLAN.md
 
-Progress: █████░░░░░ 50%
+Progress: ██████░░░░ 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: ~10 min
-- Total execution time: ~0.75 hours
+- Total plans completed: 6
+- Average duration: ~8 min
+- Total execution time: ~0.8 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: █████░░░░░ 50%
 | 1. Foundation | 1 | ~15 min | ~15 min |
 | 2. Global Hotkeys | 2 | ~14 min | ~7 min |
 | 3. Keystroke Injection | 2 | ~23 min | ~11 min |
+| 4. Configuration | 1 | ~2 min | ~2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~15 min), 02-01 (~8 min), 02-02 (~6 min), 03-01 (~8 min), 03-02 (~15 min)
-- Trend: Checkpoint plans take longer due to user verification
+- Last 5 plans: 02-01 (~8 min), 02-02 (~6 min), 03-01 (~8 min), 03-02 (~15 min), 04-01 (~2 min)
+- Trend: Simple data model plan completed quickly
 
 ## Accumulated Context
 
@@ -56,6 +57,9 @@ Recent decisions affecting current work:
 | Release modifiers before typing | 03-01 | Prevents Ctrl/Shift/Alt interference from hotkey trigger |
 | 50ms delay after modifier release | 03-02 | macOS needs longer delay; 10ms caused Apple symbol bleed-through |
 | Bulk vs char-by-char delay modes | 03-01 | 0ms uses fast text(), >0ms for slow applications |
+| dirs crate for config paths | 04-01 | Cross-platform config directory detection |
+| Atomic config writes | 04-01 | Temp file + rename prevents corruption on crash |
+| delay_ms defaults to 0 | 04-01 | Instant/bulk typing is the common case |
 
 ### Pending Todos
 
@@ -67,6 +71,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-16
-Stopped at: Completed 03-02-PLAN.md, Phase 3 complete
+Last session: 2026-01-16T18:42:54Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
