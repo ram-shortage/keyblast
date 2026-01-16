@@ -1651,6 +1651,7 @@ dependencies = [
  "muda",
  "rfd",
  "serde",
+ "tempfile",
  "toml",
  "tray-icon",
  "winit",

@@ -489,4 +489,78 @@ mod tests {
         assert!(path.to_string_lossy().contains("keyblast"));
         assert!(path.to_string_lossy().ends_with("config.toml"));
     }
+
+    #[test]
+    fn test_group_field_optional() {
+        // Group is optional and defaults to None
+        let toml_str = r#"
+            name = "Test"
+            hotkey = "ctrl+k"
+            text = "Hello"
+        "#;
+        let macro_def: MacroDefinition = toml::from_str(toml_str).unwrap();
+        assert_eq!(macro_def.group, None);
+    }
+
+    #[test]
+    fn test_group_field_serialization() {
+        // With group set
+        let macro_def = MacroDefinition {
+            name: "Test".to_string(),
+            hotkey: "ctrl+k".to_string(),
+            text: "Hello".to_string(),
+            delay_ms: 0,
+            group: Some("Work".to_string()),
+        };
+        let toml_str = toml::to_string(&macro_def).unwrap();
+        assert!(toml_str.contains("group = \"Work\""));
+
+        // Without group (should not serialize the field)
+        let macro_def_no_group = MacroDefinition {
+            name: "Test".to_string(),
+            hotkey: "ctrl+k".to_string(),
+            text: "Hello".to_string(),
+            delay_ms: 0,
+            group: None,
+        };
+        let toml_str_no_group = toml::to_string(&macro_def_no_group).unwrap();
+        assert!(!toml_str_no_group.contains("group"));
+    }
+
+    #[test]
+    fn test_export_import_roundtrip() {
+        use tempfile::tempdir;
+
+        let dir = tempdir().unwrap();
+        let export_path = dir.path().join("export.toml");
+
+        let macros = vec![
+            MacroDefinition {
+                name: "Macro 1".to_string(),
+                hotkey: "ctrl+1".to_string(),
+                text: "Text 1".to_string(),
+                delay_ms: 0,
+                group: Some("Group A".to_string()),
+            },
+            MacroDefinition {
+                name: "Macro 2".to_string(),
+                hotkey: "ctrl+2".to_string(),
+                text: "Text 2".to_string(),
+                delay_ms: 10,
+                group: None,
+            },
+        ];
+
+        // Export
+        export_macros(&macros, &export_path).unwrap();
+        assert!(export_path.exists());
+
+        // Import
+        let imported = import_macros(&export_path).unwrap();
+        assert_eq!(imported.len(), 2);
+        assert_eq!(imported[0].name, "Macro 1");
+        assert_eq!(imported[0].group, Some("Group A".to_string()));
+        assert_eq!(imported[1].name, "Macro 2");
+        assert_eq!(imported[1].group, None);
+    }
 }
