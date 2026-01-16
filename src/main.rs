@@ -46,7 +46,11 @@ impl KeyBlastApp {
             menu: muda::Menu::new(),
             menu_ids: tray::MenuIds {
                 toggle: muda::MenuId::new(""),
+                edit_config: muda::MenuId::new(""),
+                export_macros: muda::MenuId::new(""),
+                import_macros: muda::MenuId::new(""),
                 quit: muda::MenuId::new(""),
+                delete_macro_ids: std::collections::HashMap::new(),
             },
             _tray_icon: None,
             hotkey_manager: None,
@@ -63,14 +67,6 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
         // On macOS, this must happen after the event loop starts
         if self._tray_icon.is_none() {
             println!("KeyBlast initializing...");
-
-            // Build menu and create tray icon
-            let (menu, menu_ids) = tray::build_menu(self.state.enabled);
-            let tray_icon = tray::create_tray(&menu);
-
-            self.menu = menu;
-            self.menu_ids = menu_ids;
-            self._tray_icon = Some(tray_icon);
 
             // Check accessibility permission (macOS)
             if !permission::check_accessibility_permission() {
@@ -132,6 +128,14 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             };
 
             self.config = Some(final_config.clone());
+
+            // Build menu with macros and create tray icon
+            let (menu, menu_ids) = tray::build_menu(self.state.enabled, &final_config.macros);
+            let tray_icon = tray::create_tray(&menu);
+
+            self.menu = menu;
+            self.menu_ids = menu_ids;
+            self._tray_icon = Some(tray_icon);
 
             // Initialize hotkey manager and register macros from config
             match hotkey::HotkeyManager::new() {
