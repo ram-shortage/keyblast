@@ -111,6 +111,7 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                     hotkey: "ctrl+shift+k".to_string(),
                     text: "Hello from KeyBlast!{Enter}".to_string(),
                     delay_ms: 0,
+                    group: None,
                 };
                 let mut cfg = loaded_config;
                 cfg.macros.push(default_macro);

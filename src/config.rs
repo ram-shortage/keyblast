@@ -62,6 +62,9 @@ pub struct MacroDefinition {
     /// Delay between keystrokes in milliseconds. 0 for instant (bulk) typing.
     #[serde(default)]
     pub delay_ms: u64,
+    /// Optional group/category for organization. None means "Ungrouped".
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub group: Option<String>,
 }
 
 /// Application configuration.
@@ -304,12 +307,14 @@ mod tests {
                     hotkey: "ctrl+shift+k".to_string(),
                     text: "Hello{Enter}World".to_string(),
                     delay_ms: 0,
+                    group: None,
                 },
                 MacroDefinition {
                     name: "Slow Macro".to_string(),
                     hotkey: "ctrl+alt+m".to_string(),
                     text: "Typing slowly...".to_string(),
                     delay_ms: 20,
+                    group: Some("Work".to_string()),
                 },
             ],
         };
@@ -330,6 +335,7 @@ mod tests {
             hotkey: "ctrl+shift+k".to_string(),
             text: "Hello".to_string(),
             delay_ms: 0,
+            group: None,
         };
 
         let toml_str = toml::to_string(&macro_def).unwrap();
