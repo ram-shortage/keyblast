@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Global Hotkeys** - Hotkey registration that works in any application
 - [x] **Phase 3: Keystroke Injection** - Type macros into the focused application
 - [x] **Phase 4: Configuration** - Persistent macro storage in TOML
-- [ ] **Phase 5: Configuration UI** - Create/edit/delete macros via tray menu
+- [x] **Phase 5: Configuration UI** - Create/edit/delete macros via tray menu
 - [ ] **Phase 6: Platform Polish** - macOS/Windows support, auto-start, visual feedback
 
 ## Phase Details
@@ -93,10 +93,12 @@ Plans:
   5. User can import macros from file
   6. User can organize macros into groups/categories
 **Research**: Unlikely (internal UI patterns)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: TBD
+- [x] 05-01: Config layer enhancements (groups, export/import)
+- [x] 05-02: Tray menu restructure with dynamic macro listing
+- [x] 05-03: Action handlers + file watcher for hot-reload
 
 ### Phase 6: Platform Polish
 **Goal**: Production-ready cross-platform support
@@ -126,5 +128,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Global Hotkeys | 2/2 | Complete | 2026-01-16 |
 | 3. Keystroke Injection | 2/2 | Complete | 2026-01-16 |
 | 4. Configuration | 2/2 | Complete | 2026-01-16 |
-| 5. Configuration UI | 0/TBD | Not started | - |
+| 5. Configuration UI | 3/3 | Complete | 2026-01-16 |
 | 6. Platform Polish | 0/TBD | Not started | - |

@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 5 complete — Ready for Phase 6 (Platform Polish)
+**Current focus:** Phase 6 — Platform Polish
 
 ## Current Position
 
-Phase: 5 of 6 (Configuration UI) - COMPLETE
-Plan: 3 of 3 in phase
-Status: Phase complete
-Last activity: 2026-01-16 — Completed 5-03-PLAN.md
+Phase: 6 of 6 (Platform Polish)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-16 — Phase 5 verified and complete
 
-Progress: ██████████ 100% (phases 1-5)
+Progress: █████████░ 83%
 
 ## Performance Metrics
 

@@ -28,15 +28,15 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Configuration
 
 - [x] **CONF-01**: User's macros persist across app restarts
-- [ ] **CONF-02**: User can create new macros via tray menu
-- [ ] **CONF-03**: User can edit existing macros via tray menu
-- [ ] **CONF-04**: User can delete macros via tray menu
-- [ ] **CONF-05**: User can export all macros to a file
-- [ ] **CONF-06**: User can import macros from a file
+- [x] **CONF-02**: User can create new macros via tray menu
+- [x] **CONF-03**: User can edit existing macros via tray menu
+- [x] **CONF-04**: User can delete macros via tray menu
+- [x] **CONF-05**: User can export all macros to a file
+- [x] **CONF-06**: User can import macros from a file
 
 ### Organization
 
-- [ ] **ORGN-01**: User can organize macros into groups/categories
+- [x] **ORGN-01**: User can organize macros into groups/categories
 
 ### Platform
 
@@ -87,12 +87,12 @@ Which phases cover which requirements. Updated by create-roadmap.
 | INJT-02 | Phase 3 | Complete |
 | INJT-03 | Phase 3 | Complete |
 | CONF-01 | Phase 4 | Complete |
-| CONF-02 | Phase 5 | Pending |
-| CONF-03 | Phase 5 | Pending |
-| CONF-04 | Phase 5 | Pending |
-| CONF-05 | Phase 5 | Pending |
-| CONF-06 | Phase 5 | Pending |
-| ORGN-01 | Phase 5 | Pending |
+| CONF-02 | Phase 5 | Complete |
+| CONF-03 | Phase 5 | Complete |
+| CONF-04 | Phase 5 | Complete |
+| CONF-05 | Phase 5 | Complete |
+| CONF-06 | Phase 5 | Complete |
+| ORGN-01 | Phase 5 | Complete |
 | PLAT-01 | Phase 6 | Pending |
 | PLAT-02 | Phase 6 | Pending |
 | PLAT-03 | Phase 6 | Pending |
@@ -105,4 +105,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after Phase 4 completion*
+*Last updated: 2026-01-16 after Phase 5 completion*
