@@ -371,6 +371,30 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
     }
 
     fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
+        // Handle icon flash animation
+        if self.flash_remaining > 0 {
+            let should_toggle = self.last_flash_toggle
+                .map(|t| t.elapsed() >= std::time::Duration::from_millis(100))
+                .unwrap_or(true);
+
+            if should_toggle {
+                self.flash_state = !self.flash_state;
+                self.flash_remaining -= 1;
+                self.last_flash_toggle = Some(std::time::Instant::now());
+
+                if let Some(ref tray_icon) = self._tray_icon {
+                    let icon = if self.flash_state {
+                        self.flash_icon.clone()
+                    } else {
+                        self.normal_icon.clone()
+                    };
+                    if let Some(i) = icon {
+                        let _ = tray_icon.set_icon(Some(i));
+                    }
+                }
+            }
+        }
+
         // Check for config file changes (hot-reload)
         self.check_config_changes();
 
