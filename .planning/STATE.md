@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 2 — Global Hotkeys
+**Current focus:** Phase 2 — Global Hotkeys (complete)
 
 ## Current Position
 
 Phase: 2 of 6 (Global Hotkeys)
-Plan: 1 of 1 complete
+Plan: 2 of 2 complete
 Status: Phase 2 complete
-Last activity: 2026-01-16 — Completed 02-01-PLAN.md
+Last activity: 2026-01-16 — Completed 02-02-PLAN.md
 
-Progress: ██░░░░░░░░ 33%
+Progress: ██████████ 100% (of phases 1-2)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: ~12 min
-- Total execution time: ~0.4 hours
+- Total plans completed: 3
+- Average duration: ~10 min
+- Total execution time: ~0.5 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 1 | ~15 min | ~15 min |
-| 2. Global Hotkeys | 1 | ~8 min | ~8 min |
+| 2. Global Hotkeys | 2 | ~14 min | ~7 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~15 min), 02-01 (~8 min)
+- Last 5 plans: 01-01 (~15 min), 02-01 (~8 min), 02-02 (~6 min)
 - Trend: Improving (faster execution)
 
 ## Accumulated Context
@@ -49,6 +49,8 @@ Recent decisions affecting current work:
 | EventLoopProxy pattern for hotkeys | 02-01 | Forward GlobalHotKeyEvent to winit loop, avoids polling delays |
 | HotkeyManager in resumed() | 02-01 | macOS requires main thread for GlobalHotKeyManager |
 | Test hotkey Ctrl+Shift+K | 02-01 | Low conflict probability with system shortcuts |
+| RegisterResult enum over Result | 02-02 | Distinguishes internal vs external conflicts for better UX |
+| Tier 1/2 candidate hotkeys | 02-02 | Ctrl+Shift and Ctrl+Alt combinations rarely conflict |
 
 ### Pending Todos
 
@@ -61,5 +63,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 02-01-PLAN.md (Phase 2 complete)
+Stopped at: Completed 02-02-PLAN.md (Phase 2 complete)
 Resume file: None
