@@ -3,6 +3,7 @@
 /// Sits in the system tray and provides hotkey-triggered keystroke injection.
 
 mod app;
+mod config;
 mod hotkey;
 mod injection;
 mod permission;
