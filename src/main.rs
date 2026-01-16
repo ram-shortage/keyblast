@@ -4,6 +4,8 @@
 
 mod app;
 mod hotkey;
+mod injection;
+mod permission;
 mod tray;
 
 use std::process;
