@@ -3,6 +3,7 @@
 /// Sits in the system tray and provides hotkey-triggered keystroke injection.
 
 mod app;
+mod hotkey;
 mod tray;
 
 use std::process;
@@ -12,6 +13,14 @@ use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
 use muda::MenuEvent;
 use tray_icon::TrayIcon;
+use global_hotkey::hotkey::{Code, HotKey, Modifiers};
+use global_hotkey::{GlobalHotKeyEvent, HotKeyState};
+
+/// Custom events for the winit event loop.
+#[derive(Debug)]
+enum AppEvent {
+    HotKey(GlobalHotKeyEvent),
+}
 
 /// Application wrapper for winit event loop integration.
 struct KeyBlastApp {
@@ -19,6 +28,7 @@ struct KeyBlastApp {
     menu: muda::Menu,
     menu_ids: tray::MenuIds,
     _tray_icon: Option<TrayIcon>,
+    hotkey_manager: Option<hotkey::HotkeyManager>,
 }
 
 impl KeyBlastApp {
@@ -31,11 +41,12 @@ impl KeyBlastApp {
                 quit: muda::MenuId::new(""),
             },
             _tray_icon: None,
+            hotkey_manager: None,
         }
     }
 }
 
-impl ApplicationHandler for KeyBlastApp {
+impl ApplicationHandler<AppEvent> for KeyBlastApp {
     fn resumed(&mut self, _event_loop: &ActiveEventLoop) {
         // Create tray icon when the application is ready
         // On macOS, this must happen after the event loop starts
@@ -50,12 +61,48 @@ impl ApplicationHandler for KeyBlastApp {
             self.menu_ids = menu_ids;
             self._tray_icon = Some(tray_icon);
 
+            // Initialize hotkey manager and register test hotkey
+            match hotkey::HotkeyManager::new() {
+                Ok(mut manager) => {
+                    let test_hotkey = HotKey::new(
+                        Some(Modifiers::CONTROL | Modifiers::SHIFT),
+                        Code::KeyK,
+                    );
+                    match manager.register(test_hotkey, "test".to_string()) {
+                        Ok(()) => {
+                            println!("Registered test hotkey: Ctrl+Shift+K");
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to register test hotkey: {}", e);
+                        }
+                    }
+                    self.hotkey_manager = Some(manager);
+                }
+                Err(e) => {
+                    eprintln!("Failed to create hotkey manager: {}", e);
+                }
+            }
+
             println!("KeyBlast running. Right-click tray icon for menu.");
         }
     }
 
     fn window_event(&mut self, _event_loop: &ActiveEventLoop, _id: WindowId, _event: WindowEvent) {
         // No windows in this application
+    }
+
+    fn user_event(&mut self, _event_loop: &ActiveEventLoop, event: AppEvent) {
+        match event {
+            AppEvent::HotKey(hotkey_event) => {
+                if hotkey_event.state == HotKeyState::Pressed {
+                    if let Some(ref manager) = self.hotkey_manager {
+                        if let Some(macro_id) = manager.get_macro_id(hotkey_event.id) {
+                            println!("Hotkey triggered: {}", macro_id);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
@@ -91,10 +138,18 @@ impl ApplicationHandler for KeyBlastApp {
 }
 
 fn main() {
-    // Create the event loop - this pumps the native event loop on macOS
-    let event_loop = EventLoop::new().expect("Failed to create event loop");
+    // Create the event loop with custom event type for hotkey integration
+    let event_loop = EventLoop::<AppEvent>::with_user_event()
+        .build()
+        .expect("Failed to create event loop");
 
-    // Set control flow to poll so we check for menu events regularly
+    // Set up global hotkey event forwarding to the winit event loop
+    let proxy = event_loop.create_proxy();
+    GlobalHotKeyEvent::set_event_handler(Some(move |event| {
+        let _ = proxy.send_event(AppEvent::HotKey(event));
+    }));
+
+    // Set control flow to wait so we check for events regularly
     event_loop.set_control_flow(ControlFlow::Wait);
 
     // Create and run the application
