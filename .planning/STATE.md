@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Global Hotkeys
 
 ## Current Position
 
-Phase: 1 of 6 (Foundation)
-Plan: 1 of 1 complete
-Status: Phase 1 complete
-Last activity: 2026-01-16 — Completed 01-01-PLAN.md
+Phase: 2 of 6 (Global Hotkeys)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-16 — Phase 1 verified and complete
 
 Progress: █░░░░░░░░░ 17%
 
@@ -52,7 +52,7 @@ None yet.
 
 ### Blockers/Concerns
 
-None - Phase 1 complete, ready for Phase 2.
+None.
 
 ## Session Continuity
 

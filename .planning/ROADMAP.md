@@ -12,7 +12,7 @@ KeyBlast delivers a lightweight hotkey-triggered keystroke injector in 6 phases.
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - System tray presence with enable/disable toggle
+- [x] **Phase 1: Foundation** - System tray presence with enable/disable toggle
 - [ ] **Phase 2: Global Hotkeys** - Hotkey registration that works in any application
 - [ ] **Phase 3: Keystroke Injection** - Type macros into the focused application
 - [ ] **Phase 4: Configuration** - Persistent macro storage in TOML
@@ -30,10 +30,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Right-click menu shows Enable/Disable toggle and Quit option
   3. Toggle state persists visually (checked/unchecked)
 **Research**: Unlikely (tray-icon + muda established patterns)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 01-01: TBD
+- [x] 01-01: System tray with enable/disable toggle and quit
 
 ### Phase 2: Global Hotkeys
 **Goal**: Hotkey registration that works in any application
@@ -119,7 +119,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 1/1 | Complete | 2026-01-16 |
 | 2. Global Hotkeys | 0/TBD | Not started | - |
 | 3. Keystroke Injection | 0/TBD | Not started | - |
 | 4. Configuration | 0/TBD | Not started | - |

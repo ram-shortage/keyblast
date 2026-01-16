@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### System Tray
 
-- [ ] **TRAY-01**: User can see app in system tray with menu
-- [ ] **TRAY-02**: User can enable/disable all macros via toggle
+- [x] **TRAY-01**: User can see app in system tray with menu
+- [x] **TRAY-02**: User can enable/disable all macros via toggle
 - [ ] **TRAY-03**: User sees visual feedback when macro triggers (tray icon flash)
 
 ### Global Hotkeys
@@ -77,8 +77,8 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TRAY-01 | Phase 1 | Pending |
-| TRAY-02 | Phase 1 | Pending |
+| TRAY-01 | Phase 1 | Complete |
+| TRAY-02 | Phase 1 | Complete |
 | TRAY-03 | Phase 6 | Pending |
 | HKEY-01 | Phase 2 | Pending |
 | HKEY-02 | Phase 2 | Pending |
@@ -105,4 +105,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after roadmap creation*
+*Last updated: 2026-01-16 after Phase 1 completion*
