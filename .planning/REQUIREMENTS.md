@@ -77,32 +77,32 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TRAY-01 | — | Pending |
-| TRAY-02 | — | Pending |
-| TRAY-03 | — | Pending |
-| HKEY-01 | — | Pending |
-| HKEY-02 | — | Pending |
-| HKEY-03 | — | Pending |
-| INJT-01 | — | Pending |
-| INJT-02 | — | Pending |
-| INJT-03 | — | Pending |
-| CONF-01 | — | Pending |
-| CONF-02 | — | Pending |
-| CONF-03 | — | Pending |
-| CONF-04 | — | Pending |
-| CONF-05 | — | Pending |
-| CONF-06 | — | Pending |
-| ORGN-01 | — | Pending |
-| PLAT-01 | — | Pending |
-| PLAT-02 | — | Pending |
-| PLAT-03 | — | Pending |
-| PLAT-04 | — | Pending |
+| TRAY-01 | Phase 1 | Pending |
+| TRAY-02 | Phase 1 | Pending |
+| TRAY-03 | Phase 6 | Pending |
+| HKEY-01 | Phase 2 | Pending |
+| HKEY-02 | Phase 2 | Pending |
+| HKEY-03 | Phase 2 | Pending |
+| INJT-01 | Phase 3 | Pending |
+| INJT-02 | Phase 3 | Pending |
+| INJT-03 | Phase 3 | Pending |
+| CONF-01 | Phase 4 | Pending |
+| CONF-02 | Phase 5 | Pending |
+| CONF-03 | Phase 5 | Pending |
+| CONF-04 | Phase 5 | Pending |
+| CONF-05 | Phase 5 | Pending |
+| CONF-06 | Phase 5 | Pending |
+| ORGN-01 | Phase 5 | Pending |
+| PLAT-01 | Phase 6 | Pending |
+| PLAT-02 | Phase 6 | Pending |
+| PLAT-03 | Phase 6 | Pending |
+| PLAT-04 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total
-- Mapped to phases: 0
-- Unmapped: 20 ⚠️
+- Mapped to phases: 20 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after initial definition*
+*Last updated: 2026-01-16 after roadmap creation*
