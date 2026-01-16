@@ -9,6 +9,7 @@ mod injection;
 mod permission;
 mod tray;
 
+use std::collections::HashMap;
 use std::process;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
@@ -16,7 +17,6 @@ use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
 use winit::window::WindowId;
 use muda::MenuEvent;
 use tray_icon::TrayIcon;
-use global_hotkey::hotkey::{Code, HotKey, Modifiers};
 use global_hotkey::{GlobalHotKeyEvent, HotKeyState};
 
 /// Custom events for the winit event loop.
@@ -33,8 +33,10 @@ struct KeyBlastApp {
     _tray_icon: Option<TrayIcon>,
     hotkey_manager: Option<hotkey::HotkeyManager>,
     injector: Option<injection::KeystrokeInjector>,
-    /// Trigger count to alternate between instant/slow injection modes
-    trigger_count: u32,
+    /// Loaded configuration
+    config: Option<config::Config>,
+    /// Map hotkey_id -> macro definition for quick lookup
+    macros: HashMap<u32, config::MacroDefinition>,
 }
 
 impl KeyBlastApp {
@@ -49,7 +51,8 @@ impl KeyBlastApp {
             _tray_icon: None,
             hotkey_manager: None,
             injector: None,
-            trigger_count: 0,
+            config: None,
+            macros: HashMap::new(),
         }
     }
 }
@@ -86,41 +89,80 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
             }
 
-            // Initialize hotkey manager and register test hotkey
+            // Load configuration from disk
+            let loaded_config = match config::load_config() {
+                Ok(cfg) => {
+                    let config_path = config::config_path();
+                    if config_path.exists() {
+                        println!("Config loaded from: {}", config_path.display());
+                    }
+                    cfg
+                }
+                Err(e) => {
+                    eprintln!("Warning: Failed to load config: {}. Using defaults.", e);
+                    config::Config::default()
+                }
+            };
+
+            // If config has no macros, create a default example macro and save it
+            let final_config = if loaded_config.macros.is_empty() {
+                let default_macro = config::MacroDefinition {
+                    name: "example".to_string(),
+                    hotkey: "ctrl+shift+k".to_string(),
+                    text: "Hello from KeyBlast!{Enter}".to_string(),
+                    delay_ms: 0,
+                };
+                let mut cfg = loaded_config;
+                cfg.macros.push(default_macro);
+
+                // Save the default config so user has a template
+                match config::save_config(&cfg) {
+                    Ok(()) => {
+                        let config_path = config::config_path();
+                        println!("Created default config at: {}", config_path.display());
+                    }
+                    Err(e) => {
+                        eprintln!("Warning: Failed to save default config: {}", e);
+                    }
+                }
+                cfg
+            } else {
+                loaded_config
+            };
+
+            self.config = Some(final_config.clone());
+
+            // Initialize hotkey manager and register macros from config
             match hotkey::HotkeyManager::new() {
                 Ok(mut manager) => {
-                    let test_hotkey = HotKey::new(
-                        Some(Modifiers::CONTROL | Modifiers::SHIFT),
-                        Code::KeyK,
-                    );
-                    match manager.register(test_hotkey, "test".to_string()) {
-                        Ok(()) => {
-                            println!("Registered test hotkey: Ctrl+Shift+K");
+                    // Register each macro from config
+                    for macro_def in &final_config.macros {
+                        match config::parse_hotkey_string(&macro_def.hotkey) {
+                            Some(hotkey) => {
+                                match manager.register(hotkey, macro_def.name.clone()) {
+                                    Ok(()) => {
+                                        let hotkey_id = hotkey.id();
+                                        self.macros.insert(hotkey_id, macro_def.clone());
+                                        println!(
+                                            "Registered macro: {} ({})",
+                                            macro_def.name, macro_def.hotkey
+                                        );
+                                    }
+                                    Err(e) => {
+                                        eprintln!(
+                                            "Failed to register macro '{}': {}",
+                                            macro_def.name, e
+                                        );
+                                    }
+                                }
+                            }
+                            None => {
+                                eprintln!(
+                                    "Invalid hotkey '{}' for macro '{}'",
+                                    macro_def.hotkey, macro_def.name
+                                );
+                            }
                         }
-                        Err(e) => {
-                            eprintln!("Failed to register test hotkey: {}", e);
-                        }
-                    }
-
-                    // Test conflict detection - try to register same hotkey again
-                    let duplicate = HotKey::new(
-                        Some(Modifiers::CONTROL | Modifiers::SHIFT),
-                        Code::KeyK,
-                    );
-                    match manager.try_register(duplicate, "duplicate".to_string()) {
-                        hotkey::RegisterResult::ConflictInternal(msg) => {
-                            println!("Conflict test passed: {}", msg);
-                        }
-                        other => {
-                            println!("Unexpected result: {:?}", other);
-                        }
-                    }
-
-                    // Get 3 available hotkey suggestions
-                    let suggestions = manager.suggest_available(3);
-                    println!("Available hotkeys:");
-                    for hk in &suggestions {
-                        println!("  - {}", hotkey::hotkey_display_string(hk));
                     }
 
                     self.hotkey_manager = Some(manager);
@@ -142,45 +184,38 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
         match event {
             AppEvent::HotKey(hotkey_event) => {
                 if hotkey_event.state == HotKeyState::Pressed {
-                    if let Some(ref manager) = self.hotkey_manager {
-                        if let Some(macro_id) = manager.get_macro_id(hotkey_event.id) {
-                            println!("Hotkey triggered: {}", macro_id);
+                    // Look up macro by hotkey_id
+                    if let Some(macro_def) = self.macros.get(&hotkey_event.id) {
+                        println!("Hotkey triggered: {}", macro_def.name);
 
-                            // Check if macros are enabled
-                            if !self.state.enabled {
-                                println!("Macros disabled, ignoring hotkey");
-                                return;
-                            }
+                        // Check if macros are enabled
+                        if !self.state.enabled {
+                            println!("Macros disabled, ignoring hotkey");
+                            return;
+                        }
 
-                            // Test macro sequence demonstrating special keys (Enter, Tab)
-                            let test_macro = "KeyBlast test:{Enter}Line 2{Tab}tabbed{Enter}";
-
-                            // Alternate between instant (0ms) and slow (20ms) modes
-                            let (test_delay_ms, mode_name) = if self.trigger_count % 2 == 0 {
-                                (0, "instant")
+                        // Inject the macro text using config-defined text and delay
+                        if let Some(ref mut injector) = self.injector {
+                            let segments = injection::parse_macro_sequence(&macro_def.text);
+                            let mode_name = if macro_def.delay_ms == 0 {
+                                "instant"
                             } else {
-                                (20, "slow")
+                                "slow"
                             };
-                            self.trigger_count += 1;
-
-                            // Inject the macro text
-                            if let Some(ref mut injector) = self.injector {
-                                let segments = injection::parse_macro_sequence(test_macro);
-                                println!(
-                                    "Injecting macro ({}): {}",
-                                    mode_name, test_macro
-                                );
-                                match injector.execute_sequence(&segments, test_delay_ms) {
-                                    Ok(()) => {
-                                        println!("Injection complete");
-                                    }
-                                    Err(e) => {
-                                        eprintln!("Injection failed: {}", e);
-                                    }
+                            println!(
+                                "Injecting macro '{}' ({}): {}",
+                                macro_def.name, mode_name, macro_def.text
+                            );
+                            match injector.execute_sequence(&segments, macro_def.delay_ms) {
+                                Ok(()) => {
+                                    println!("Injection complete");
                                 }
-                            } else {
-                                eprintln!("No injector available");
+                                Err(e) => {
+                                    eprintln!("Injection failed: {}", e);
+                                }
                             }
+                        } else {
+                            eprintln!("No injector available");
                         }
                     }
                 }
