@@ -41,7 +41,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 11: Windows Executable** - Console suppression and embedded .exe icon
 - [x] **Phase 12: Error Notifications** - Tray alerts for injection failures and permission issues
-- [ ] **Phase 13: Onboarding Defaults** - Example macros in default config
+- [x] **Phase 13: Onboarding Defaults** - Example macros in default config
 - [ ] **Phase 14: macOS App Bundle** - .app bundle with custom icon in Finder/Dock
 
 ## Phase Details
@@ -264,11 +264,11 @@ Plans:
   1. Fresh config includes example "Hello World" macro
   2. Fresh config includes example macro demonstrating special keys and DSL features
   3. Example macros have reasonable non-conflicting hotkeys
-**Research**: Unlikely (internal patterns)
-**Plans**: TBD
+**Research**: Skipped (internal patterns)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 13-01: TBD
+- [x] 13-01: Default example macros (Hello World, Form Navigation, Signature Block)
 
 ### Phase 14: macOS App Bundle
 **Goal**: Professional macOS app distribution with custom icon
@@ -305,5 +305,5 @@ Phases execute in numeric order: 1 → 2 → ... → 14
 | 10. UX Polish | v2.0 | 4/4 | Complete | 2026-01-17 |
 | 11. Windows Executable | v2.1 | 1/1 | Complete | 2026-01-17 |
 | 12. Error Notifications | v2.1 | 1/1 | Complete | 2026-01-17 |
-| 13. Onboarding Defaults | v2.1 | 0/TBD | Not started | - |
+| 13. Onboarding Defaults | v2.1 | 1/1 | Complete | 2026-01-17 |
 | 14. macOS App Bundle | v2.1 | 0/TBD | Not started | - |

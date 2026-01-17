@@ -93,7 +93,7 @@ All v2.0 requirements delivered and shipped.
 
 ### Onboarding
 
-- [ ] **ONBOARD-01**: Fresh config includes example macros demonstrating usage
+- [x] **ONBOARD-01**: Fresh config includes example macros demonstrating usage
 
 ### macOS Polish
 
@@ -181,13 +181,13 @@ Which phases cover which requirements. Updated by create-roadmap.
 | WIN-02 | Phase 11 | Complete |
 | ERR-01 | Phase 12 | Complete |
 | ERR-02 | Phase 12 | Complete |
-| ONBOARD-01 | Phase 13 | Pending |
+| ONBOARD-01 | Phase 13 | Complete |
 | MAC-01 | Phase 14 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total (Complete)
 - v2 requirements: 17 total (Complete)
-- v2.1 requirements: 6 total (4 complete, 2 pending)
+- v2.1 requirements: 6 total (5 complete, 1 pending)
 - Unmapped: 0 ✓
 
 ---
