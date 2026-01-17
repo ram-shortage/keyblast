@@ -88,45 +88,6 @@ impl KeystrokeInjector {
         Ok(())
     }
 
-    /// Type text after releasing modifiers.
-    ///
-    /// # Arguments
-    ///
-    /// * `text` - The text to type
-    /// * `delay_ms` - Delay between keystrokes in milliseconds.
-    ///   - `0`: Use bulk text() method for maximum speed
-    ///   - `>0`: Type character-by-character with delay (for slow applications)
-    ///
-    /// # Example
-    ///
-    /// ```ignore
-    /// let mut injector = KeystrokeInjector::new()?;
-    /// // Fast typing
-    /// injector.type_text_with_delay("Hello, World!", 0)?;
-    /// // Slow typing for problematic applications
-    /// injector.type_text_with_delay("Hello, World!", 20)?;
-    /// ```
-    pub fn type_text_with_delay(&mut self, text: &str, delay_ms: u64) -> Result<(), InjectionError> {
-        // Release any modifiers held from hotkey activation
-        self.release_modifiers()?;
-
-        // Wait for modifiers to fully release (macOS needs longer)
-        thread::sleep(Duration::from_millis(50));
-
-        if delay_ms == 0 {
-            // Fast path: use bulk text() method
-            self.enigo.text(text)?;
-        } else {
-            // Slow path: character-by-character with delay
-            for c in text.chars() {
-                self.enigo.text(&c.to_string())?;
-                thread::sleep(Duration::from_millis(delay_ms));
-            }
-        }
-
-        Ok(())
-    }
-
     /// Execute a parsed macro sequence with special keys and text.
     ///
     /// # Arguments

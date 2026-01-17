@@ -58,11 +58,6 @@ impl ExecutionHandle {
         self.stop_flag.store(true, Ordering::Relaxed);
     }
 
-    /// Check if the worker thread is still running.
-    pub fn is_running(&self) -> bool {
-        self.thread.as_ref().map_or(false, |t| !t.is_finished())
-    }
-
     /// Wait for the worker thread to complete.
     ///
     /// Call this on app exit to ensure clean shutdown.
@@ -279,18 +274,6 @@ mod tests {
         }
 
         assert!(received_cancelled, "Should receive Cancelled after stop");
-        handle.join();
-    }
-
-    #[test]
-    fn test_execution_handle_is_running() {
-        let segments = vec![MacroSegment::Text("test".to_string())];
-        let (_rx, handle) = start_execution(segments, 0);
-
-        // Thread should finish quickly with no delay
-        std::thread::sleep(Duration::from_millis(50));
-        assert!(!handle.is_running(), "Thread should have finished");
-
         handle.join();
     }
 

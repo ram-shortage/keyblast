@@ -3,7 +3,7 @@
 /// Provides registration and lookup of global keyboard shortcuts that trigger macro playback.
 
 use std::collections::HashMap;
-use global_hotkey::hotkey::{Code, HotKey, Modifiers};
+use global_hotkey::hotkey::HotKey;
 use global_hotkey::GlobalHotKeyManager;
 
 /// Result of attempting to register a hotkey.
@@ -20,6 +20,7 @@ pub enum RegisterResult {
 }
 
 /// A binding between a hotkey and its associated macro.
+#[allow(dead_code)]
 pub struct HotkeyBinding {
     pub hotkey: HotKey,
     pub macro_id: String,
@@ -103,76 +104,4 @@ impl HotkeyManager {
         Ok(())
     }
 
-    /// Look up the macro ID for a given hotkey ID.
-    pub fn get_macro_id(&self, hotkey_id: u32) -> Option<&str> {
-        self.bindings.get(&hotkey_id).map(|b| b.macro_id.as_str())
-    }
-
-    /// Returns up to `count` available hotkey combinations.
-    ///
-    /// Tests each candidate by registering then immediately unregistering.
-    /// Skips hotkeys already registered by this application.
-    pub fn suggest_available(&self, count: usize) -> Vec<HotKey> {
-        let mut suggestions = Vec::new();
-
-        for candidate in candidate_hotkeys() {
-            // Skip if already registered by this app
-            if self.bindings.contains_key(&candidate.id()) {
-                continue;
-            }
-
-            // Try to register - if it succeeds, it's available
-            match self.manager.register(candidate) {
-                Ok(()) => {
-                    // Available! Unregister immediately
-                    let _ = self.manager.unregister(candidate);
-                    suggestions.push(candidate);
-                    if suggestions.len() >= count {
-                        break;
-                    }
-                }
-                Err(_) => {
-                    // Not available, try next
-                    continue;
-                }
-            }
-        }
-
-        suggestions
-    }
-}
-
-/// Returns a list of candidate hotkeys to try for suggestions.
-///
-/// These are ordered from most likely to be available (Tier 1) to less likely (Tier 2).
-fn candidate_hotkeys() -> Vec<HotKey> {
-    let ctrl_shift = Some(Modifiers::CONTROL | Modifiers::SHIFT);
-    let ctrl_alt = Some(Modifiers::CONTROL | Modifiers::ALT);
-
-    vec![
-        // Ctrl+Shift+<letter> - rarely conflicts
-        HotKey::new(ctrl_shift, Code::KeyK),
-        HotKey::new(ctrl_shift, Code::KeyM),
-        HotKey::new(ctrl_shift, Code::KeyJ),
-        HotKey::new(ctrl_shift, Code::KeyL),
-        HotKey::new(ctrl_shift, Code::KeyU),
-        HotKey::new(ctrl_shift, Code::KeyI),
-        HotKey::new(ctrl_shift, Code::KeyO),
-        HotKey::new(ctrl_shift, Code::KeyP),
-        // Ctrl+Alt+<letter> - rarely conflicts
-        HotKey::new(ctrl_alt, Code::KeyK),
-        HotKey::new(ctrl_alt, Code::KeyM),
-        HotKey::new(ctrl_alt, Code::KeyJ),
-        HotKey::new(ctrl_alt, Code::KeyL),
-        // Ctrl+Shift+<number>
-        HotKey::new(ctrl_shift, Code::Digit1),
-        HotKey::new(ctrl_shift, Code::Digit2),
-        HotKey::new(ctrl_shift, Code::Digit3),
-        HotKey::new(ctrl_shift, Code::Digit4),
-    ]
-}
-
-/// Format a hotkey for display.
-pub fn hotkey_display_string(hotkey: &HotKey) -> String {
-    hotkey.into_string()
 }
