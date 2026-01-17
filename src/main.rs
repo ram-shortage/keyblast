@@ -13,7 +13,6 @@ mod permission;
 mod tray;
 
 use std::collections::HashMap;
-use std::process;
 use std::sync::mpsc;
 use winit::application::ApplicationHandler;
 use winit::event::WindowEvent;
@@ -69,6 +68,8 @@ struct KeyBlastApp {
     stop_hotkey_id: Option<u32>,
     /// Validation warnings from config load
     config_warnings: Vec<config::ValidationWarning>,
+    /// Flag to signal clean shutdown
+    should_exit: bool,
 }
 
 impl KeyBlastApp {
@@ -105,6 +106,7 @@ impl KeyBlastApp {
             execution_prepared: false,
             stop_hotkey_id: None,
             config_warnings: Vec::new(),
+            should_exit: false,
         }
     }
 
@@ -129,6 +131,9 @@ impl KeyBlastApp {
     }
 
     /// Set up file watcher for config hot-reload.
+    ///
+    /// Watches the parent directory to catch rename/create events from editors
+    /// that use atomic save (write temp file, then rename).
     fn setup_config_watcher(&mut self) {
         let (tx, rx) = mpsc::channel();
 
@@ -142,12 +147,17 @@ impl KeyBlastApp {
         match watcher_result {
             Ok(mut watcher) => {
                 let config_path = config::config_path();
-                if let Err(e) = watcher.watch(&config_path, RecursiveMode::NonRecursive) {
-                    eprintln!("Failed to watch config file: {}", e);
+                // Watch parent directory to catch rename/create events
+                if let Some(parent) = config_path.parent() {
+                    if let Err(e) = watcher.watch(parent, RecursiveMode::NonRecursive) {
+                        eprintln!("Failed to watch config directory: {}", e);
+                    } else {
+                        println!("Watching config directory for changes: {}", parent.display());
+                        self.config_watcher = Some(watcher);
+                        self.config_change_rx = Some(rx);
+                    }
                 } else {
-                    println!("Watching config file for changes: {}", config_path.display());
-                    self.config_watcher = Some(watcher);
-                    self.config_change_rx = Some(rx);
+                    eprintln!("Could not determine config file parent directory");
                 }
             }
             Err(e) => {
@@ -158,15 +168,24 @@ impl KeyBlastApp {
 
     /// Check for config file changes (non-blocking).
     fn check_config_changes(&mut self) {
-        // Collect any modify events first (to avoid borrow issues)
+        let config_path = config::config_path();
+        // Collect any relevant events first (to avoid borrow issues)
         let mut should_reload = false;
         if let Some(ref rx) = self.config_change_rx {
             // Non-blocking receive - check if there are any pending events
             while let Ok(result) = rx.try_recv() {
                 if let Ok(event) = result {
-                    // Only reload on modify events (not access, create, etc.)
-                    if matches!(event.kind, EventKind::Modify(_)) {
-                        should_reload = true;
+                    // Check if event affects our config file
+                    let affects_config = event.paths.iter().any(|p| p == &config_path);
+                    if !affects_config {
+                        continue;
+                    }
+                    // Reload on modify, create, or rename events (editors use atomic save)
+                    match event.kind {
+                        EventKind::Modify(_) | EventKind::Create(_) => {
+                            should_reload = true;
+                        }
+                        _ => {}
                     }
                 }
             }
@@ -457,7 +476,13 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
         }
     }
 
-    fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
+    fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
+        // Check for clean shutdown request
+        if self.should_exit {
+            event_loop.exit();
+            return;
+        }
+
         // Process async execution commands (non-blocking)
         // Collect commands first to avoid borrow issues when clearing state
         let commands: Vec<_> = self.execution_rx.as_ref()
@@ -470,11 +495,15 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                     if let Some(ref mut injector) = self.injector {
                         // Prepare injector once at start of execution
                         if !self.execution_prepared {
-                            let _ = injector.prepare_for_injection();
+                            if let Err(e) = injector.prepare_for_injection() {
+                                eprintln!("Failed to prepare injection: {}", e);
+                            }
                             self.execution_prepared = true;
                         }
                         // Execute segment on main thread (safe for macOS TIS/TSM)
-                        let _ = injector.execute_single_segment(&segment);
+                        if let Err(e) = injector.execute_single_segment(&segment) {
+                            eprintln!("Injection error: {}", e);
+                        }
                     }
                 }
                 execution::ExecutionCommand::Complete => {
@@ -724,7 +753,7 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
 
                             if let Some(ref mut cfg) = self.config {
                                 // Merge imported macros (add new ones, skip duplicates by name)
-                                let existing_names: std::collections::HashSet<_> =
+                                let mut existing_names: std::collections::HashSet<_> =
                                     cfg.macros.iter().map(|m| m.name.clone()).collect();
 
                                 let mut added = 0;
@@ -736,6 +765,8 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                                 match manager.register(hotkey, macro_def.name.clone()) {
                                                     Ok(()) => {
                                                         let hotkey_id = hotkey.id();
+                                                        // Track this name to prevent duplicates within import
+                                                        existing_names.insert(macro_def.name.clone());
                                                         self.macros.insert(hotkey_id, macro_def.clone());
                                                         cfg.macros.push(macro_def);
                                                         added += 1;
@@ -808,7 +839,8 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                     handle.join();
                 }
                 println!("KeyBlast shutting down.");
-                process::exit(0);
+                // Set flag for clean exit (allows destructors to run for log flushing)
+                self.should_exit = true;
             }
         }
     }

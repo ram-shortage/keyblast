@@ -132,20 +132,50 @@ pub fn start_execution(
 ///
 /// Iterates through segments, checking the stop flag before each.
 /// Sends segments to main thread via channel.
-/// For delays, sleeps in small increments to respond quickly to cancellation.
+///
+/// Key timing behaviors:
+/// - {Delay N} segments: worker sleeps (doesn't send to main thread)
+/// - Text segments with delay_ms > 0: split into per-character injections
+/// - All other segments: sent to main thread, worker sleeps delay_ms after
 fn execution_worker(
     segments: Vec<MacroSegment>,
     delay_ms: u64,
     stop_flag: Arc<AtomicBool>,
     tx: Sender<ExecutionCommand>,
 ) {
-    let segment_count = segments.len();
+    // Expand segments: Text with delay_ms > 0 becomes per-character
+    let expanded: Vec<MacroSegment> = if delay_ms > 0 {
+        segments.into_iter().flat_map(|seg| {
+            match seg {
+                MacroSegment::Text(text) => {
+                    // Split text into individual characters for per-char delay
+                    text.chars()
+                        .map(|c| MacroSegment::Text(c.to_string()))
+                        .collect::<Vec<_>>()
+                }
+                other => vec![other],
+            }
+        }).collect()
+    } else {
+        segments
+    };
 
-    for (i, segment) in segments.into_iter().enumerate() {
+    let segment_count = expanded.len();
+
+    for (i, segment) in expanded.into_iter().enumerate() {
         // Check for cancellation before each segment
         if stop_flag.load(Ordering::Relaxed) {
             let _ = tx.send(ExecutionCommand::Cancelled);
             return;
+        }
+
+        // Handle Delay segments in worker thread (don't block main thread)
+        if let MacroSegment::Delay(ms) = segment {
+            if !cancellable_sleep(ms, &stop_flag) {
+                let _ = tx.send(ExecutionCommand::Cancelled);
+                return;
+            }
+            continue; // Don't send Delay to main thread
         }
 
         // Send segment to main thread for execution
@@ -156,22 +186,30 @@ fn execution_worker(
 
         // Wait between segments if delay specified (not after last segment)
         if delay_ms > 0 && i < segment_count.saturating_sub(1) {
-            // Sleep in small increments (50ms) to check stop flag more frequently
-            let check_interval = Duration::from_millis(50.min(delay_ms));
-            let total_delay = Duration::from_millis(delay_ms);
-            let start = Instant::now();
-
-            while start.elapsed() < total_delay {
-                if stop_flag.load(Ordering::Relaxed) {
-                    let _ = tx.send(ExecutionCommand::Cancelled);
-                    return;
-                }
-                std::thread::sleep(check_interval);
+            if !cancellable_sleep(delay_ms, &stop_flag) {
+                let _ = tx.send(ExecutionCommand::Cancelled);
+                return;
             }
         }
     }
 
     let _ = tx.send(ExecutionCommand::Complete);
+}
+
+/// Sleep for the specified duration, checking the stop flag periodically.
+/// Returns true if sleep completed, false if cancelled.
+fn cancellable_sleep(ms: u64, stop_flag: &Arc<AtomicBool>) -> bool {
+    let check_interval = Duration::from_millis(50.min(ms));
+    let total_delay = Duration::from_millis(ms);
+    let start = Instant::now();
+
+    while start.elapsed() < total_delay {
+        if stop_flag.load(Ordering::Relaxed) {
+            return false;
+        }
+        std::thread::sleep(check_interval);
+    }
+    true
 }
 
 #[cfg(test)]
