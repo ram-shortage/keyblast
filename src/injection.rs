@@ -445,6 +445,19 @@ fn special_key_from_name(name: &str) -> Option<Key> {
         "pageup" | "pgup" => Some(Key::PageUp),
         "pagedown" | "pgdn" => Some(Key::PageDown),
         "space" => Some(Key::Space),
+        // Function keys
+        "f1" => Some(Key::F1),
+        "f2" => Some(Key::F2),
+        "f3" => Some(Key::F3),
+        "f4" => Some(Key::F4),
+        "f5" => Some(Key::F5),
+        "f6" => Some(Key::F6),
+        "f7" => Some(Key::F7),
+        "f8" => Some(Key::F8),
+        "f9" => Some(Key::F9),
+        "f10" => Some(Key::F10),
+        "f11" => Some(Key::F11),
+        "f12" => Some(Key::F12),
         _ => None,
     }
 }
@@ -457,7 +470,8 @@ fn modifier_key_from_name(name: &str) -> Option<Key> {
     match name.to_lowercase().as_str() {
         "ctrl" | "control" => Some(Key::Control),
         "shift" => Some(Key::Shift),
-        "alt" => Some(Key::Alt),
+        // Note: enigo doesn't distinguish LAlt/RAlt, so they map to generic Alt
+        "alt" | "lalt" | "ralt" => Some(Key::Alt),
         "meta" | "win" | "cmd" | "command" | "super" => Some(Key::Meta),
         "lctrl" | "lcontrol" => Some(Key::LControl),
         "rctrl" | "rcontrol" => Some(Key::RControl),

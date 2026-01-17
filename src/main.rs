@@ -231,6 +231,11 @@ impl KeyBlastApp {
                                     eprintln!("Failed to register '{}': {}", macro_def.name, e);
                                 }
                             }
+                        } else {
+                            eprintln!(
+                                "Invalid hotkey '{}' for macro '{}' (skipped during reload)",
+                                macro_def.hotkey, macro_def.name
+                            );
                         }
                     }
                 }
@@ -283,11 +288,14 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
             }
 
+            // Check if this is first run (config file doesn't exist yet)
+            let config_path = config::config_path();
+            let is_first_run = !config_path.exists();
+
             // Load configuration from disk
             let loaded_config = match config::load_config() {
                 Ok(cfg) => {
-                    let config_path = config::config_path();
-                    if config_path.exists() {
+                    if !is_first_run {
                         info!("Config loaded from: {}", config_path.display());
                     }
                     cfg
@@ -298,15 +306,15 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
             };
 
-            // If config has no macros, create default example macros and save
-            let final_config = if loaded_config.macros.is_empty() {
+            // Only seed example macros on first run (config file didn't exist)
+            // This allows users to intentionally keep an empty macro list
+            let final_config = if is_first_run && loaded_config.macros.is_empty() {
                 let mut cfg = loaded_config;
                 cfg.macros = config::default_example_macros();
 
                 // Save the default config so user has a template
                 match config::save_config(&cfg) {
                     Ok(()) => {
-                        let config_path = config::config_path();
                         info!("Created default config with example macros at: {}", config_path.display());
                     }
                     Err(e) => {
@@ -797,10 +805,17 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                 // Merge imported macros (add new ones, skip duplicates by name)
                                 let mut existing_names: std::collections::HashSet<_> =
                                     cfg.macros.iter().map(|m| m.name.clone()).collect();
+                                // Collect existing IDs to detect collisions
+                                let existing_ids: std::collections::HashSet<_> =
+                                    cfg.macros.iter().map(|m| m.id).collect();
 
                                 let mut added = 0;
-                                for macro_def in imported_macros {
+                                for mut macro_def in imported_macros {
                                     if !existing_names.contains(&macro_def.name) {
+                                        // Regenerate ID if it collides with existing macros
+                                        if existing_ids.contains(&macro_def.id) {
+                                            macro_def.id = uuid::Uuid::new_v4();
+                                        }
                                         // Register the hotkey for the new macro
                                         if let Some(ref mut manager) = self.hotkey_manager {
                                             if let Some(hotkey) = config::parse_hotkey_string(&macro_def.hotkey) {
@@ -834,7 +849,14 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                     }
                                 }
 
-                                // Rebuild menu to show new macros
+                                // Refresh validation warnings after import
+                                let warnings = config::validate_config(cfg);
+                                for warning in &warnings {
+                                    eprintln!("Config warning: {}", warning);
+                                }
+                                self.config_warnings = warnings;
+
+                                // Rebuild menu to show new macros and updated warnings
                                 self.rebuild_menu();
                             }
                         }

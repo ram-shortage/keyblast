@@ -119,7 +119,7 @@ Use `{KeyName}` syntax for special keys:
 For `{KeyDown}` and `{KeyUp}`:
 - `Ctrl`, `LCtrl`, `RCtrl`
 - `Shift`, `LShift`, `RShift`
-- `Alt`, `LAlt`, `RAlt`
+- `Alt` (LAlt/RAlt accepted but map to generic Alt)
 - `Meta` (Cmd on macOS, Win on Windows)
 
 ### Example: Complex Macro
@@ -134,12 +134,15 @@ text = "{KeyDown Ctrl}a{KeyUp Ctrl}{Delay 50}{KeyDown Ctrl}c{KeyUp Ctrl}"
 ## Tray Menu
 
 - **Enable/Disable** — Toggle all macro hotkeys
-- **Run Macro** — Click to execute (alphabetized list)
-- **Macros** — View, edit, delete macros by group
-- **New Macro...** — Create a new macro
-- **Import/Export** — Share configurations
+- **Stop Macro** — Stop running macro (shown during execution)
+- **Run Macro** — Click to execute any macro (alphabetized list)
+- **Macros** — View macros by group, with Edit/Delete options
+- **Warnings** — Shows validation warnings (if any)
+- **Edit Config File...** — Open config in default editor
+- **Export Macros...** — Save macros to a file
+- **Import Macros...** — Load macros from a file
 - **Open Logs...** — View application logs
-- **Auto-Start** — Toggle launch at login
+- **Start at Login** — Toggle auto-start at login
 - **Quit** — Exit KeyBlast
 
 ## Keyboard Shortcuts
