@@ -893,6 +893,9 @@ fn main() {
     // Keep guard alive for program lifetime
     let _log_guard = logging::init_file_logging();
 
+    // Initialize notification system (sets bundle identifier on macOS)
+    notification::init();
+
     // Create the event loop with custom event type for hotkey integration
     let event_loop = EventLoop::<AppEvent>::with_user_event()
         .build()

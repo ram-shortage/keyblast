@@ -7,6 +7,20 @@ use notify_rust::{Notification, Timeout};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+/// Initialize the notification system.
+///
+/// On macOS, this sets the application bundle identifier so notifications
+/// are properly associated with the app. Must be called before any notifications.
+pub fn init() {
+    #[cfg(target_os = "macos")]
+    {
+        // Set the bundle identifier for macOS notifications.
+        // This prevents the "where is use_default" dialog that occurs when
+        // mac-notification-sys tries to find a default app.
+        let _ = notify_rust::set_application("com.keyblast.app");
+    }
+}
+
 /// Minimum interval between notifications to prevent spam (3 seconds)
 const NOTIFICATION_DEBOUNCE_MS: u64 = 3000;
 
