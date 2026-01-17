@@ -36,3 +36,24 @@ tempfile = "3"
 
 [build-dependencies]
 winresource = "0.1"
+
+[package.metadata.bundle]
+name = "KeyBlast"
+identifier = "com.keyblast.app"
+icon = [
+    "assets/macos/icon_16x16.png",
+    "assets/macos/icon_16x16@2x.png",
+    "assets/macos/icon_32x32.png",
+    "assets/macos/icon_32x32@2x.png",
+    "assets/macos/icon_128x128.png",
+    "assets/macos/icon_128x128@2x.png",
+    "assets/macos/icon_256x256.png",
+    "assets/macos/icon_256x256@2x.png",
+    "assets/macos/icon_512x512.png",
+    "assets/macos/icon_512x512@2x.png",
+]
+version = "0.1.0"
+copyright = "Copyright (c) 2026 KeyBlast"
+category = "public.app-category.productivity"
+short_description = "A lightweight macro playback application"
+osx_minimum_system_version = "10.13"
