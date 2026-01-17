@@ -169,6 +169,20 @@ impl KeystrokeInjector {
                         thread::sleep(Duration::from_millis(delay_ms));
                     }
                 }
+                // New segment types - execution handled in Plan 08-02
+                MacroSegment::Delay(ms) => {
+                    thread::sleep(Duration::from_millis(*ms));
+                }
+                MacroSegment::KeyDown(key) => {
+                    self.enigo.key(*key, Direction::Press)?;
+                }
+                MacroSegment::KeyUp(key) => {
+                    self.enigo.key(*key, Direction::Release)?;
+                }
+                MacroSegment::Paste => {
+                    // Clipboard paste requires arboard - will be implemented in 08-02
+                    // For now, this is a no-op to allow compilation
+                }
             }
         }
 
@@ -206,6 +220,20 @@ impl KeystrokeInjector {
             MacroSegment::SpecialKey(key) => {
                 self.enigo.key(*key, Direction::Click)?;
             }
+            // New segment types - execution handled in Plan 08-02
+            MacroSegment::Delay(ms) => {
+                thread::sleep(Duration::from_millis(*ms));
+            }
+            MacroSegment::KeyDown(key) => {
+                self.enigo.key(*key, Direction::Press)?;
+            }
+            MacroSegment::KeyUp(key) => {
+                self.enigo.key(*key, Direction::Release)?;
+            }
+            MacroSegment::Paste => {
+                // Clipboard paste requires arboard - will be implemented in 08-02
+                // For now, this is a no-op to allow compilation
+            }
         }
         Ok(())
     }
@@ -238,13 +266,21 @@ impl KeystrokeInjector {
     }
 }
 
-/// A segment of a macro sequence - either plain text or a special key.
+/// A segment of a macro sequence.
 #[derive(Debug, Clone, PartialEq)]
 pub enum MacroSegment {
     /// Plain text to be typed.
     Text(String),
     /// A special key to be pressed (Enter, Tab, etc.).
     SpecialKey(Key),
+    /// Pause execution for N milliseconds.
+    Delay(u64),
+    /// Press and hold a modifier key.
+    KeyDown(Key),
+    /// Release a modifier key.
+    KeyUp(Key),
+    /// Paste current clipboard contents as text.
+    Paste,
 }
 
 /// Parse a macro string with escape sequences into segments.
@@ -346,6 +382,24 @@ fn special_key_from_name(name: &str) -> Option<Key> {
         "pageup" | "pgup" => Some(Key::PageUp),
         "pagedown" | "pgdn" => Some(Key::PageDown),
         "space" => Some(Key::Space),
+        _ => None,
+    }
+}
+
+/// Map a modifier key name to an enigo Key variant.
+///
+/// Returns `None` for unknown modifier key names.
+/// Used for `{KeyDown key}` and `{KeyUp key}` commands.
+fn modifier_key_from_name(name: &str) -> Option<Key> {
+    match name.to_lowercase().as_str() {
+        "ctrl" | "control" => Some(Key::Control),
+        "shift" => Some(Key::Shift),
+        "alt" => Some(Key::Alt),
+        "meta" | "win" | "cmd" | "command" | "super" => Some(Key::Meta),
+        "lctrl" | "lcontrol" => Some(Key::LControl),
+        "rctrl" | "rcontrol" => Some(Key::RControl),
+        "lshift" => Some(Key::LShift),
+        "rshift" => Some(Key::RShift),
         _ => None,
     }
 }
