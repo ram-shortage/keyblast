@@ -64,6 +64,8 @@ Progress: █████████░ 86% (19/22 plans complete)
 | serde default = Uuid::new_v4 | 09-02 | Auto-generate UUIDs for existing configs on deserialize |
 | Warnings as disabled menu items | 09-02 | Informational display in tray, not clickable actions |
 | Flat list over grouped for Run Macro | 10-03 | Native tray menus cannot support search; flat alphabetized is easiest to browse |
+| AppSettings separate struct | 10-02 | Application-wide preferences separate from macros, backward-compatible via serde defaults |
+| Immediate save on toggle | 10-02 | Prevents data loss on crash, no wait-for-quit semantics |
 
 ### Pending Todos
 
@@ -76,5 +78,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 10-03-PLAN.md
+Stopped at: Completed 10-02-PLAN.md
 Resume file: None
