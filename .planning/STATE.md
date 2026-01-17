@@ -12,9 +12,9 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 Phase: 10 of 10 (UX Polish)
 Plan: 3 of 4 complete
 Status: In progress
-Last activity: 2026-01-17 — Completed 10-03-PLAN.md
+Last activity: 2026-01-17 — Completed 10-01-PLAN.md
 
-Progress: █████████░ 86% (19/22 plans complete)
+Progress: █████████▌ 95% (21/22 plans complete)
 
 ## Performance Metrics
 
@@ -41,7 +41,7 @@ Progress: █████████░ 86% (19/22 plans complete)
 | 7. Async Execution | 2 | 2 | Complete |
 | 8. Expanded DSL | 2 | 2 | Complete |
 | 9. Robustness | 2 | 2 | Complete |
-| 10. UX Polish | 4 | 1 | In progress |
+| 10. UX Polish | 4 | 3 | In progress |
 
 ## Accumulated Context
 
@@ -66,6 +66,9 @@ Progress: █████████░ 86% (19/22 plans complete)
 | Flat list over grouped for Run Macro | 10-03 | Native tray menus cannot support search; flat alphabetized is easiest to browse |
 | AppSettings separate struct | 10-02 | Application-wide preferences separate from macros, backward-compatible via serde defaults |
 | Immediate save on toggle | 10-02 | Prevents data loss on crash, no wait-for-quit semantics |
+| 7-day log retention | 10-01 | Reasonable default for troubleshooting without accumulating excessive files |
+| Daily log rotation | 10-01 | Matches common patterns, easy to find logs by date |
+| Graceful logging fallback | 10-01 | If logging setup fails, app continues without file logging |
 
 ### Pending Todos
 
@@ -78,5 +81,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 10-02-PLAN.md
+Stopped at: Completed 10-01-PLAN.md
 Resume file: None
