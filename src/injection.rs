@@ -770,4 +770,78 @@ mod tests {
             ]
         );
     }
+
+    // === DSL Execution Tests (08-02) ===
+
+    #[test]
+    fn test_parse_delay_segment() {
+        let segments = parse_macro_sequence("{Delay 500}");
+        assert_eq!(segments, vec![MacroSegment::Delay(500)]);
+    }
+
+    #[test]
+    fn test_parse_keydown_keyup() {
+        let segments = parse_macro_sequence("{KeyDown Ctrl}c{KeyUp Ctrl}");
+        assert_eq!(
+            segments,
+            vec![
+                MacroSegment::KeyDown(Key::Control),
+                MacroSegment::Text("c".to_string()),
+                MacroSegment::KeyUp(Key::Control),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_parse_paste_in_context() {
+        let segments = parse_macro_sequence("prefix{Paste}suffix");
+        assert_eq!(
+            segments,
+            vec![
+                MacroSegment::Text("prefix".to_string()),
+                MacroSegment::Paste,
+                MacroSegment::Text("suffix".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_parse_brace_escapes_for_json() {
+        // Template: Type JSON with escaped braces
+        let segments = parse_macro_sequence(r#"{{"name": "test"}}"#);
+        assert_eq!(
+            segments,
+            vec![MacroSegment::Text(r#"{"name": "test"}"#.to_string())]
+        );
+    }
+
+    #[test]
+    fn test_complex_macro_with_all_features() {
+        // Realistic macro: Type text, delay, press Enter, escaped braces, paste clipboard
+        let segments = parse_macro_sequence("Hello{Delay 100}{Enter}{{data}}: {Paste}");
+        assert_eq!(
+            segments,
+            vec![
+                MacroSegment::Text("Hello".to_string()),
+                MacroSegment::Delay(100),
+                MacroSegment::SpecialKey(Key::Return),
+                MacroSegment::Text("{data}: ".to_string()),
+                MacroSegment::Paste,
+            ]
+        );
+    }
+
+    #[test]
+    fn test_shift_combo_for_uppercase() {
+        // {KeyDown Shift}hello{KeyUp Shift} should hold shift while typing
+        let segments = parse_macro_sequence("{KeyDown Shift}hello{KeyUp Shift}");
+        assert_eq!(
+            segments,
+            vec![
+                MacroSegment::KeyDown(Key::Shift),
+                MacroSegment::Text("hello".to_string()),
+                MacroSegment::KeyUp(Key::Shift),
+            ]
+        );
+    }
 }
