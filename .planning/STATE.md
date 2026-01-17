@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 8 of 10 (Expanded DSL)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — Phase 7 complete
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-17 — Completed 08-01-PLAN.md
 
-Progress: ███████░░░ 70% (v1.0 complete, Phase 7 done)
+Progress: ███████▓░░ 75% (v1.0 complete, Phase 8 Plan 1 done)
 
 ## Performance Metrics
 
@@ -39,7 +39,7 @@ Progress: ███████░░░ 70% (v1.0 complete, Phase 7 done)
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
 | 7. Async Execution | 2 | 2 | Complete |
-| 8. Expanded DSL | ? | 0 | Not started |
+| 8. Expanded DSL | 2 | 1 | In progress |
 | 9. Robustness | ? | 0 | Not started |
 | 10. UX Polish | ? | 0 | Not started |
 
@@ -54,6 +54,8 @@ Progress: ███████░░░ 70% (v1.0 complete, Phase 7 done)
 | ExecutionCommand enum pattern | 07-01 | Clean worker-to-main communication (Inject/Complete/Cancelled) |
 | Sync fast path for short macros | 07-02 | Avoid async overhead for <= 10 segments with no delay |
 | Collect-then-process pattern | 07-02 | Satisfy Rust borrow checker when processing commands |
+| Placeholder execution handlers | 08-01 | Allow compilation before 08-02 implements full execution |
+| Brace escapes merge into text | 08-01 | Efficiency - single Text segment vs multiple |
 
 ### Pending Todos
 
@@ -66,5 +68,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Phase 7 complete
+Stopped at: Completed 08-01-PLAN.md
 Resume file: None
