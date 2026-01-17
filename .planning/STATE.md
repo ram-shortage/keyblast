@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 9 of 10 (Robustness)
-Plan: 1 of ? complete
+Plan: 2 of ? complete
 Status: In progress
-Last activity: 2026-01-17 — Completed 09-01-PLAN.md
+Last activity: 2026-01-17 — Completed 09-02-PLAN.md
 
-Progress: ████████░░ 85% (v1.0 complete, Phase 9 started)
+Progress: ████████░░ 87% (v1.0 complete, Phase 9 progressing)
 
 ## Performance Metrics
 
@@ -40,7 +40,7 @@ Progress: ████████░░ 85% (v1.0 complete, Phase 9 started)
 |-------|-------|-----------|--------|
 | 7. Async Execution | 2 | 2 | Complete |
 | 8. Expanded DSL | 2 | 2 | Complete |
-| 9. Robustness | ? | 1 | In progress |
+| 9. Robustness | ? | 2 | In progress |
 | 10. UX Polish | ? | 0 | Not started |
 
 ## Accumulated Context
@@ -61,6 +61,8 @@ Progress: ████████░░ 85% (v1.0 complete, Phase 9 started)
 | First occurrence wins dedupe | 09-01 | Simple deterministic rule for duplicate macro names |
 | Windows remove-then-rename | 09-01 | Preserve atomic write intent on Windows platform |
 | validate_config returns warnings | 09-01 | Caller decides action on validation warnings |
+| serde default = Uuid::new_v4 | 09-02 | Auto-generate UUIDs for existing configs on deserialize |
+| Warnings as disabled menu items | 09-02 | Informational display in tray, not clickable actions |
 
 ### Pending Todos
 
@@ -73,5 +75,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 09-01-PLAN.md
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None
