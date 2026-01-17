@@ -298,24 +298,16 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
             };
 
-            // If config has no macros, create a default example macro and save it
+            // If config has no macros, create default example macros and save
             let final_config = if loaded_config.macros.is_empty() {
-                let default_macro = config::MacroDefinition {
-                    id: uuid::Uuid::new_v4(),
-                    name: "example".to_string(),
-                    hotkey: "ctrl+shift+k".to_string(),
-                    text: "Hello from KeyBlast!{Enter}".to_string(),
-                    delay_ms: 0,
-                    group: None,
-                };
                 let mut cfg = loaded_config;
-                cfg.macros.push(default_macro);
+                cfg.macros = config::default_example_macros();
 
                 // Save the default config so user has a template
                 match config::save_config(&cfg) {
                     Ok(()) => {
                         let config_path = config::config_path();
-                        println!("Created default config at: {}", config_path.display());
+                        info!("Created default config with example macros at: {}", config_path.display());
                     }
                     Err(e) => {
                         eprintln!("Warning: Failed to save default config: {}", e);
