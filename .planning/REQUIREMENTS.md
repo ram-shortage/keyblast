@@ -83,8 +83,8 @@ All v2.0 requirements delivered and shipped.
 
 ### Windows Polish
 
-- [ ] **WIN-01**: Windows executable runs without console window
-- [ ] **WIN-02**: Windows executable displays embedded icon in Explorer/taskbar/Alt+Tab
+- [x] **WIN-01**: Windows executable runs without console window
+- [x] **WIN-02**: Windows executable displays embedded icon in Explorer/taskbar/Alt+Tab
 
 ### Error Visibility
 
@@ -165,8 +165,8 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WIN-01 | Phase 11 | Pending |
-| WIN-02 | Phase 11 | Pending |
+| WIN-01 | Phase 11 | Complete |
+| WIN-02 | Phase 11 | Complete |
 | ERR-01 | Phase 12 | Pending |
 | ERR-02 | Phase 12 | Pending |
 | ONBOARD-01 | Phase 13 | Pending |

@@ -38,7 +38,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### 🚧 v2.1 Windows Polish (In Progress)
 
-- [ ] **Phase 11: Windows Executable** - Console suppression and embedded .exe icon
+- [x] **Phase 11: Windows Executable** - Console suppression and embedded .exe icon
 - [ ] **Phase 12: Error Notifications** - Tray alerts for injection failures and permission issues
 - [ ] **Phase 13: Onboarding Defaults** - Example macros in default config
 
@@ -232,12 +232,12 @@ Plans:
   2. Windows executable shows custom icon in Explorer file listing
   3. Windows executable shows custom icon in taskbar when running
   4. Windows executable shows custom icon in Alt+Tab switcher
-**Research**: Likely (winres/embed-resource for icon embedding)
+**Research**: Complete (11-RESEARCH.md)
 **Research topics**: winres vs embed-resource crate, icon format requirements (.ico), build.rs setup for Windows-only resource embedding
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 11-01: TBD
+- [x] 11-01: Windows executable polish (console suppression + embedded icon)
 
 ### Phase 12: Error Notifications
 **Goal**: Users see failures instead of silent errors
@@ -285,6 +285,6 @@ Phases execute in numeric order: 1 → 2 → ... → 13
 | 8. Expanded DSL | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 9. Robustness | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 10. UX Polish | v2.0 | 4/4 | Complete | 2026-01-17 |
-| 11. Windows Executable | v2.1 | 0/TBD | Not started | - |
+| 11. Windows Executable | v2.1 | 1/1 | Complete | 2026-01-17 |
 | 12. Error Notifications | v2.1 | 0/TBD | Not started | - |
 | 13. Onboarding Defaults | v2.1 | 0/TBD | Not started | - |
