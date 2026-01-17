@@ -66,10 +66,10 @@ Requirements for v2.0 Quality & Power release.
 
 ### Expanded DSL
 
-- [ ] **DSL-01**: User can insert `{Delay 500}` to pause mid-macro (milliseconds)
-- [ ] **DSL-02**: User can use `{KeyDown Ctrl}` / `{KeyUp Ctrl}` for modifier combos
-- [ ] **DSL-03**: User can use `{Paste}` to paste clipboard contents
-- [ ] **DSL-04**: User can use `{{` / `}}` for literal brace characters
+- [x] **DSL-01**: User can insert `{Delay 500}` to pause mid-macro (milliseconds)
+- [x] **DSL-02**: User can use `{KeyDown Ctrl}` / `{KeyUp Ctrl}` for modifier combos
+- [x] **DSL-03**: User can use `{Paste}` to paste clipboard contents
+- [x] **DSL-04**: User can use `{{` / `}}` for literal brace characters
 
 ### Robustness
 
@@ -130,10 +130,10 @@ Which phases cover which requirements. Updated by create-roadmap.
 | ASYNC-01 | Phase 7 | Complete |
 | ASYNC-02 | Phase 7 | Complete |
 | ASYNC-03 | Phase 7 | Complete |
-| DSL-01 | Phase 8 | Pending |
-| DSL-02 | Phase 8 | Pending |
-| DSL-03 | Phase 8 | Pending |
-| DSL-04 | Phase 8 | Pending |
+| DSL-01 | Phase 8 | Complete |
+| DSL-02 | Phase 8 | Complete |
+| DSL-03 | Phase 8 | Complete |
+| DSL-04 | Phase 8 | Complete |
 | ROBUST-01 | Phase 9 | Pending |
 | ROBUST-02 | Phase 9 | Pending |
 | ROBUST-03 | Phase 9 | Pending |
@@ -152,4 +152,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after Phase 7 completion*
+*Last updated: 2026-01-17 after Phase 8 completion*

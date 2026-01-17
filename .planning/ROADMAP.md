@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### 🚧 v2.0 Quality & Power (In Progress)
 
 - [x] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
-- [ ] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
+- [x] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
 - [ ] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
 - [ ] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
 
@@ -162,12 +162,13 @@ Plans:
   2. User can press/release modifiers with `{KeyDown Ctrl}` / `{KeyUp Ctrl}`
   3. User can paste clipboard with `{Paste}`
   4. User can type literal braces with `{{` and `}}`
-**Research**: Likely (clipboard access, modifier key handling)
+**Research**: Complete (08-RESEARCH.md)
 **Research topics**: Cross-platform clipboard crates, modifier key state management, DSL parser extension
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: TBD
+- [x] 08-01: Parser extension (Delay, KeyDown/KeyUp, Paste, brace escapes)
+- [x] 08-02: Execution integration (clipboard, fast-path update)
 
 ### Phase 9: Robustness
 **Goal**: Config validation, conflict surfacing, and bug fixes
@@ -216,6 +217,6 @@ Phases execute in numeric order: 1 → 2 → ... → 10
 | 5. Configuration UI | v1.0 | 3/3 | Complete | 2026-01-16 |
 | 6. Platform Polish | v1.0 | 2/2 | Complete | 2026-01-16 |
 | 7. Async Execution | v2.0 | 2/2 | Complete | 2026-01-17 |
-| 8. Expanded DSL | v2.0 | 0/? | Not started | - |
+| 8. Expanded DSL | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 9. Robustness | v2.0 | 0/? | Not started | - |
 | 10. UX Polish | v2.0 | 0/? | Not started | - |
