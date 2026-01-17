@@ -88,6 +88,11 @@ impl HotkeyManager {
         }
     }
 
+    /// Register a hotkey without a macro name (for system hotkeys like stop).
+    pub fn register_raw(&mut self, hotkey: HotKey) -> Result<(), global_hotkey::Error> {
+        self.manager.register(hotkey)
+    }
+
     /// Unregister a hotkey.
     ///
     /// Returns an error if the hotkey was not registered.

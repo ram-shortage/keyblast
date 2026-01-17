@@ -16,6 +16,7 @@ pub struct MenuIds {
     pub export_macros: muda::MenuId,
     pub import_macros: muda::MenuId,
     pub auto_start: muda::MenuId,
+    pub stop_macro: muda::MenuId,
     pub quit: muda::MenuId,
     /// Map from menu item ID to macro name for delete actions
     pub delete_macro_ids: HashMap<muda::MenuId, String>,
@@ -68,6 +69,12 @@ pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, M
     let toggle_id = toggle_item.id().clone();
 
     menu.append(&toggle_item).expect("Failed to add toggle item");
+
+    // Stop Macro item (initially disabled - enabled when macro is running)
+    let stop_item = MenuItem::new("Stop Macro", false, None::<Accelerator>);
+    let stop_id = stop_item.id().clone();
+    menu.append(&stop_item).expect("Failed to add stop item");
+
     menu.append(&PredefinedMenuItem::separator()).expect("Failed to add separator");
 
     // Build the Macros submenu with grouped macros
@@ -158,6 +165,7 @@ pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, M
         export_macros: export_id,
         import_macros: import_id,
         auto_start: auto_start_id,
+        stop_macro: stop_id,
         quit: quit_id,
         delete_macro_ids,
     };

@@ -63,6 +63,8 @@ struct KeyBlastApp {
     execution_rx: Option<crossbeam_channel::Receiver<execution::ExecutionCommand>>,
     /// Whether we've prepared the injector for this execution run
     execution_prepared: bool,
+    /// ID of the stop macro hotkey (Ctrl+Escape)
+    stop_hotkey_id: Option<u32>,
 }
 
 impl KeyBlastApp {
@@ -76,6 +78,7 @@ impl KeyBlastApp {
                 export_macros: muda::MenuId::new(""),
                 import_macros: muda::MenuId::new(""),
                 auto_start: muda::MenuId::new(""),
+                stop_macro: muda::MenuId::new(""),
                 quit: muda::MenuId::new(""),
                 delete_macro_ids: std::collections::HashMap::new(),
             },
@@ -94,6 +97,7 @@ impl KeyBlastApp {
             active_execution: None,
             execution_rx: None,
             execution_prepared: false,
+            stop_hotkey_id: None,
         }
     }
 
@@ -316,6 +320,19 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         }
                     }
 
+                    // Register stop hotkey (Ctrl+Escape on all platforms)
+                    use global_hotkey::hotkey::{HotKey, Code, Modifiers};
+                    let stop_hotkey = HotKey::new(Some(Modifiers::CONTROL), Code::Escape);
+                    match manager.register_raw(stop_hotkey) {
+                        Ok(()) => {
+                            self.stop_hotkey_id = Some(stop_hotkey.id());
+                            println!("Stop hotkey registered: Ctrl+Escape");
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to register stop hotkey: {}", e);
+                        }
+                    }
+
                     self.hotkey_manager = Some(manager);
                 }
                 Err(e) => {
@@ -338,6 +355,15 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
         match event {
             AppEvent::HotKey(hotkey_event) => {
                 if hotkey_event.state == HotKeyState::Pressed {
+                    // Check for stop hotkey
+                    if Some(hotkey_event.id) == self.stop_hotkey_id {
+                        if let Some(ref handle) = self.active_execution {
+                            handle.stop();
+                            println!("Stop hotkey pressed - macro will stop");
+                        }
+                        return;
+                    }
+
                     // Look up macro by hotkey_id
                     if let Some(macro_def) = self.macros.get(&hotkey_event.id) {
                         println!("Hotkey triggered: {}", macro_def.name);
@@ -434,6 +460,17 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                     self.execution_rx = None;
                     self.execution_prepared = false;
                     // No flash on cancel - user knows they cancelled
+                }
+            }
+        }
+
+        // Update Stop Macro menu item enabled state
+        let is_running = self.active_execution.is_some();
+        for item in self.menu.items() {
+            if let muda::MenuItemKind::MenuItem(normal_item) = item {
+                if normal_item.id() == &self.menu_ids.stop_macro {
+                    normal_item.set_enabled(is_running);
+                    break;
                 }
             }
         }
@@ -661,7 +698,17 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         eprintln!("Failed to toggle auto-start: {}", e);
                     }
                 }
+            } else if event.id == self.menu_ids.stop_macro {
+                if let Some(ref handle) = self.active_execution {
+                    handle.stop();
+                    println!("Stop menu clicked - macro will stop");
+                }
             } else if event.id == self.menu_ids.quit {
+                // Clean up active execution if running
+                if let Some(handle) = self.active_execution.take() {
+                    handle.stop();
+                    handle.join();
+                }
                 println!("KeyBlast shutting down.");
                 process::exit(0);
             }
