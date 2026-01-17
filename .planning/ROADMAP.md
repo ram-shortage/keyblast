@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-01-16)
 - ✅ **v2.0 Quality & Power** - Phases 7-10 (shipped 2026-01-17)
-- 🚧 **v2.1 Windows Polish** - Phases 11-13 (in progress)
+- 🚧 **v2.1 Platform Polish** - Phases 11-14 (in progress)
 
 ## Phases
 
@@ -36,11 +36,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 </details>
 
-### 🚧 v2.1 Windows Polish (In Progress)
+### 🚧 v2.1 Platform Polish (In Progress)
 
 - [x] **Phase 11: Windows Executable** - Console suppression and embedded .exe icon
 - [ ] **Phase 12: Error Notifications** - Tray alerts for injection failures and permission issues
 - [ ] **Phase 13: Onboarding Defaults** - Example macros in default config
+- [ ] **Phase 14: macOS App Bundle** - .app bundle with custom icon in Finder/Dock
 
 ## Phase Details
 
@@ -268,10 +269,26 @@ Plans:
 Plans:
 - [ ] 13-01: TBD
 
+### Phase 14: macOS App Bundle
+**Goal**: Professional macOS app distribution with custom icon
+**Depends on**: Phase 13
+**Requirements**: MAC-01
+**Success Criteria** (what must be TRUE):
+  1. macOS app distributed as KeyBlast.app bundle
+  2. App shows lightning bolt icon in Finder
+  3. App shows lightning bolt icon in Dock when running
+  4. App bundle structure follows Apple conventions (Info.plist, .icns)
+**Research**: Likely (cargo-bundle or manual .app structure)
+**Research topics**: cargo-bundle vs manual packaging, .icns format generation, Info.plist requirements, LSUIElement for menu bar apps
+**Plans**: TBD
+
+Plans:
+- [ ] 14-01: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → ... → 13
+Phases execute in numeric order: 1 → 2 → ... → 14
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -288,3 +305,4 @@ Phases execute in numeric order: 1 → 2 → ... → 13
 | 11. Windows Executable | v2.1 | 1/1 | Complete | 2026-01-17 |
 | 12. Error Notifications | v2.1 | 0/TBD | Not started | - |
 | 13. Onboarding Defaults | v2.1 | 0/TBD | Not started | - |
+| 14. macOS App Bundle | v2.1 | 0/TBD | Not started | - |

@@ -95,6 +95,10 @@ All v2.0 requirements delivered and shipped.
 
 - [ ] **ONBOARD-01**: Fresh config includes example macros demonstrating usage
 
+### macOS Polish
+
+- [ ] **MAC-01**: macOS app distributed as .app bundle with custom icon in Finder/Dock
+
 ## Out of Scope
 
 Explicitly excluded. Documented to prevent scope creep.
@@ -170,13 +174,14 @@ Which phases cover which requirements. Updated by create-roadmap.
 | ERR-01 | Phase 12 | Pending |
 | ERR-02 | Phase 12 | Pending |
 | ONBOARD-01 | Phase 13 | Pending |
+| MAC-01 | Phase 14 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total (Complete)
 - v2 requirements: 17 total (Complete)
-- v2.1 requirements: 5 total (Pending)
+- v2.1 requirements: 6 total (2 complete, 4 pending)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after v2.1 roadmap creation*
+*Last updated: 2026-01-17 after adding MAC-01*

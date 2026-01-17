@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** v2.1 Windows Polish
+**Current focus:** v2.1 Platform Polish
 
 ## Current Position
 
-Phase: 12 of 13 (Error Notifications)
+Phase: 12 of 14 (Error Notifications)
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-01-17 — Phase 11 verified and complete
+Last activity: 2026-01-17 — Added Phase 14 (macOS App Bundle)
 
-Progress: ███████████████░░░░░ 85% (11/13 phases complete)
+Progress: ██████████████░░░░░░ 79% (11/14 phases complete)
 
 ## Performance Metrics
 
