@@ -288,8 +288,9 @@ pub enum MacroSegment {
 /// Special keys are enclosed in braces: `{Enter}`, `{Tab}`, etc.
 /// Unknown keys in braces are passed through as literal text.
 ///
-/// # Supported Special Keys (case-insensitive)
+/// # Supported Commands (case-insensitive)
 ///
+/// ## Special Keys
 /// - `{Enter}` or `{Return}` - Enter/Return key
 /// - `{Tab}` - Tab key
 /// - `{Escape}` or `{Esc}` - Escape key
@@ -305,11 +306,27 @@ pub enum MacroSegment {
 /// - `{PageDown}` or `{PgDn}` - Page Down
 /// - `{Space}` - Space key
 ///
+/// ## Extended Commands
+/// - `{Delay N}` - Pause for N milliseconds
+/// - `{KeyDown key}` - Press and hold a modifier key
+/// - `{KeyUp key}` - Release a modifier key
+/// - `{Paste}` - Paste clipboard contents
+///
+/// ## Escape Sequences
+/// - `{{` - Literal `{` character
+/// - `}}` - Literal `}` character
+///
 /// # Example
 ///
 /// ```ignore
 /// let segments = parse_macro_sequence("Hello{Enter}World{Tab}Next");
 /// // Returns: [Text("Hello"), SpecialKey(Return), Text("World"), SpecialKey(Tab), Text("Next")]
+///
+/// let segments = parse_macro_sequence("Wait{Delay 500}Done");
+/// // Returns: [Text("Wait"), Delay(500), Text("Done")]
+///
+/// let segments = parse_macro_sequence("{{braces}}");
+/// // Returns: [Text("{braces}")]
 /// ```
 pub fn parse_macro_sequence(input: &str) -> Vec<MacroSegment> {
     let mut segments = Vec::new();
@@ -318,7 +335,14 @@ pub fn parse_macro_sequence(input: &str) -> Vec<MacroSegment> {
 
     while let Some(c) = chars.next() {
         if c == '{' {
-            // Start of potential escape sequence
+            // Check for escaped brace `{{`
+            if chars.peek() == Some(&'{') {
+                chars.next(); // consume second '{'
+                current_text.push('{');
+                continue;
+            }
+
+            // Start of command
             let mut key_name = String::new();
             let mut found_close = false;
 
@@ -332,15 +356,12 @@ pub fn parse_macro_sequence(input: &str) -> Vec<MacroSegment> {
             }
 
             if found_close {
-                if let Some(key) = special_key_from_name(&key_name) {
-                    // Valid special key - flush text buffer first
-                    if !current_text.is_empty() {
-                        segments.push(MacroSegment::Text(current_text.clone()));
-                        current_text.clear();
-                    }
-                    segments.push(MacroSegment::SpecialKey(key));
+                // Try to parse as command
+                if let Some(segment) = parse_command(&key_name) {
+                    flush_text(&mut current_text, &mut segments);
+                    segments.push(segment);
                 } else {
-                    // Unknown key name - treat as literal text (don't crash)
+                    // Unknown command - treat as literal
                     current_text.push('{');
                     current_text.push_str(&key_name);
                     current_text.push('}');
@@ -350,17 +371,68 @@ pub fn parse_macro_sequence(input: &str) -> Vec<MacroSegment> {
                 current_text.push('{');
                 current_text.push_str(&key_name);
             }
+        } else if c == '}' {
+            // Check for escaped brace `}}`
+            if chars.peek() == Some(&'}') {
+                chars.next(); // consume second '}'
+                current_text.push('}');
+                continue;
+            }
+            // Lone '}' - treat as literal
+            current_text.push(c);
         } else {
             current_text.push(c);
         }
     }
 
     // Flush any remaining text
-    if !current_text.is_empty() {
-        segments.push(MacroSegment::Text(current_text));
-    }
+    flush_text(&mut current_text, &mut segments);
 
     segments
+}
+
+/// Flush accumulated text to the segments vector.
+fn flush_text(current_text: &mut String, segments: &mut Vec<MacroSegment>) {
+    if !current_text.is_empty() {
+        segments.push(MacroSegment::Text(current_text.clone()));
+        current_text.clear();
+    }
+}
+
+/// Parse a command string (contents between `{` and `}`) into a MacroSegment.
+///
+/// Returns `None` if the command is not recognized (will be treated as literal text).
+fn parse_command(key_name: &str) -> Option<MacroSegment> {
+    // Split on first space for parameterized commands
+    let parts: Vec<&str> = key_name.splitn(2, ' ').collect();
+    let command = parts[0].to_lowercase();
+    let arg = parts.get(1).map(|s| s.trim());
+
+    match command.as_str() {
+        "delay" => {
+            // {Delay N} - requires numeric argument
+            arg.and_then(|s| s.parse::<u64>().ok())
+                .map(MacroSegment::Delay)
+        }
+        "keydown" => {
+            // {KeyDown key} - requires modifier key name
+            arg.and_then(modifier_key_from_name)
+                .map(MacroSegment::KeyDown)
+        }
+        "keyup" => {
+            // {KeyUp key} - requires modifier key name
+            arg.and_then(modifier_key_from_name)
+                .map(MacroSegment::KeyUp)
+        }
+        "paste" => {
+            // {Paste} - no argument needed
+            Some(MacroSegment::Paste)
+        }
+        _ => {
+            // Try as a special key (Enter, Tab, etc.)
+            special_key_from_name(key_name).map(MacroSegment::SpecialKey)
+        }
+    }
 }
 
 /// Map a key name to an enigo Key variant.
@@ -508,5 +580,164 @@ mod tests {
                 input
             );
         }
+    }
+
+    // === DSL Extension Tests (08-01) ===
+
+    // Brace escape tests
+    #[test]
+    fn test_parse_escaped_open_brace() {
+        let segments = parse_macro_sequence("{{");
+        assert_eq!(segments, vec![MacroSegment::Text("{".to_string())]);
+    }
+
+    #[test]
+    fn test_parse_escaped_close_brace() {
+        let segments = parse_macro_sequence("}}");
+        assert_eq!(segments, vec![MacroSegment::Text("}".to_string())]);
+    }
+
+    #[test]
+    fn test_parse_escaped_braces_around_text() {
+        let segments = parse_macro_sequence("{{foo}}");
+        assert_eq!(segments, vec![MacroSegment::Text("{foo}".to_string())]);
+    }
+
+    #[test]
+    fn test_parse_escaped_braces_mixed_with_text() {
+        let segments = parse_macro_sequence("a{{b}}c");
+        assert_eq!(segments, vec![MacroSegment::Text("a{b}c".to_string())]);
+    }
+
+    // Delay tests
+    #[test]
+    fn test_parse_delay() {
+        let segments = parse_macro_sequence("{Delay 500}");
+        assert_eq!(segments, vec![MacroSegment::Delay(500)]);
+    }
+
+    #[test]
+    fn test_parse_delay_case_insensitive() {
+        let segments = parse_macro_sequence("{delay 100}");
+        assert_eq!(segments, vec![MacroSegment::Delay(100)]);
+    }
+
+    #[test]
+    fn test_parse_delay_missing_arg_literal() {
+        let segments = parse_macro_sequence("{Delay}");
+        assert_eq!(segments, vec![MacroSegment::Text("{Delay}".to_string())]);
+    }
+
+    #[test]
+    fn test_parse_delay_non_numeric_literal() {
+        let segments = parse_macro_sequence("{Delay abc}");
+        assert_eq!(
+            segments,
+            vec![MacroSegment::Text("{Delay abc}".to_string())]
+        );
+    }
+
+    // KeyDown/KeyUp tests
+    #[test]
+    fn test_parse_keydown_ctrl() {
+        let segments = parse_macro_sequence("{KeyDown Ctrl}");
+        assert_eq!(segments, vec![MacroSegment::KeyDown(Key::Control)]);
+    }
+
+    #[test]
+    fn test_parse_keydown_shift_case_insensitive() {
+        let segments = parse_macro_sequence("{keydown shift}");
+        assert_eq!(segments, vec![MacroSegment::KeyDown(Key::Shift)]);
+    }
+
+    #[test]
+    fn test_parse_keyup_alt() {
+        let segments = parse_macro_sequence("{KeyUp Alt}");
+        assert_eq!(segments, vec![MacroSegment::KeyUp(Key::Alt)]);
+    }
+
+    #[test]
+    fn test_parse_keydown_invalid_key_literal() {
+        let segments = parse_macro_sequence("{KeyDown Unknown}");
+        assert_eq!(
+            segments,
+            vec![MacroSegment::Text("{KeyDown Unknown}".to_string())]
+        );
+    }
+
+    #[test]
+    fn test_parse_keydown_meta_variants() {
+        // All these should map to Key::Meta
+        for name in ["Meta", "Win", "Cmd", "Command", "Super"] {
+            let input = format!("{{KeyDown {}}}", name);
+            let segments = parse_macro_sequence(&input);
+            assert_eq!(
+                segments,
+                vec![MacroSegment::KeyDown(Key::Meta)],
+                "Failed for: {}",
+                name
+            );
+        }
+    }
+
+    #[test]
+    fn test_parse_keydown_left_right_variants() {
+        let segments = parse_macro_sequence("{KeyDown LCtrl}");
+        assert_eq!(segments, vec![MacroSegment::KeyDown(Key::LControl)]);
+
+        let segments = parse_macro_sequence("{KeyDown RShift}");
+        assert_eq!(segments, vec![MacroSegment::KeyDown(Key::RShift)]);
+    }
+
+    // Paste tests
+    #[test]
+    fn test_parse_paste() {
+        let segments = parse_macro_sequence("{Paste}");
+        assert_eq!(segments, vec![MacroSegment::Paste]);
+    }
+
+    #[test]
+    fn test_parse_paste_case_insensitive() {
+        let segments = parse_macro_sequence("{paste}");
+        assert_eq!(segments, vec![MacroSegment::Paste]);
+    }
+
+    // Mixed tests
+    #[test]
+    fn test_parse_mixed_commands() {
+        let segments = parse_macro_sequence("Hello{Delay 100}{Enter}World");
+        assert_eq!(
+            segments,
+            vec![
+                MacroSegment::Text("Hello".to_string()),
+                MacroSegment::Delay(100),
+                MacroSegment::SpecialKey(Key::Return),
+                MacroSegment::Text("World".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_parse_escaped_braces_with_text() {
+        // Escaped braces are merged into surrounding text
+        let segments = parse_macro_sequence("Type {{braces}}");
+        assert_eq!(
+            segments,
+            vec![MacroSegment::Text("Type {braces}".to_string())]
+        );
+    }
+
+    #[test]
+    fn test_parse_ctrl_c_combo() {
+        // Common use case: Ctrl+C
+        let segments = parse_macro_sequence("{KeyDown Ctrl}c{KeyUp Ctrl}");
+        assert_eq!(
+            segments,
+            vec![
+                MacroSegment::KeyDown(Key::Control),
+                MacroSegment::Text("c".to_string()),
+                MacroSegment::KeyUp(Key::Control),
+            ]
+        );
     }
 }
