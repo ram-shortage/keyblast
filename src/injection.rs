@@ -174,6 +174,68 @@ impl KeystrokeInjector {
 
         Ok(())
     }
+
+    /// Execute a single macro segment.
+    ///
+    /// Unlike execute_sequence, this does NOT:
+    /// - Release modifiers (caller must handle once at start)
+    /// - Wait between segments (caller handles timing)
+    ///
+    /// Used by async execution where timing is managed by worker thread.
+    ///
+    /// # Arguments
+    ///
+    /// * `segment` - The single segment to execute
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// // First, prepare for injection (releases modifiers)
+    /// injector.prepare_for_injection()?;
+    ///
+    /// // Then execute segments one at a time
+    /// for segment in segments {
+    ///     injector.execute_single_segment(&segment)?;
+    /// }
+    /// ```
+    pub fn execute_single_segment(&mut self, segment: &MacroSegment) -> Result<(), InjectionError> {
+        match segment {
+            MacroSegment::Text(text) => {
+                self.enigo.text(text)?;
+            }
+            MacroSegment::SpecialKey(key) => {
+                self.enigo.key(*key, Direction::Click)?;
+            }
+        }
+        Ok(())
+    }
+
+    /// Release modifiers and wait for them to take effect.
+    ///
+    /// Call once at the start of async execution before processing segments.
+    /// This handles the modifier release that execute_sequence does internally.
+    ///
+    /// # Why this is needed
+    ///
+    /// When a hotkey triggers macro playback, modifier keys (Ctrl, Shift, etc.)
+    /// may still be physically held. We need to release them before typing.
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// // At start of macro execution
+    /// injector.prepare_for_injection()?;
+    ///
+    /// // Now safe to execute segments
+    /// for segment in segments {
+    ///     injector.execute_single_segment(&segment)?;
+    /// }
+    /// ```
+    pub fn prepare_for_injection(&mut self) -> Result<(), InjectionError> {
+        self.release_modifiers()?;
+        thread::sleep(Duration::from_millis(50));
+        Ok(())
+    }
 }
 
 /// A segment of a macro sequence - either plain text or a special key.
