@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-01-16)
 - ✅ **v2.0 Quality & Power** - Phases 7-10 (shipped 2026-01-17)
+- 🚧 **v2.1 Windows Polish** - Phases 11-13 (in progress)
 
 ## Phases
 
@@ -25,12 +26,21 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 </details>
 
-### ✅ v2.0 Quality & Power (Complete)
+<details>
+<summary>✅ v2.0 Quality & Power (Phases 7-10) - SHIPPED 2026-01-17</summary>
 
 - [x] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
 - [x] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
 - [x] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
 - [x] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
+
+</details>
+
+### 🚧 v2.1 Windows Polish (In Progress)
+
+- [ ] **Phase 11: Windows Executable** - Console suppression and embedded .exe icon
+- [ ] **Phase 12: Error Notifications** - Tray alerts for injection failures and permission issues
+- [ ] **Phase 13: Onboarding Defaults** - Example macros in default config
 
 ## Phase Details
 
@@ -207,10 +217,61 @@ Plans:
 - [x] 10-03: Click-to-run macros via "Run Macro" submenu
 - [x] 10-04: Custom icon design (lightning bolt)
 
+</details>
+
+---
+
+## v2.1 Phase Details
+
+### Phase 11: Windows Executable
+**Goal**: Professional Windows executable presentation
+**Depends on**: Phase 10
+**Requirements**: WIN-01, WIN-02
+**Success Criteria** (what must be TRUE):
+  1. Windows executable runs without spawning a console window
+  2. Windows executable shows custom icon in Explorer file listing
+  3. Windows executable shows custom icon in taskbar when running
+  4. Windows executable shows custom icon in Alt+Tab switcher
+**Research**: Likely (winres/embed-resource for icon embedding)
+**Research topics**: winres vs embed-resource crate, icon format requirements (.ico), build.rs setup for Windows-only resource embedding
+**Plans**: TBD
+
+Plans:
+- [ ] 11-01: TBD
+
+### Phase 12: Error Notifications
+**Goal**: Users see failures instead of silent errors
+**Depends on**: Phase 11
+**Requirements**: ERR-01, ERR-02
+**Success Criteria** (what must be TRUE):
+  1. User sees tray notification when keystroke injection fails
+  2. User sees tray notification when Accessibility permission is missing (macOS)
+  3. User sees tray notification when injection is blocked (Windows UIPI)
+**Research**: Likely (cross-platform notification API)
+**Research topics**: notify-rust vs native-dialog, tray-icon notification support, platform-specific error conditions
+**Plans**: TBD
+
+Plans:
+- [ ] 12-01: TBD
+
+### Phase 13: Onboarding Defaults
+**Goal**: New users have example macros to understand the format
+**Depends on**: Phase 12
+**Requirements**: ONBOARD-01
+**Success Criteria** (what must be TRUE):
+  1. Fresh config includes example "Hello World" macro
+  2. Fresh config includes example macro demonstrating special keys and DSL features
+  3. Example macros have reasonable non-conflicting hotkeys
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 13-01: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → ... → 10
+Phases execute in numeric order: 1 → 2 → ... → 13
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -224,3 +285,6 @@ Phases execute in numeric order: 1 → 2 → ... → 10
 | 8. Expanded DSL | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 9. Robustness | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 10. UX Polish | v2.0 | 4/4 | Complete | 2026-01-17 |
+| 11. Windows Executable | v2.1 | 0/TBD | Not started | - |
+| 12. Error Notifications | v2.1 | 0/TBD | Not started | - |
+| 13. Onboarding Defaults | v2.1 | 0/TBD | Not started | - |

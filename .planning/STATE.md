@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 
 ## Current Position
 
-Phase: Not started (run /gsd:create-roadmap)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-01-17 — Milestone v2.1 started
+Phase: 11 of 13 (Windows Executable)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-17 — v2.1 roadmap created
 
-Progress: Not started
+Progress: ██████████░░░░░░░░░░ 77% (10/13 phases complete)
 
 ## Performance Metrics
 

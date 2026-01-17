@@ -79,6 +79,22 @@ All v2.0 requirements delivered and shipped.
 - [x] **ROBUST-04**: Import merge correctly de-dupes within imported file
 - [x] **ROBUST-05**: Windows config save works (fix fs::rename overwrite)
 
+## v2.1 Requirements (Active)
+
+### Windows Polish
+
+- [ ] **WIN-01**: Windows executable runs without console window
+- [ ] **WIN-02**: Windows executable displays embedded icon in Explorer/taskbar/Alt+Tab
+
+### Error Visibility
+
+- [ ] **ERR-01**: User receives tray notification when keystroke injection fails
+- [ ] **ERR-02**: User receives tray notification when permission issue occurs
+
+### Onboarding
+
+- [ ] **ONBOARD-01**: Fresh config includes example macros demonstrating usage
+
 ## Out of Scope
 
 Explicitly excluded. Documented to prevent scope creep.
@@ -145,11 +161,22 @@ Which phases cover which requirements. Updated by create-roadmap.
 | UX-04 | Phase 10 | Complete |
 | UX-05 | Phase 10 | Complete |
 
+### v2.1 (Active)
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| WIN-01 | Phase 11 | Pending |
+| WIN-02 | Phase 11 | Pending |
+| ERR-01 | Phase 12 | Pending |
+| ERR-02 | Phase 12 | Pending |
+| ONBOARD-01 | Phase 13 | Pending |
+
 **Coverage:**
 - v1 requirements: 20 total (Complete)
 - v2 requirements: 17 total (Complete)
+- v2.1 requirements: 5 total (Pending)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after v2.0 milestone completion*
+*Last updated: 2026-01-17 after v2.1 roadmap creation*
