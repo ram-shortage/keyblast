@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 10 — UX Polish (next)
+**Current focus:** Phase 10 — UX Polish (in progress)
 
 ## Current Position
 
 Phase: 10 of 10 (UX Polish)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — Phase 9 complete
+Plan: 3 of 4 complete
+Status: In progress
+Last activity: 2026-01-17 — Completed 10-03-PLAN.md
 
-Progress: █████████░ 90% (v1.0 complete, Phase 9 done)
+Progress: █████████░ 86% (19/22 plans complete)
 
 ## Performance Metrics
 
@@ -41,7 +41,7 @@ Progress: █████████░ 90% (v1.0 complete, Phase 9 done)
 | 7. Async Execution | 2 | 2 | Complete |
 | 8. Expanded DSL | 2 | 2 | Complete |
 | 9. Robustness | 2 | 2 | Complete |
-| 10. UX Polish | ? | 0 | Not started |
+| 10. UX Polish | 4 | 1 | In progress |
 
 ## Accumulated Context
 
@@ -63,6 +63,7 @@ Progress: █████████░ 90% (v1.0 complete, Phase 9 done)
 | validate_config returns warnings | 09-01 | Caller decides action on validation warnings |
 | serde default = Uuid::new_v4 | 09-02 | Auto-generate UUIDs for existing configs on deserialize |
 | Warnings as disabled menu items | 09-02 | Informational display in tray, not clickable actions |
+| Flat list over grouped for Run Macro | 10-03 | Native tray menus cannot support search; flat alphabetized is easiest to browse |
 
 ### Pending Todos
 
@@ -75,5 +76,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Phase 9 complete
+Stopped at: Completed 10-03-PLAN.md
 Resume file: None
