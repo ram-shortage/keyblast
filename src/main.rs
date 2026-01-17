@@ -5,6 +5,7 @@
 mod app;
 mod autostart;
 mod config;
+mod execution;
 mod hotkey;
 mod injection;
 mod permission;
