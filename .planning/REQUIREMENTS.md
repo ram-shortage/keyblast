@@ -79,7 +79,7 @@ All v2.0 requirements delivered and shipped.
 - [x] **ROBUST-04**: Import merge correctly de-dupes within imported file
 - [x] **ROBUST-05**: Windows config save works (fix fs::rename overwrite)
 
-## v2.1 Requirements (Active)
+## v2.1 Requirements (Complete)
 
 ### Windows Polish
 
@@ -97,7 +97,7 @@ All v2.0 requirements delivered and shipped.
 
 ### macOS Polish
 
-- [ ] **MAC-01**: macOS app distributed as .app bundle with custom icon in Finder/Dock
+- [x] **MAC-01**: macOS app distributed as .app bundle with custom icon in Finder/Dock
 
 ## v3.0 Requirements (Planned)
 
@@ -173,7 +173,7 @@ Which phases cover which requirements. Updated by create-roadmap.
 | UX-04 | Phase 10 | Complete |
 | UX-05 | Phase 10 | Complete |
 
-### v2.1 (Active)
+### v2.1 (Complete)
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
@@ -182,12 +182,12 @@ Which phases cover which requirements. Updated by create-roadmap.
 | ERR-01 | Phase 12 | Complete |
 | ERR-02 | Phase 12 | Complete |
 | ONBOARD-01 | Phase 13 | Complete |
-| MAC-01 | Phase 14 | Pending |
+| MAC-01 | Phase 14 | Complete |
 
 **Coverage:**
 - v1 requirements: 20 total (Complete)
 - v2 requirements: 17 total (Complete)
-- v2.1 requirements: 6 total (5 complete, 1 pending)
+- v2.1 requirements: 6 total (Complete)
 - Unmapped: 0 ✓
 
 ---
