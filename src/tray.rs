@@ -17,6 +17,7 @@ pub struct MenuIds {
     pub edit_config: muda::MenuId,
     pub export_macros: muda::MenuId,
     pub import_macros: muda::MenuId,
+    pub open_logs: muda::MenuId,
     pub auto_start: muda::MenuId,
     pub stop_macro: muda::MenuId,
     pub quit: muda::MenuId,
@@ -177,9 +178,13 @@ pub fn build_menu(
     let import_item = MenuItem::new("Import Macros...", true, None::<Accelerator>);
     let import_id = import_item.id().clone();
 
+    let open_logs_item = MenuItem::new("Open Logs...", true, None::<Accelerator>);
+    let open_logs_id = open_logs_item.id().clone();
+
     menu.append(&edit_config_item).expect("Failed to add edit config item");
     menu.append(&export_item).expect("Failed to add export item");
     menu.append(&import_item).expect("Failed to add import item");
+    menu.append(&open_logs_item).expect("Failed to add open logs item");
     menu.append(&PredefinedMenuItem::separator()).expect("Failed to add separator");
 
     // Auto-start toggle
@@ -205,6 +210,7 @@ pub fn build_menu(
         edit_config: edit_config_id,
         export_macros: export_id,
         import_macros: import_id,
+        open_logs: open_logs_id,
         auto_start: auto_start_id,
         stop_macro: stop_id,
         quit: quit_id,
