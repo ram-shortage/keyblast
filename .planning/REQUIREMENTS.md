@@ -99,6 +99,14 @@ All v2.0 requirements delivered and shipped.
 
 - [ ] **MAC-01**: macOS app distributed as .app bundle with custom icon in Finder/Dock
 
+## v3.0 Requirements (Planned)
+
+*Specifics to be defined when starting v3.0 milestone.*
+
+### Security
+
+- [ ] **SEC-01**: User can encrypt sensitive macros with PIN/passkey access control
+
 ## Out of Scope
 
 Explicitly excluded. Documented to prevent scope creep.

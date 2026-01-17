@@ -5,6 +5,7 @@
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-01-16)
 - ✅ **v2.0 Quality & Power** - Phases 7-10 (shipped 2026-01-17)
 - 🚧 **v2.1 Platform Polish** - Phases 11-14 (in progress)
+- 📋 **v3.0 Security** - Encrypted macros with PIN/passkey (planned)
 
 ## Phases
 
