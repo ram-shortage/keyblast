@@ -29,7 +29,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
 - [x] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
-- [ ] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
+- [x] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
 - [ ] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
 
 ## Phase Details
@@ -180,11 +180,12 @@ Plans:
   3. Macro delete works reliably via stable IDs
   4. Importing macros doesn't create duplicates
   5. Config saves correctly on Windows
-**Research**: Unlikely (internal patterns, bug fixes)
-**Plans**: TBD
+**Research**: Skipped (internal patterns, bug fixes)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 09-01: TBD
+- [x] 09-01: Config validation, Windows save fix, import de-dupe
+- [x] 09-02: Stable UUIDs for macros, warnings UI in tray menu
 
 ### Phase 10: UX Polish
 **Goal**: User-facing improvements for power users
@@ -218,5 +219,5 @@ Phases execute in numeric order: 1 → 2 → ... → 10
 | 6. Platform Polish | v1.0 | 2/2 | Complete | 2026-01-16 |
 | 7. Async Execution | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 8. Expanded DSL | v2.0 | 2/2 | Complete | 2026-01-17 |
-| 9. Robustness | v2.0 | 0/? | Not started | - |
+| 9. Robustness | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 10. UX Polish | v2.0 | 0/? | Not started | - |

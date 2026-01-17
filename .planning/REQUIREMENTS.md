@@ -73,11 +73,11 @@ Requirements for v2.0 Quality & Power release.
 
 ### Robustness
 
-- [ ] **ROBUST-01**: App validates config and detects duplicate names/hotkeys
-- [ ] **ROBUST-02**: Conflicts are surfaced in tray menu (not just println)
-- [ ] **ROBUST-03**: Macro delete uses stable IDs instead of names
-- [ ] **ROBUST-04**: Import merge correctly de-dupes within imported file
-- [ ] **ROBUST-05**: Windows config save works (fix fs::rename overwrite)
+- [x] **ROBUST-01**: App validates config and detects duplicate names/hotkeys
+- [x] **ROBUST-02**: Conflicts are surfaced in tray menu (not just println)
+- [x] **ROBUST-03**: Macro delete uses stable IDs instead of names
+- [x] **ROBUST-04**: Import merge correctly de-dupes within imported file
+- [x] **ROBUST-05**: Windows config save works (fix fs::rename overwrite)
 
 ## Out of Scope
 
@@ -134,11 +134,11 @@ Which phases cover which requirements. Updated by create-roadmap.
 | DSL-02 | Phase 8 | Complete |
 | DSL-03 | Phase 8 | Complete |
 | DSL-04 | Phase 8 | Complete |
-| ROBUST-01 | Phase 9 | Pending |
-| ROBUST-02 | Phase 9 | Pending |
-| ROBUST-03 | Phase 9 | Pending |
-| ROBUST-04 | Phase 9 | Pending |
-| ROBUST-05 | Phase 9 | Pending |
+| ROBUST-01 | Phase 9 | Complete |
+| ROBUST-02 | Phase 9 | Complete |
+| ROBUST-03 | Phase 9 | Complete |
+| ROBUST-04 | Phase 9 | Complete |
+| ROBUST-05 | Phase 9 | Complete |
 | UX-01 | Phase 10 | Pending |
 | UX-02 | Phase 10 | Pending |
 | UX-03 | Phase 10 | Pending |
@@ -152,4 +152,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after Phase 8 completion*
+*Last updated: 2026-01-17 after Phase 9 completion*
