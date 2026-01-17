@@ -8,6 +8,7 @@ mod config;
 mod execution;
 mod hotkey;
 mod injection;
+mod logging;
 mod permission;
 mod tray;
 
@@ -24,6 +25,7 @@ use global_hotkey::{GlobalHotKeyEvent, HotKeyState};
 use notify::{RecommendedWatcher, RecursiveMode, Watcher, Event, EventKind};
 use rfd::FileDialog;
 use crossbeam_channel;
+use tracing::{info, debug, error};
 
 /// Custom events for the winit event loop.
 #[derive(Debug)]
@@ -79,6 +81,7 @@ impl KeyBlastApp {
                 edit_config: muda::MenuId::new(""),
                 export_macros: muda::MenuId::new(""),
                 import_macros: muda::MenuId::new(""),
+                open_logs: muda::MenuId::new(""),
                 auto_start: muda::MenuId::new(""),
                 stop_macro: muda::MenuId::new(""),
                 quit: muda::MenuId::new(""),
@@ -229,7 +232,7 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
         // Create tray icon when the application is ready
         // On macOS, this must happen after the event loop starts
         if self._tray_icon.is_none() {
-            println!("KeyBlast initializing...");
+            info!("KeyBlast initializing...");
 
             // Check accessibility permission (macOS)
             // Detailed guidance is printed by the permission module if not granted
@@ -238,11 +241,11 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             // Initialize keystroke injector
             match injection::KeystrokeInjector::new() {
                 Ok(inj) => {
-                    println!("Keystroke injector initialized");
+                    info!("Keystroke injector initialized");
                     self.injector = Some(inj);
                 }
                 Err(e) => {
-                    eprintln!("Failed to initialize keystroke injector: {}", e);
+                    error!("Failed to initialize keystroke injector: {}", e);
                 }
             }
 
@@ -251,12 +254,12 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 Ok(cfg) => {
                     let config_path = config::config_path();
                     if config_path.exists() {
-                        println!("Config loaded from: {}", config_path.display());
+                        info!("Config loaded from: {}", config_path.display());
                     }
                     cfg
                 }
                 Err(e) => {
-                    eprintln!("Warning: Failed to load config: {}. Using defaults.", e);
+                    error!("Failed to load config: {}. Using defaults.", e);
                     config::Config::default()
                 }
             };
@@ -297,6 +300,9 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             self.config_warnings = warnings;
             self.config = Some(final_config.clone());
 
+            // Load enabled state from config (before build_menu so menu shows correct state)
+            self.state.enabled = final_config.settings.enabled;
+
             // Build menu with macros and create tray icon
             let (menu, menu_ids) = tray::build_menu(
                 self.state.enabled,
@@ -324,13 +330,13 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                     Ok(()) => {
                                         let hotkey_id = hotkey.id();
                                         self.macros.insert(hotkey_id, macro_def.clone());
-                                        println!(
+                                        debug!(
                                             "Registered macro: {} ({})",
                                             macro_def.name, macro_def.hotkey
                                         );
                                     }
                                     Err(e) => {
-                                        eprintln!(
+                                        error!(
                                             "Failed to register macro '{}': {}",
                                             macro_def.name, e
                                         );
@@ -531,6 +537,59 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
 
         // Process any pending menu events
         while let Ok(event) = MenuEvent::receiver().try_recv() {
+            // Check if this is a run macro action (check before delete and static IDs)
+            if let Some(macro_id) = self.menu_ids.run_macro_ids.get(&event.id) {
+                let macro_id = *macro_id;
+
+                // Find the macro definition by UUID
+                let macro_def = self.config.as_ref()
+                    .and_then(|cfg| cfg.macros.iter().find(|m| m.id == macro_id))
+                    .cloned();
+
+                if let Some(macro_def) = macro_def {
+                    // Check if macros are enabled
+                    if !self.state.enabled {
+                        println!("Macros disabled, ignoring run request");
+                        continue;
+                    }
+
+                    // Check if already executing
+                    if self.active_execution.is_some() {
+                        println!("Macro already running, ignoring new trigger");
+                        continue;
+                    }
+
+                    // Trigger execution (same logic as hotkey trigger)
+                    if let Some(ref mut injector) = self.injector {
+                        let segments = injection::parse_macro_sequence(&macro_def.text);
+                        println!("Running macro '{}' from menu", macro_def.name);
+
+                        let has_delay = segments.iter().any(|s| matches!(s, injection::MacroSegment::Delay(_)));
+                        if macro_def.delay_ms == 0 && segments.len() <= 10 && !has_delay {
+                            // Fast path: short macros with no delay
+                            match injector.execute_sequence(&segments, 0) {
+                                Ok(()) => {
+                                    println!("Injection complete");
+                                    self.flash_remaining = 4;
+                                    self.flash_state = false;
+                                    self.last_flash_toggle = Some(std::time::Instant::now());
+                                }
+                                Err(e) => {
+                                    eprintln!("Injection failed: {}", e);
+                                }
+                            }
+                        } else {
+                            // Async path
+                            let (rx, handle) = execution::start_execution(segments, macro_def.delay_ms);
+                            self.execution_rx = Some(rx);
+                            self.active_execution = Some(handle);
+                            self.execution_prepared = false;
+                        }
+                    }
+                }
+                continue;
+            }
+
             // Check if this is a delete macro action (check before static IDs)
             if let Some(macro_id) = self.menu_ids.delete_macro_ids.get(&event.id) {
                 let macro_id = *macro_id; // Copy the UUID
@@ -590,6 +649,14 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         "disabled"
                     }
                 );
+
+                // Save enabled state to config immediately
+                if let Some(ref mut cfg) = self.config {
+                    cfg.settings.enabled = self.state.enabled;
+                    if let Err(e) = config::save_config(cfg) {
+                        eprintln!("Failed to save enabled state: {}", e);
+                    }
+                }
 
                 // Update the checkbox state
                 for item in self.menu.items() {
@@ -703,6 +770,9 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         }
                     }
                 }
+            } else if event.id == self.menu_ids.open_logs {
+                // Open logs directory in system file browser
+                logging::open_logs_directory();
             } else if event.id == self.menu_ids.auto_start {
                 // Toggle auto-start at login
                 let currently_enabled = autostart::is_auto_start_enabled();
@@ -745,6 +815,10 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
 }
 
 fn main() {
+    // Initialize file logging BEFORE event loop creation
+    // Keep guard alive for program lifetime
+    let _log_guard = logging::init_file_logging();
+
     // Create the event loop with custom event type for hotkey integration
     let event_loop = EventLoop::<AppEvent>::with_user_event()
         .build()
