@@ -181,9 +181,13 @@ impl KeyBlastApp {
                         continue;
                     }
                     // Reload on modify, create, or rename events (editors use atomic save)
+                    // Reset to defaults on file deletion
                     match event.kind {
                         EventKind::Modify(_) | EventKind::Create(_) => {
                             should_reload = true;
+                        }
+                        EventKind::Remove(_) => {
+                            should_reload = true; // Will trigger reload which handles missing file
                         }
                         _ => {}
                     }
@@ -234,6 +238,9 @@ impl KeyBlastApp {
                     eprintln!("Config warning: {}", warning);
                 }
                 self.config_warnings = warnings;
+
+                // Apply settings from config file (sync enabled state)
+                self.state.enabled = new_config.settings.enabled;
 
                 self.config = Some(new_config);
                 self.rebuild_menu();
@@ -489,6 +496,7 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             .map(|rx| rx.try_iter().collect())
             .unwrap_or_default();
 
+        let mut injection_failed = false;
         for cmd in commands {
             match cmd {
                 execution::ExecutionCommand::Inject(segment) => {
@@ -497,12 +505,16 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         if !self.execution_prepared {
                             if let Err(e) = injector.prepare_for_injection() {
                                 eprintln!("Failed to prepare injection: {}", e);
+                                injection_failed = true;
+                                break;
                             }
                             self.execution_prepared = true;
                         }
                         // Execute segment on main thread (safe for macOS TIS/TSM)
                         if let Err(e) = injector.execute_single_segment(&segment) {
                             eprintln!("Injection error: {}", e);
+                            injection_failed = true;
+                            break;
                         }
                     }
                 }
@@ -524,6 +536,16 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                     // No flash on cancel - user knows they cancelled
                 }
             }
+        }
+
+        // Handle injection failure: stop execution and clean up
+        if injection_failed {
+            if let Some(ref handle) = self.active_execution {
+                handle.stop();
+            }
+            self.active_execution = None;
+            self.execution_rx = None;
+            self.execution_prepared = false;
         }
 
         // Update Stop Macro menu item enabled state

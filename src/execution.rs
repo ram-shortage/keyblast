@@ -23,6 +23,7 @@ use std::sync::Arc;
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
+use arboard::Clipboard;
 use crossbeam_channel::{unbounded, Receiver, Sender};
 
 use crate::injection::MacroSegment;
@@ -138,7 +139,7 @@ fn execution_worker(
     stop_flag: Arc<AtomicBool>,
     tx: Sender<ExecutionCommand>,
 ) {
-    // Expand segments: Text with delay_ms > 0 becomes per-character
+    // Expand segments: Text and Paste with delay_ms > 0 become per-character
     let expanded: Vec<MacroSegment> = if delay_ms > 0 {
         segments.into_iter().flat_map(|seg| {
             match seg {
@@ -147,6 +148,20 @@ fn execution_worker(
                     text.chars()
                         .map(|c| MacroSegment::Text(c.to_string()))
                         .collect::<Vec<_>>()
+                }
+                MacroSegment::Paste => {
+                    // Read clipboard and expand to per-char for consistent delay behavior
+                    match Clipboard::new().and_then(|mut cb| cb.get_text()) {
+                        Ok(text) => {
+                            text.chars()
+                                .map(|c| MacroSegment::Text(c.to_string()))
+                                .collect::<Vec<_>>()
+                        }
+                        Err(e) => {
+                            eprintln!("Warning: Could not read clipboard for delayed paste: {}", e);
+                            vec![] // Skip paste on error
+                        }
+                    }
                 }
                 other => vec![other],
             }

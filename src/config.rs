@@ -57,6 +57,7 @@ impl From<toml::ser::Error> for ConfigError {
 pub enum ValidationWarning {
     DuplicateName(String),
     DuplicateHotkey { hotkey: String, names: Vec<String> },
+    DuplicateId { id: Uuid, names: Vec<String> },
 }
 
 impl std::fmt::Display for ValidationWarning {
@@ -67,6 +68,9 @@ impl std::fmt::Display for ValidationWarning {
             }
             ValidationWarning::DuplicateHotkey { hotkey, names } => {
                 write!(f, "Hotkey '{}' used by multiple macros: {}", hotkey, names.join(", "))
+            }
+            ValidationWarning::DuplicateId { id, names } => {
+                write!(f, "Duplicate macro ID '{}' used by: {}", id, names.join(", "))
             }
         }
     }
@@ -97,6 +101,17 @@ pub fn validate_config(config: &Config) -> Vec<ValidationWarning> {
     for (hotkey, names) in hotkey_to_names {
         if names.len() > 1 {
             warnings.push(ValidationWarning::DuplicateHotkey { hotkey, names });
+        }
+    }
+
+    // Check for duplicate IDs (can happen via manual config edits)
+    let mut id_to_names: HashMap<Uuid, Vec<String>> = HashMap::new();
+    for macro_def in &config.macros {
+        id_to_names.entry(macro_def.id).or_default().push(macro_def.name.clone());
+    }
+    for (id, names) in id_to_names {
+        if names.len() > 1 {
+            warnings.push(ValidationWarning::DuplicateId { id, names });
         }
     }
 
