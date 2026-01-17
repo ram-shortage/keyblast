@@ -1,8 +1,9 @@
 # Roadmap: KeyBlast
 
-## Overview
+## Milestones
 
-KeyBlast delivers a lightweight hotkey-triggered keystroke injector in 6 phases. Starting with system tray presence, we progressively add hotkey detection, keystroke injection, persistent configuration, a tray-based config UI, and finally cross-platform polish with accessibility handling. Each phase delivers a complete, testable capability.
+- ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-01-16)
+- 🚧 **v2.0 Quality & Power** - Phases 7-10 (in progress)
 
 ## Phases
 
@@ -12,12 +13,24 @@ KeyBlast delivers a lightweight hotkey-triggered keystroke injector in 6 phases.
 
 Decimal phases appear between their surrounding integers in numeric order.
 
+<details>
+<summary>✅ v1.0 MVP (Phases 1-6) - SHIPPED 2026-01-16</summary>
+
 - [x] **Phase 1: Foundation** - System tray presence with enable/disable toggle
 - [x] **Phase 2: Global Hotkeys** - Hotkey registration that works in any application
 - [x] **Phase 3: Keystroke Injection** - Type macros into the focused application
 - [x] **Phase 4: Configuration** - Persistent macro storage in TOML
 - [x] **Phase 5: Configuration UI** - Create/edit/delete macros via tray menu
 - [x] **Phase 6: Platform Polish** - macOS/Windows support, auto-start, visual feedback
+
+</details>
+
+### 🚧 v2.0 Quality & Power (In Progress)
+
+- [ ] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
+- [ ] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
+- [ ] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
+- [ ] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
 
 ## Phase Details
 
@@ -118,16 +131,90 @@ Plans:
 - [x] 06-01: Auto-start at login functionality (PLAT-03)
 - [x] 06-02: Accessibility permission UX and tray icon flash (PLAT-04, TRAY-03)
 
+</details>
+
+---
+
+## v2.0 Phase Details
+
+### Phase 7: Async Execution
+**Goal**: Non-blocking macro execution with stop capability
+**Depends on**: Phase 6
+**Requirements**: ASYNC-01, ASYNC-02, ASYNC-03
+**Success Criteria** (what must be TRUE):
+  1. Long macros don't freeze the tray menu
+  2. User can stop a running macro mid-execution
+  3. Macro execution happens in background thread
+**Research**: Likely (threading model, cancellation patterns)
+**Research topics**: Rust async vs threads for keystroke injection, cancellation tokens, cross-thread communication
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: TBD
+
+### Phase 8: Expanded DSL
+**Goal**: New macro syntax features for advanced sequences
+**Depends on**: Phase 7
+**Requirements**: DSL-01, DSL-02, DSL-03, DSL-04
+**Success Criteria** (what must be TRUE):
+  1. User can pause mid-macro with `{Delay 500}`
+  2. User can press/release modifiers with `{KeyDown Ctrl}` / `{KeyUp Ctrl}`
+  3. User can paste clipboard with `{Paste}`
+  4. User can type literal braces with `{{` and `}}`
+**Research**: Likely (clipboard access, modifier key handling)
+**Research topics**: Cross-platform clipboard crates, modifier key state management, DSL parser extension
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: TBD
+
+### Phase 9: Robustness
+**Goal**: Config validation, conflict surfacing, and bug fixes
+**Depends on**: Phase 7 (needs stable IDs before async)
+**Requirements**: ROBUST-01, ROBUST-02, ROBUST-03, ROBUST-04, ROBUST-05
+**Success Criteria** (what must be TRUE):
+  1. App warns on duplicate macro names at config load
+  2. Hotkey conflicts shown in tray menu (not just console)
+  3. Macro delete works reliably via stable IDs
+  4. Importing macros doesn't create duplicates
+  5. Config saves correctly on Windows
+**Research**: Unlikely (internal patterns, bug fixes)
+**Plans**: TBD
+
+Plans:
+- [ ] 09-01: TBD
+
+### Phase 10: UX Polish
+**Goal**: User-facing improvements for power users
+**Depends on**: Phase 9
+**Requirements**: UX-01, UX-02, UX-03, UX-04, UX-05
+**Success Criteria** (what must be TRUE):
+  1. User can search/filter macros by name in tray menu
+  2. User can execute macro by clicking menu item
+  3. User can open log files from tray menu
+  4. Enabled/disabled state survives app restart
+  5. App has distinctive custom icon
+**Research**: Likely (icon design, logging crate)
+**Research topics**: tracing/log crate setup, file rotation, icon design/format requirements
+**Plans**: TBD
+
+Plans:
+- [ ] 10-01: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 → 2 → ... → 10
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 1/1 | Complete | 2026-01-16 |
-| 2. Global Hotkeys | 2/2 | Complete | 2026-01-16 |
-| 3. Keystroke Injection | 2/2 | Complete | 2026-01-16 |
-| 4. Configuration | 2/2 | Complete | 2026-01-16 |
-| 5. Configuration UI | 3/3 | Complete | 2026-01-16 |
-| 6. Platform Polish | 2/2 | Complete | 2026-01-16 |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Foundation | v1.0 | 1/1 | Complete | 2026-01-16 |
+| 2. Global Hotkeys | v1.0 | 2/2 | Complete | 2026-01-16 |
+| 3. Keystroke Injection | v1.0 | 2/2 | Complete | 2026-01-16 |
+| 4. Configuration | v1.0 | 2/2 | Complete | 2026-01-16 |
+| 5. Configuration UI | v1.0 | 3/3 | Complete | 2026-01-16 |
+| 6. Platform Polish | v1.0 | 2/2 | Complete | 2026-01-16 |
+| 7. Async Execution | v2.0 | 0/? | Not started | - |
+| 8. Expanded DSL | v2.0 | 0/? | Not started | - |
+| 9. Robustness | v2.0 | 0/? | Not started | - |
+| 10. UX Polish | v2.0 | 0/? | Not started | - |

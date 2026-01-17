@@ -123,33 +123,33 @@ Which phases cover which requirements. Updated by create-roadmap.
 | PLAT-03 | Phase 6 | Complete |
 | PLAT-04 | Phase 6 | Complete |
 
-### v2.0 (Pending)
+### v2.0 (Active)
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UX-01 | TBD | Pending |
-| UX-02 | TBD | Pending |
-| UX-03 | TBD | Pending |
-| UX-04 | TBD | Pending |
-| UX-05 | TBD | Pending |
-| ASYNC-01 | TBD | Pending |
-| ASYNC-02 | TBD | Pending |
-| ASYNC-03 | TBD | Pending |
-| DSL-01 | TBD | Pending |
-| DSL-02 | TBD | Pending |
-| DSL-03 | TBD | Pending |
-| DSL-04 | TBD | Pending |
-| ROBUST-01 | TBD | Pending |
-| ROBUST-02 | TBD | Pending |
-| ROBUST-03 | TBD | Pending |
-| ROBUST-04 | TBD | Pending |
-| ROBUST-05 | TBD | Pending |
+| ASYNC-01 | Phase 7 | Pending |
+| ASYNC-02 | Phase 7 | Pending |
+| ASYNC-03 | Phase 7 | Pending |
+| DSL-01 | Phase 8 | Pending |
+| DSL-02 | Phase 8 | Pending |
+| DSL-03 | Phase 8 | Pending |
+| DSL-04 | Phase 8 | Pending |
+| ROBUST-01 | Phase 9 | Pending |
+| ROBUST-02 | Phase 9 | Pending |
+| ROBUST-03 | Phase 9 | Pending |
+| ROBUST-04 | Phase 9 | Pending |
+| ROBUST-05 | Phase 9 | Pending |
+| UX-01 | Phase 10 | Pending |
+| UX-02 | Phase 10 | Pending |
+| UX-03 | Phase 10 | Pending |
+| UX-04 | Phase 10 | Pending |
+| UX-05 | Phase 10 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total (Complete)
-- v2 requirements: 17 total (Pending)
-- Mapped to phases: v2 TBD (run /gsd:create-roadmap)
+- v2 requirements: 17 total (Mapped to phases 7-10)
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after v2.0 requirements definition*
+*Last updated: 2026-01-17 after v2.0 roadmap creation*
