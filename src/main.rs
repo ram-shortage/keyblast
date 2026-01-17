@@ -83,6 +83,7 @@ impl KeyBlastApp {
                 stop_macro: muda::MenuId::new(""),
                 quit: muda::MenuId::new(""),
                 delete_macro_ids: std::collections::HashMap::new(),
+                run_macro_ids: std::collections::HashMap::new(),
             },
             _tray_icon: None,
             hotkey_manager: None,

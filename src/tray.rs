@@ -22,6 +22,8 @@ pub struct MenuIds {
     pub quit: muda::MenuId,
     /// Map from menu item ID to macro UUID for delete actions
     pub delete_macro_ids: HashMap<muda::MenuId, Uuid>,
+    /// Map from menu item ID to macro UUID for run actions
+    pub run_macro_ids: HashMap<muda::MenuId, Uuid>,
 }
 
 /// Load the normal application icon.
@@ -72,6 +74,7 @@ pub fn build_menu(
 ) -> (Menu, MenuIds) {
     let menu = Menu::new();
     let mut delete_macro_ids: HashMap<muda::MenuId, Uuid> = HashMap::new();
+    let mut run_macro_ids: HashMap<muda::MenuId, Uuid> = HashMap::new();
 
     // Create the toggle item as a CheckMenuItem (no keyboard accelerator)
     let toggle_item = CheckMenuItem::new("Enable", true, enabled, None::<Accelerator>);
@@ -85,6 +88,21 @@ pub fn build_menu(
     menu.append(&stop_item).expect("Failed to add stop item");
 
     menu.append(&PredefinedMenuItem::separator()).expect("Failed to add separator");
+
+    // Build Run Macro submenu (flat alphabetized list for quick access)
+    let run_submenu = Submenu::new("Run Macro", true);
+    let mut sorted_macros: Vec<_> = macros.iter().collect();
+    sorted_macros.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+
+    for macro_def in &sorted_macros {
+        let label = format!("{} ({})", macro_def.name, macro_def.hotkey);
+        let item = MenuItem::new(&label, true, None::<Accelerator>);
+        let item_id = item.id().clone();
+        run_macro_ids.insert(item_id, macro_def.id);
+        run_submenu.append(&item).expect("Failed to add run item");
+    }
+
+    menu.append(&run_submenu).expect("Failed to add run submenu");
 
     // Build the Macros submenu with grouped macros
     let macros_submenu = Submenu::new("Macros", true);
@@ -191,6 +209,7 @@ pub fn build_menu(
         stop_macro: stop_id,
         quit: quit_id,
         delete_macro_ids,
+        run_macro_ids,
     };
 
     (menu, ids)
