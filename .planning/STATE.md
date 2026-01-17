@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 7 of 10 (Async Execution)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — v2.0 roadmap created
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-17 — Completed 07-01-PLAN.md (Async Infrastructure)
 
-Progress: ██████░░░░ 60% (v1.0 complete, v2.0 starting)
+Progress: ██████░░░░ 63% (v1.0 complete, v2.0 Phase 7 Plan 1 done)
 
 ## Performance Metrics
 
@@ -34,11 +34,24 @@ Progress: ██████░░░░ 60% (v1.0 complete, v2.0 starting)
 | 5. Configuration UI | 3 | ~21 min | ~7 min |
 | 6. Platform Polish | 2 | ~10 min | ~5 min |
 
+**v2.0 Progress:**
+
+| Phase | Plans | Completed | Status |
+|-------|-------|-----------|--------|
+| 7. Async Execution | 3 | 1 | In progress |
+| 8. Stop Hotkey | 2 | 0 | Not started |
+| 9. Execution Status | 3 | 0 | Not started |
+| 10. Polish | 3 | 0 | Not started |
+
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
+| Decision | Phase | Rationale |
+|----------|-------|-----------|
+| Unbounded crossbeam channel | 07-01 | Avoid deadlock scenarios with bounded channels |
+| 50ms stop flag check interval | 07-01 | Balance responsiveness and efficiency during delays |
+| ExecutionCommand enum pattern | 07-01 | Clean worker-to-main communication (Inject/Complete/Cancelled) |
 
 ### Pending Todos
 
@@ -51,5 +64,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: v2.0 roadmap created (4 phases: 7-10)
+Stopped at: Completed 07-01-PLAN.md (Async Infrastructure)
 Resume file: None
+Next plan: .planning/phases/07-async-execution/07-02-PLAN.md
