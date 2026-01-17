@@ -65,6 +65,8 @@ struct KeyBlastApp {
     execution_prepared: bool,
     /// ID of the stop macro hotkey (Ctrl+Escape)
     stop_hotkey_id: Option<u32>,
+    /// Validation warnings from config load
+    config_warnings: Vec<config::ValidationWarning>,
 }
 
 impl KeyBlastApp {
@@ -98,6 +100,7 @@ impl KeyBlastApp {
             execution_rx: None,
             execution_prepared: false,
             stop_hotkey_id: None,
+            config_warnings: Vec::new(),
         }
     }
 
@@ -105,7 +108,11 @@ impl KeyBlastApp {
     /// Call after config changes (import, delete).
     fn rebuild_menu(&mut self) {
         if let Some(ref config) = self.config {
-            let (menu, menu_ids) = tray::build_menu(self.state.enabled, &config.macros);
+            let (menu, menu_ids) = tray::build_menu(
+                self.state.enabled,
+                &config.macros,
+                &self.config_warnings,
+            );
 
             // Update the tray icon's menu
             if let Some(ref tray_icon) = self._tray_icon {
@@ -198,6 +205,13 @@ impl KeyBlastApp {
                     }
                 }
 
+                // Validate and store warnings
+                let warnings = config::validate_config(&new_config);
+                for warning in &warnings {
+                    eprintln!("Config warning: {}", warning);
+                }
+                self.config_warnings = warnings;
+
                 self.config = Some(new_config);
                 self.rebuild_menu();
                 println!("Config reloaded successfully");
@@ -274,10 +288,20 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 loaded_config
             };
 
+            // Validate config and store warnings
+            let warnings = config::validate_config(&final_config);
+            for warning in &warnings {
+                eprintln!("Config warning: {}", warning);
+            }
+            self.config_warnings = warnings;
             self.config = Some(final_config.clone());
 
             // Build menu with macros and create tray icon
-            let (menu, menu_ids) = tray::build_menu(self.state.enabled, &final_config.macros);
+            let (menu, menu_ids) = tray::build_menu(
+                self.state.enabled,
+                &final_config.macros,
+                &self.config_warnings,
+            );
             let tray_icon = tray::create_tray(&menu);
 
             self.menu = menu;
@@ -507,22 +531,21 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
         // Process any pending menu events
         while let Ok(event) = MenuEvent::receiver().try_recv() {
             // Check if this is a delete macro action (check before static IDs)
-            if let Some(macro_name) = self.menu_ids.delete_macro_ids.get(&event.id) {
-                let macro_name = macro_name.clone();
-                println!("Deleting macro: {}", macro_name);
+            if let Some(macro_id) = self.menu_ids.delete_macro_ids.get(&event.id) {
+                let macro_id = *macro_id; // Copy the UUID
+                println!("Deleting macro with ID: {}", macro_id);
 
                 if let Some(ref mut cfg) = self.config {
-                    // Find and remove the macro by name
+                    // Find and remove the macro by UUID
                     let original_len = cfg.macros.len();
-                    cfg.macros.retain(|m| m.name != macro_name);
+                    cfg.macros.retain(|m| m.id != macro_id);
 
                     if cfg.macros.len() < original_len {
-                        // Unregister the hotkey - find the binding
+                        // Find and unregister the hotkey
                         if let Some(ref mut manager) = self.hotkey_manager {
-                            // Find the hotkey id for this macro
                             let mut id_to_remove = None;
                             for (&hotkey_id, binding) in self.macros.iter() {
-                                if binding.name == macro_name {
+                                if binding.id == macro_id {
                                     if let Some(hotkey) = config::parse_hotkey_string(&binding.hotkey) {
                                         let _ = manager.unregister(&hotkey);
                                     }
@@ -530,16 +553,18 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                     break;
                                 }
                             }
-                            // Remove after iteration
                             if let Some(id) = id_to_remove {
                                 self.macros.remove(&id);
                             }
                         }
 
+                        // Re-validate after deletion
+                        self.config_warnings = config::validate_config(cfg);
+
                         // Save updated config
                         match config::save_config(cfg) {
                             Ok(()) => {
-                                println!("Macro '{}' deleted and config saved", macro_name);
+                                println!("Macro deleted and config saved");
                             }
                             Err(e) => {
                                 eprintln!("Failed to save config after delete: {}", e);
