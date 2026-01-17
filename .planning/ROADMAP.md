@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-01-16)
-- 🚧 **v2.0 Quality & Power** - Phases 7-10 (in progress)
+- ✅ **v2.0 Quality & Power** - Phases 7-10 (shipped 2026-01-17)
 
 ## Phases
 
@@ -25,12 +25,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 </details>
 
-### 🚧 v2.0 Quality & Power (In Progress)
+### ✅ v2.0 Quality & Power (Complete)
 
 - [x] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
 - [x] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
 - [x] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
-- [ ] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
+- [x] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
 
 ## Phase Details
 
@@ -197,12 +197,15 @@ Plans:
   3. User can open log files from tray menu
   4. Enabled/disabled state survives app restart
   5. App has distinctive custom icon
-**Research**: Likely (icon design, logging crate)
+**Research**: Complete (10-RESEARCH.md)
 **Research topics**: tracing/log crate setup, file rotation, icon design/format requirements
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 10-01: TBD
+- [x] 10-01: File logging with "Open Logs..." menu
+- [x] 10-02: Persist enabled/disabled state across restarts
+- [x] 10-03: Click-to-run macros via "Run Macro" submenu
+- [x] 10-04: Custom icon design (lightning bolt)
 
 ## Progress
 
@@ -220,4 +223,4 @@ Phases execute in numeric order: 1 → 2 → ... → 10
 | 7. Async Execution | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 8. Expanded DSL | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 9. Robustness | v2.0 | 2/2 | Complete | 2026-01-17 |
-| 10. UX Polish | v2.0 | 0/? | Not started | - |
+| 10. UX Polish | v2.0 | 4/4 | Complete | 2026-01-17 |

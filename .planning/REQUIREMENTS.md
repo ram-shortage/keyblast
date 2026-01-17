@@ -46,17 +46,17 @@ All v1.0 requirements delivered and shipped.
 - [x] **PLAT-03**: User can enable auto-start at login
 - [x] **PLAT-04**: macOS user is guided through Accessibility permission grant
 
-## v2 Requirements (Active)
+## v2 Requirements (Complete)
 
-Requirements for v2.0 Quality & Power release.
+All v2.0 requirements delivered and shipped.
 
 ### UX Improvements
 
-- [ ] **UX-01**: User can search/filter macros by name in tray menu
-- [ ] **UX-02**: User can run macro by clicking menu item (not just hotkey)
-- [ ] **UX-03**: User can access file logs via "Open Logs..." menu item
-- [ ] **UX-04**: User's enabled/disabled state persists across restarts
-- [ ] **UX-05**: App has a unique, recognizable icon (tray and app)
+- [x] **UX-01**: User can search/filter macros by name in tray menu
+- [x] **UX-02**: User can run macro by clicking menu item (not just hotkey)
+- [x] **UX-03**: User can access file logs via "Open Logs..." menu item
+- [x] **UX-04**: User's enabled/disabled state persists across restarts
+- [x] **UX-05**: App has a unique, recognizable icon (tray and app)
 
 ### Async Execution
 
@@ -123,7 +123,7 @@ Which phases cover which requirements. Updated by create-roadmap.
 | PLAT-03 | Phase 6 | Complete |
 | PLAT-04 | Phase 6 | Complete |
 
-### v2.0 (Active)
+### v2.0 (Complete)
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
@@ -139,17 +139,17 @@ Which phases cover which requirements. Updated by create-roadmap.
 | ROBUST-03 | Phase 9 | Complete |
 | ROBUST-04 | Phase 9 | Complete |
 | ROBUST-05 | Phase 9 | Complete |
-| UX-01 | Phase 10 | Pending |
-| UX-02 | Phase 10 | Pending |
-| UX-03 | Phase 10 | Pending |
-| UX-04 | Phase 10 | Pending |
-| UX-05 | Phase 10 | Pending |
+| UX-01 | Phase 10 | Complete |
+| UX-02 | Phase 10 | Complete |
+| UX-03 | Phase 10 | Complete |
+| UX-04 | Phase 10 | Complete |
+| UX-05 | Phase 10 | Complete |
 
 **Coverage:**
 - v1 requirements: 20 total (Complete)
-- v2 requirements: 17 total (Mapped to phases 7-10)
+- v2 requirements: 17 total (Complete)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after Phase 9 completion*
+*Last updated: 2026-01-17 after v2.0 milestone completion*
