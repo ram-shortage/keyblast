@@ -275,6 +275,11 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                 }
                 Err(e) => {
                     error!("Failed to initialize keystroke injector: {}", e);
+                    notification::show_error(
+                        "KeyBlast",
+                        notification::permission_error_message(),
+                        notification::NotificationSeverity::Permission,
+                    );
                 }
             }
 
@@ -467,6 +472,11 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                     }
                                     Err(e) => {
                                         eprintln!("Injection failed: {}", e);
+                                        notification::show_error(
+                                            "KeyBlast",
+                                            "Macro injection failed",
+                                            notification::NotificationSeverity::InjectionFailed,
+                                        );
                                     }
                                 }
                             } else {
@@ -508,6 +518,11 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         if !self.execution_prepared {
                             if let Err(e) = injector.prepare_for_injection() {
                                 eprintln!("Failed to prepare injection: {}", e);
+                                notification::show_error(
+                                    "KeyBlast",
+                                    &format!("Failed to prepare injection: {}", e),
+                                    notification::NotificationSeverity::InjectionFailed,
+                                );
                                 injection_failed = true;
                                 break;
                             }
@@ -516,6 +531,11 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                         // Execute segment on main thread (safe for macOS TIS/TSM)
                         if let Err(e) = injector.execute_single_segment(&segment) {
                             eprintln!("Injection error: {}", e);
+                            notification::show_error(
+                                "KeyBlast",
+                                "Macro injection failed",
+                                notification::NotificationSeverity::InjectionFailed,
+                            );
                             injection_failed = true;
                             break;
                         }
@@ -630,6 +650,11 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                 }
                                 Err(e) => {
                                     eprintln!("Injection failed: {}", e);
+                                    notification::show_error(
+                                        "KeyBlast",
+                                        "Macro injection failed",
+                                        notification::NotificationSeverity::InjectionFailed,
+                                    );
                                 }
                             }
                         } else {

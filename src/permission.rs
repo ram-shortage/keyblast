@@ -15,6 +15,8 @@
 /// Windows and Linux do not require special permissions for input simulation,
 /// so this function returns `true` on those platforms.
 
+use crate::notification;
+
 /// Check if the application has accessibility permission to inject keystrokes.
 ///
 /// On macOS, this will prompt the user to grant permission if not already granted,
@@ -33,6 +35,11 @@ pub fn check_accessibility_permission() -> bool {
 
     if !trusted {
         print_accessibility_guidance();
+        notification::show_error(
+            "KeyBlast - Permission Required",
+            notification::permission_error_message(),
+            notification::NotificationSeverity::Permission,
+        );
     }
 
     trusted
