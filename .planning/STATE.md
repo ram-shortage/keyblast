@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 11 of 13 (Windows Executable)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — v2.1 roadmap created
+Plan: 1 of 1 complete
+Status: Phase complete
+Last activity: 2026-01-17 — Completed 11-01-PLAN.md
 
-Progress: ██████████░░░░░░░░░░ 77% (10/13 phases complete)
+Progress: ███████████░░░░░░░░░ 85% (11/13 phases complete)
 
 ## Performance Metrics
 
@@ -56,6 +56,9 @@ Progress: ██████████░░░░░░░░░░ 77% (10/1
 | Graceful logging fallback | 10-01 | If logging setup fails, app continues without file logging |
 | Lightning bolt icon design | 10-04 | Suggests "blast"/speed, recognizable at small tray size |
 | Color inversion for flash state | 10-04 | Yellow-on-dark vs dark-on-yellow provides clear visual feedback |
+| Multi-size ICO (16,32,48,256) | 11-01 | Covers all Windows display contexts |
+| CARGO_CFG_TARGET_OS check | 11-01 | build.rs runs on host, use env var for cross-compilation |
+| windows_subsystem attribute | 11-01 | Standard Rust approach for GUI apps |
 
 ### Pending Todos
 
@@ -67,6 +70,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-17
-Stopped at: Milestone v2.1 initialized
+Last session: 2026-01-17T11:44:19Z
+Stopped at: Completed 11-01-PLAN.md (Phase 11 complete)
 Resume file: None
