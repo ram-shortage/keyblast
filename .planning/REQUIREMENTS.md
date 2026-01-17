@@ -60,9 +60,9 @@ Requirements for v2.0 Quality & Power release.
 
 ### Async Execution
 
-- [ ] **ASYNC-01**: Macro execution runs off event loop thread (non-blocking)
-- [ ] **ASYNC-02**: User can stop a running macro via hotkey or menu
-- [ ] **ASYNC-03**: Tray menu stays responsive during long macro execution
+- [x] **ASYNC-01**: Macro execution runs off event loop thread (non-blocking)
+- [x] **ASYNC-02**: User can stop a running macro via hotkey or menu
+- [x] **ASYNC-03**: Tray menu stays responsive during long macro execution
 
 ### Expanded DSL
 
@@ -127,9 +127,9 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ASYNC-01 | Phase 7 | Pending |
-| ASYNC-02 | Phase 7 | Pending |
-| ASYNC-03 | Phase 7 | Pending |
+| ASYNC-01 | Phase 7 | Complete |
+| ASYNC-02 | Phase 7 | Complete |
+| ASYNC-03 | Phase 7 | Complete |
 | DSL-01 | Phase 8 | Pending |
 | DSL-02 | Phase 8 | Pending |
 | DSL-03 | Phase 8 | Pending |
@@ -152,4 +152,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-17 after v2.0 roadmap creation*
+*Last updated: 2026-01-17 after Phase 7 completion*

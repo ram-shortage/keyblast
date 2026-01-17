@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 7 — Async Execution
+**Current focus:** Phase 8 — Expanded DSL
 
 ## Current Position
 
-Phase: 7 of 10 (Async Execution)
-Plan: 2 of 3 complete
-Status: In progress
-Last activity: 2026-01-17 — Completed 07-02-PLAN.md (Wire Async Execution)
+Phase: 8 of 10 (Expanded DSL)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-17 — Phase 7 complete
 
-Progress: ███████░░░ 68% (v1.0 complete, v2.0 Phase 7 Plan 2 done)
+Progress: ███████░░░ 70% (v1.0 complete, Phase 7 done)
 
 ## Performance Metrics
 
@@ -38,10 +38,10 @@ Progress: ███████░░░ 68% (v1.0 complete, v2.0 Phase 7 Plan 2
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 7. Async Execution | 3 | 2 | In progress |
-| 8. Stop Hotkey | 2 | 0 | Not started |
-| 9. Execution Status | 3 | 0 | Not started |
-| 10. Polish | 3 | 0 | Not started |
+| 7. Async Execution | 2 | 2 | Complete |
+| 8. Expanded DSL | ? | 0 | Not started |
+| 9. Robustness | ? | 0 | Not started |
+| 10. UX Polish | ? | 0 | Not started |
 
 ## Accumulated Context
 
@@ -66,6 +66,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 07-02-PLAN.md (Wire Async Execution)
+Stopped at: Phase 7 complete
 Resume file: None
-Next plan: .planning/phases/07-async-execution/07-03-PLAN.md

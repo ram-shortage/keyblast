@@ -27,7 +27,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### 🚧 v2.0 Quality & Power (In Progress)
 
-- [ ] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
+- [x] **Phase 7: Async Execution** - Non-blocking macro execution with stop capability
 - [ ] **Phase 8: Expanded DSL** - New macro syntax: Delay, KeyDown/KeyUp, Paste, brace escapes
 - [ ] **Phase 9: Robustness** - Config validation, conflict UI, bug fixes
 - [ ] **Phase 10: UX Polish** - Search, click-to-run, logging, persist state, custom icon
@@ -145,12 +145,13 @@ Plans:
   1. Long macros don't freeze the tray menu
   2. User can stop a running macro mid-execution
   3. Macro execution happens in background thread
-**Research**: Likely (threading model, cancellation patterns)
+**Research**: Complete (07-RESEARCH.md)
 **Research topics**: Rust async vs threads for keystroke injection, cancellation tokens, cross-thread communication
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: TBD
+- [x] 07-01: Async execution infrastructure (worker thread, channels, stop flag)
+- [x] 07-02: Wire async execution into application (event loop, stop hotkey, stop menu)
 
 ### Phase 8: Expanded DSL
 **Goal**: New macro syntax features for advanced sequences
@@ -214,7 +215,7 @@ Phases execute in numeric order: 1 → 2 → ... → 10
 | 4. Configuration | v1.0 | 2/2 | Complete | 2026-01-16 |
 | 5. Configuration UI | v1.0 | 3/3 | Complete | 2026-01-16 |
 | 6. Platform Polish | v1.0 | 2/2 | Complete | 2026-01-16 |
-| 7. Async Execution | v2.0 | 0/? | Not started | - |
+| 7. Async Execution | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 8. Expanded DSL | v2.0 | 0/? | Not started | - |
 | 9. Robustness | v2.0 | 0/? | Not started | - |
 | 10. UX Polish | v2.0 | 0/? | Not started | - |
