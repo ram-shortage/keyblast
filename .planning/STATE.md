@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 13 of 14 (Onboarding Defaults)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — Phase 12 verified and complete
+Plan: 1 of 1 complete
+Status: Phase complete
+Last activity: 2026-01-17 — Completed 13-01-PLAN.md
 
-Progress: ████████████████░░░░ 86% (12/14 phases complete)
+Progress: █████████████████░░░ 93% (13/14 phases complete)
 
 ## Performance Metrics
 
@@ -29,9 +29,9 @@ Progress: ████████████████░░░░ 86% (12/1
 - All phases complete
 
 **v2.1 Velocity:**
-- Plans completed: 2
-- Phases started: 2 (11-windows-polish, 12-error-notifications)
-- Phases complete: 2
+- Plans completed: 3
+- Phases started: 3 (11-windows-polish, 12-error-notifications, 13-onboarding-defaults)
+- Phases complete: 3
 
 ## Accumulated Context
 
@@ -67,6 +67,9 @@ Progress: ████████████████░░░░ 86% (12/1
 | 3s notification debounce | 12-01 | Prevent spam on rapid failures, permission errors bypass |
 | 5s injection timeout, persistent permission | 12-01 | Injection failures informational, permission requires action |
 | Notifications supplement logging | 12-01 | Keep eprintln!/error! for logs, add toast for user visibility |
+| Ctrl+Shift+letter for example hotkeys | 13-01 | Non-conflicting with common system shortcuts |
+| 3 example macros covering DSL breadth | 13-01 | Basic text, Tab/Enter, Delay - teach full DSL |
+| Factory function for default data | 13-01 | default_example_macros() pattern for generated config data |
 
 ### Pending Todos
 
@@ -78,6 +81,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-17T12:04:00Z
-Stopped at: Completed 12-01-PLAN.md (Phase 12 complete)
+Last session: 2026-01-17T12:24:33Z
+Stopped at: Completed 13-01-PLAN.md (Phase 13 complete)
 Resume file: None
