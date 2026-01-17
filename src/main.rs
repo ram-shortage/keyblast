@@ -11,6 +11,7 @@ mod execution;
 mod hotkey;
 mod injection;
 mod logging;
+mod notification;
 mod permission;
 mod tray;
 
