@@ -194,6 +194,15 @@ pub fn save_config(config: &Config) -> Result<(), ConfigError> {
     // Write atomically: temp file then rename
     let temp_path = path.with_extension("toml.tmp");
     fs::write(&temp_path, &content)?;
+
+    // On Windows, fs::rename fails if destination exists - remove it first
+    #[cfg(target_os = "windows")]
+    {
+        if path.exists() {
+            fs::remove_file(&path)?;
+        }
+    }
+
     fs::rename(&temp_path, &path)?;
 
     Ok(())
