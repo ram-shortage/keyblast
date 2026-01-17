@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 9 — Robustness (next)
+**Current focus:** Phase 9 — Robustness (in progress)
 
 ## Current Position
 
-Phase: 8 of 10 (Expanded DSL)
-Plan: 2 of 2 complete
-Status: Phase complete
-Last activity: 2026-01-17 — Completed 08-02-PLAN.md
+Phase: 9 of 10 (Robustness)
+Plan: 1 of ? complete
+Status: In progress
+Last activity: 2026-01-17 — Completed 09-01-PLAN.md
 
-Progress: ████████░░ 80% (v1.0 complete, Phase 8 complete)
+Progress: ████████░░ 85% (v1.0 complete, Phase 9 started)
 
 ## Performance Metrics
 
@@ -40,7 +40,7 @@ Progress: ████████░░ 80% (v1.0 complete, Phase 8 complete)
 |-------|-------|-----------|--------|
 | 7. Async Execution | 2 | 2 | Complete |
 | 8. Expanded DSL | 2 | 2 | Complete |
-| 9. Robustness | ? | 0 | Not started |
+| 9. Robustness | ? | 1 | In progress |
 | 10. UX Polish | ? | 0 | Not started |
 
 ## Accumulated Context
@@ -58,6 +58,9 @@ Progress: ████████░░ 80% (v1.0 complete, Phase 8 complete)
 | Brace escapes merge into text | 08-01 | Efficiency - single Text segment vs multiple |
 | Paste graceful degradation | 08-02 | Log warning but don't fail if clipboard inaccessible |
 | has_delay fast-path check | 08-02 | Ensure macros with {Delay N} use async execution for responsive tray |
+| First occurrence wins dedupe | 09-01 | Simple deterministic rule for duplicate macro names |
+| Windows remove-then-rename | 09-01 | Preserve atomic write intent on Windows platform |
+| validate_config returns warnings | 09-01 | Caller decides action on validation warnings |
 
 ### Pending Todos
 
@@ -70,5 +73,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 08-02-PLAN.md
+Stopped at: Completed 09-01-PLAN.md
 Resume file: None
