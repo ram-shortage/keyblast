@@ -249,6 +249,7 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
             // If config has no macros, create a default example macro and save it
             let final_config = if loaded_config.macros.is_empty() {
                 let default_macro = config::MacroDefinition {
+                    id: uuid::Uuid::new_v4(),
                     name: "example".to_string(),
                     hotkey: "ctrl+shift+k".to_string(),
                     text: "Hello from KeyBlast!{Enter}".to_string(),

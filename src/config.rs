@@ -9,6 +9,7 @@ use std::io;
 use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
 use global_hotkey::hotkey::{Code, HotKey, Modifiers};
+use uuid::Uuid;
 
 /// Error type for configuration operations.
 #[derive(Debug)]
@@ -105,6 +106,9 @@ pub fn validate_config(config: &Config) -> Vec<ValidationWarning> {
 /// A single macro definition.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MacroDefinition {
+    /// Stable unique identifier for this macro. Auto-generated if not present.
+    #[serde(default = "Uuid::new_v4")]
+    pub id: Uuid,
     /// Human-readable name for the macro.
     pub name: String,
     /// Hotkey string like "ctrl+shift+k".
@@ -395,6 +399,7 @@ mod tests {
             version: 1,
             macros: vec![
                 MacroDefinition {
+                    id: Uuid::new_v4(),
                     name: "Test Macro".to_string(),
                     hotkey: "ctrl+shift+k".to_string(),
                     text: "Hello{Enter}World".to_string(),
@@ -402,6 +407,7 @@ mod tests {
                     group: None,
                 },
                 MacroDefinition {
+                    id: Uuid::new_v4(),
                     name: "Slow Macro".to_string(),
                     hotkey: "ctrl+alt+m".to_string(),
                     text: "Typing slowly...".to_string(),
@@ -423,6 +429,7 @@ mod tests {
     #[test]
     fn test_macro_definition_serialization() {
         let macro_def = MacroDefinition {
+            id: Uuid::new_v4(),
             name: "Test".to_string(),
             hotkey: "ctrl+shift+k".to_string(),
             text: "Hello".to_string(),
@@ -574,6 +581,7 @@ mod tests {
     fn test_group_field_serialization() {
         // With group set
         let macro_def = MacroDefinition {
+            id: Uuid::new_v4(),
             name: "Test".to_string(),
             hotkey: "ctrl+k".to_string(),
             text: "Hello".to_string(),
@@ -585,6 +593,7 @@ mod tests {
 
         // Without group (should not serialize the field)
         let macro_def_no_group = MacroDefinition {
+            id: Uuid::new_v4(),
             name: "Test".to_string(),
             hotkey: "ctrl+k".to_string(),
             text: "Hello".to_string(),
@@ -604,6 +613,7 @@ mod tests {
 
         let macros = vec![
             MacroDefinition {
+                id: Uuid::new_v4(),
                 name: "Macro 1".to_string(),
                 hotkey: "ctrl+1".to_string(),
                 text: "Text 1".to_string(),
@@ -611,6 +621,7 @@ mod tests {
                 group: Some("Group A".to_string()),
             },
             MacroDefinition {
+                id: Uuid::new_v4(),
                 name: "Macro 2".to_string(),
                 hotkey: "ctrl+2".to_string(),
                 text: "Text 2".to_string(),
