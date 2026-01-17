@@ -23,6 +23,7 @@ use tray_icon::TrayIcon;
 use global_hotkey::{GlobalHotKeyEvent, HotKeyState};
 use notify::{RecommendedWatcher, RecursiveMode, Watcher, Event, EventKind};
 use rfd::FileDialog;
+use crossbeam_channel;
 
 /// Custom events for the winit event loop.
 #[derive(Debug)]
@@ -56,6 +57,12 @@ struct KeyBlastApp {
     flash_state: bool,
     /// Instant of last flash toggle for timing
     last_flash_toggle: Option<std::time::Instant>,
+    /// Active execution handle (if macro running)
+    active_execution: Option<execution::ExecutionHandle>,
+    /// Receiver for execution commands from worker thread
+    execution_rx: Option<crossbeam_channel::Receiver<execution::ExecutionCommand>>,
+    /// Whether we've prepared the injector for this execution run
+    execution_prepared: bool,
 }
 
 impl KeyBlastApp {
@@ -84,6 +91,9 @@ impl KeyBlastApp {
             flash_icon: None,
             flash_state: false,
             last_flash_toggle: None,
+            active_execution: None,
+            execution_rx: None,
+            execution_prepared: false,
         }
     }
 
@@ -338,7 +348,13 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                             return;
                         }
 
-                        // Inject the macro text using config-defined text and delay
+                        // Check if already executing
+                        if self.active_execution.is_some() {
+                            println!("Macro already running, ignoring new trigger");
+                            return;
+                        }
+
+                        // Inject the macro text using async execution
                         if let Some(ref mut injector) = self.injector {
                             let segments = injection::parse_macro_sequence(&macro_def.text);
                             let mode_name = if macro_def.delay_ms == 0 {
@@ -350,17 +366,28 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                 "Injecting macro '{}' ({}): {}",
                                 macro_def.name, mode_name, macro_def.text
                             );
-                            match injector.execute_sequence(&segments, macro_def.delay_ms) {
-                                Ok(()) => {
-                                    println!("Injection complete");
-                                    // Trigger icon flash for visual feedback
-                                    self.flash_remaining = 4; // 2 cycles of on/off
-                                    self.flash_state = false;
-                                    self.last_flash_toggle = Some(std::time::Instant::now());
+
+                            if macro_def.delay_ms == 0 && segments.len() <= 10 {
+                                // Fast path: short macros with no delay run synchronously
+                                // This avoids overhead for simple text expansion
+                                match injector.execute_sequence(&segments, 0) {
+                                    Ok(()) => {
+                                        println!("Injection complete");
+                                        self.flash_remaining = 4;
+                                        self.flash_state = false;
+                                        self.last_flash_toggle = Some(std::time::Instant::now());
+                                    }
+                                    Err(e) => {
+                                        eprintln!("Injection failed: {}", e);
+                                    }
                                 }
-                                Err(e) => {
-                                    eprintln!("Injection failed: {}", e);
-                                }
+                            } else {
+                                // Async path: spawn worker thread for long or delayed macros
+                                let (rx, handle) = execution::start_execution(segments, macro_def.delay_ms);
+                                self.execution_rx = Some(rx);
+                                self.active_execution = Some(handle);
+                                self.execution_prepared = false;
+                                // Flash happens when Complete command received
                             }
                         } else {
                             eprintln!("No injector available");
@@ -372,6 +399,45 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
     }
 
     fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
+        // Process async execution commands (non-blocking)
+        // Collect commands first to avoid borrow issues when clearing state
+        let commands: Vec<_> = self.execution_rx.as_ref()
+            .map(|rx| rx.try_iter().collect())
+            .unwrap_or_default();
+
+        for cmd in commands {
+            match cmd {
+                execution::ExecutionCommand::Inject(segment) => {
+                    if let Some(ref mut injector) = self.injector {
+                        // Prepare injector once at start of execution
+                        if !self.execution_prepared {
+                            let _ = injector.prepare_for_injection();
+                            self.execution_prepared = true;
+                        }
+                        // Execute segment on main thread (safe for macOS TIS/TSM)
+                        let _ = injector.execute_single_segment(&segment);
+                    }
+                }
+                execution::ExecutionCommand::Complete => {
+                    println!("Macro execution complete");
+                    self.active_execution = None;
+                    self.execution_rx = None;
+                    self.execution_prepared = false;
+                    // Trigger icon flash AFTER completion
+                    self.flash_remaining = 4;
+                    self.flash_state = false;
+                    self.last_flash_toggle = Some(std::time::Instant::now());
+                }
+                execution::ExecutionCommand::Cancelled => {
+                    println!("Macro execution cancelled");
+                    self.active_execution = None;
+                    self.execution_rx = None;
+                    self.execution_prepared = false;
+                    // No flash on cancel - user knows they cancelled
+                }
+            }
+        }
+
         // Handle icon flash animation
         if self.flash_remaining > 0 {
             let should_toggle = self.last_flash_toggle
