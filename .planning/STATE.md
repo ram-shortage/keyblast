@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 10 — UX Polish (in progress)
+**Current focus:** v2.0 Complete
 
 ## Current Position
 
 Phase: 10 of 10 (UX Polish)
-Plan: 3 of 4 complete
-Status: In progress
-Last activity: 2026-01-17 — Completed 10-01-PLAN.md
+Plan: 4 of 4 complete
+Status: Complete
+Last activity: 2026-01-17 — Completed 10-04-PLAN.md
 
-Progress: █████████▌ 95% (21/22 plans complete)
+Progress: ██████████ 100% (22/22 plans complete)
 
 ## Performance Metrics
 
@@ -41,7 +41,7 @@ Progress: █████████▌ 95% (21/22 plans complete)
 | 7. Async Execution | 2 | 2 | Complete |
 | 8. Expanded DSL | 2 | 2 | Complete |
 | 9. Robustness | 2 | 2 | Complete |
-| 10. UX Polish | 4 | 3 | In progress |
+| 10. UX Polish | 4 | 4 | Complete |
 
 ## Accumulated Context
 
@@ -69,6 +69,8 @@ Progress: █████████▌ 95% (21/22 plans complete)
 | 7-day log retention | 10-01 | Reasonable default for troubleshooting without accumulating excessive files |
 | Daily log rotation | 10-01 | Matches common patterns, easy to find logs by date |
 | Graceful logging fallback | 10-01 | If logging setup fails, app continues without file logging |
+| Lightning bolt icon design | 10-04 | Suggests "blast"/speed, recognizable at small tray size |
+| Color inversion for flash state | 10-04 | Yellow-on-dark vs dark-on-yellow provides clear visual feedback |
 
 ### Pending Todos
 
@@ -81,5 +83,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 10-01-PLAN.md
+Stopped at: Completed 10-04-PLAN.md (v2.0 complete)
 Resume file: None
