@@ -40,7 +40,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### 🚧 v2.1 Platform Polish (In Progress)
 
 - [x] **Phase 11: Windows Executable** - Console suppression and embedded .exe icon
-- [ ] **Phase 12: Error Notifications** - Tray alerts for injection failures and permission issues
+- [x] **Phase 12: Error Notifications** - Tray alerts for injection failures and permission issues
 - [ ] **Phase 13: Onboarding Defaults** - Example macros in default config
 - [ ] **Phase 14: macOS App Bundle** - .app bundle with custom icon in Finder/Dock
 
@@ -249,12 +249,12 @@ Plans:
   1. User sees tray notification when keystroke injection fails
   2. User sees tray notification when Accessibility permission is missing (macOS)
   3. User sees tray notification when injection is blocked (Windows UIPI)
-**Research**: Likely (cross-platform notification API)
+**Research**: Complete (12-RESEARCH.md)
 **Research topics**: notify-rust vs native-dialog, tray-icon notification support, platform-specific error conditions
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 12-01: TBD
+- [x] 12-01: Error notification system (notify-rust integration + debouncing)
 
 ### Phase 13: Onboarding Defaults
 **Goal**: New users have example macros to understand the format
@@ -304,6 +304,6 @@ Phases execute in numeric order: 1 → 2 → ... → 14
 | 9. Robustness | v2.0 | 2/2 | Complete | 2026-01-17 |
 | 10. UX Polish | v2.0 | 4/4 | Complete | 2026-01-17 |
 | 11. Windows Executable | v2.1 | 1/1 | Complete | 2026-01-17 |
-| 12. Error Notifications | v2.1 | 0/TBD | Not started | - |
+| 12. Error Notifications | v2.1 | 1/1 | Complete | 2026-01-17 |
 | 13. Onboarding Defaults | v2.1 | 0/TBD | Not started | - |
 | 14. macOS App Bundle | v2.1 | 0/TBD | Not started | - |

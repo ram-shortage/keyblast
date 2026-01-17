@@ -88,8 +88,8 @@ All v2.0 requirements delivered and shipped.
 
 ### Error Visibility
 
-- [ ] **ERR-01**: User receives tray notification when keystroke injection fails
-- [ ] **ERR-02**: User receives tray notification when permission issue occurs
+- [x] **ERR-01**: User receives tray notification when keystroke injection fails
+- [x] **ERR-02**: User receives tray notification when permission issue occurs
 
 ### Onboarding
 
@@ -179,15 +179,15 @@ Which phases cover which requirements. Updated by create-roadmap.
 |-------------|-------|--------|
 | WIN-01 | Phase 11 | Complete |
 | WIN-02 | Phase 11 | Complete |
-| ERR-01 | Phase 12 | Pending |
-| ERR-02 | Phase 12 | Pending |
+| ERR-01 | Phase 12 | Complete |
+| ERR-02 | Phase 12 | Complete |
 | ONBOARD-01 | Phase 13 | Pending |
 | MAC-01 | Phase 14 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total (Complete)
 - v2 requirements: 17 total (Complete)
-- v2.1 requirements: 6 total (2 complete, 4 pending)
+- v2.1 requirements: 6 total (4 complete, 2 pending)
 - Unmapped: 0 ✓
 
 ---
