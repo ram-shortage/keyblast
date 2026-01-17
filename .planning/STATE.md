@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** Phase 8 — Expanded DSL
+**Current focus:** Phase 9 — Robustness (next)
 
 ## Current Position
 
 Phase: 8 of 10 (Expanded DSL)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-17 — Completed 08-01-PLAN.md
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-17 — Completed 08-02-PLAN.md
 
-Progress: ███████▓░░ 75% (v1.0 complete, Phase 8 Plan 1 done)
+Progress: ████████░░ 80% (v1.0 complete, Phase 8 complete)
 
 ## Performance Metrics
 
@@ -39,7 +39,7 @@ Progress: ███████▓░░ 75% (v1.0 complete, Phase 8 Plan 1 done
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
 | 7. Async Execution | 2 | 2 | Complete |
-| 8. Expanded DSL | 2 | 1 | In progress |
+| 8. Expanded DSL | 2 | 2 | Complete |
 | 9. Robustness | ? | 0 | Not started |
 | 10. UX Polish | ? | 0 | Not started |
 
@@ -56,6 +56,8 @@ Progress: ███████▓░░ 75% (v1.0 complete, Phase 8 Plan 1 done
 | Collect-then-process pattern | 07-02 | Satisfy Rust borrow checker when processing commands |
 | Placeholder execution handlers | 08-01 | Allow compilation before 08-02 implements full execution |
 | Brace escapes merge into text | 08-01 | Efficiency - single Text segment vs multiple |
+| Paste graceful degradation | 08-02 | Log warning but don't fail if clipboard inaccessible |
+| has_delay fast-path check | 08-02 | Ensure macros with {Delay N} use async execution for responsive tray |
 
 ### Pending Todos
 
@@ -68,5 +70,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 08-01-PLAN.md
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
