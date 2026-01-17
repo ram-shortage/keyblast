@@ -3,7 +3,7 @@
 /// Provides persistent storage of macro definitions in a TOML configuration file.
 /// Handles cross-platform config paths and serialization/deserialization.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::io;
 use std::path::PathBuf;
@@ -222,14 +222,21 @@ pub fn export_macros(macros: &[MacroDefinition], path: &std::path::Path) -> Resu
     Ok(())
 }
 
+/// De-duplicate macros by name, keeping the first occurrence.
+pub fn dedupe_macros(macros: Vec<MacroDefinition>) -> Vec<MacroDefinition> {
+    let mut seen: HashSet<String> = HashSet::new();
+    macros.into_iter().filter(|m| seen.insert(m.name.clone())).collect()
+}
+
 /// Import macros from a TOML file.
 ///
 /// Parses a config file and returns the macros array.
+/// De-duplicates by name within the imported file.
 /// Does NOT modify the current config - caller decides how to merge.
 pub fn import_macros(path: &std::path::Path) -> Result<Vec<MacroDefinition>, ConfigError> {
     let content = fs::read_to_string(path)?;
     let config: Config = toml::from_str(&content)?;
-    Ok(config.macros)
+    Ok(dedupe_macros(config.macros))
 }
 
 /// Parse a hotkey string like "ctrl+shift+k" into a HotKey.
@@ -623,5 +630,40 @@ mod tests {
         assert_eq!(imported[0].group, Some("Group A".to_string()));
         assert_eq!(imported[1].name, "Macro 2");
         assert_eq!(imported[1].group, None);
+    }
+
+    #[test]
+    fn test_import_dedupes_within_file() {
+        use tempfile::tempdir;
+
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("dupes.toml");
+
+        // Write a file with duplicate names
+        let content = r#"
+version = 1
+
+[[macros]]
+name = "test"
+hotkey = "ctrl+1"
+text = "first"
+
+[[macros]]
+name = "test"
+hotkey = "ctrl+2"
+text = "second"
+
+[[macros]]
+name = "unique"
+hotkey = "ctrl+3"
+text = "unique"
+"#;
+        fs::write(&path, content).unwrap();
+
+        let imported = import_macros(&path).unwrap();
+        assert_eq!(imported.len(), 2);
+        assert_eq!(imported[0].name, "test");
+        assert_eq!(imported[0].text, "first"); // First one wins
+        assert_eq!(imported[1].name, "unique");
     }
 }
