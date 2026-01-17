@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** v2.1 Platform Polish
+**Current focus:** v2.1 Platform Polish - COMPLETE
 
 ## Current Position
 
 Phase: 14 of 14 (macOS App Bundle)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — Phase 13 verified and complete
+Plan: 1 of 1
+Status: Phase complete - v2.1 complete
+Last activity: 2026-01-17 — Completed 14-01-PLAN.md (Phase 14 complete)
 
-Progress: █████████████████░░░ 93% (13/14 phases complete)
+Progress: ████████████████████ 100% (14/14 phases complete)
 
 ## Performance Metrics
 
@@ -29,9 +29,10 @@ Progress: █████████████████░░░ 93% (13/1
 - All phases complete
 
 **v2.1 Velocity:**
-- Plans completed: 3
-- Phases started: 3 (11-windows-polish, 12-error-notifications, 13-onboarding-defaults)
-- Phases complete: 3
+- Plans completed: 4
+- Phases started: 4 (11-windows-polish, 12-error-notifications, 13-onboarding-defaults, 14-macos-app-bundle)
+- Phases complete: 4
+- All v2.1 milestones complete
 
 ## Accumulated Context
 
@@ -70,6 +71,10 @@ Progress: █████████████████░░░ 93% (13/1
 | Ctrl+Shift+letter for example hotkeys | 13-01 | Non-conflicting with common system shortcuts |
 | 3 example macros covering DSL breadth | 13-01 | Basic text, Tab/Enter, Delay - teach full DSL |
 | Factory function for default data | 13-01 | default_example_macros() pattern for generated config data |
+| cargo-bundle for macOS bundling | 14-01 | Official Rust tool, handles Info.plist, icon conversion, bundle structure |
+| Extract 256 from icon.ico | 14-01 | Reuse existing design, accept quality compromise for 512+ sizes |
+| com.keyblast.app identifier | 14-01 | Reverse-DNS format per Apple convention |
+| No LSUIElement in bundle | 14-01 | App should appear in Dock when running |
 
 ### Pending Todos
 
@@ -81,6 +86,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-17T12:24:33Z
-Stopped at: Completed 13-01-PLAN.md (Phase 13 complete)
+Last session: 2026-01-17T12:44:49Z
+Stopped at: Completed 14-01-PLAN.md (Phase 14 complete, v2.1 complete)
 Resume file: None
