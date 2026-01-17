@@ -6,8 +6,10 @@ use std::collections::HashMap;
 use muda::{Menu, MenuItem, PredefinedMenuItem, CheckMenuItem, Submenu};
 use muda::accelerator::Accelerator;
 use tray_icon::{Icon, TrayIcon, TrayIconBuilder};
+use uuid::Uuid;
 
 use crate::config;
+use crate::config::ValidationWarning;
 
 /// Menu item identifiers for event handling.
 pub struct MenuIds {
@@ -18,8 +20,8 @@ pub struct MenuIds {
     pub auto_start: muda::MenuId,
     pub stop_macro: muda::MenuId,
     pub quit: muda::MenuId,
-    /// Map from menu item ID to macro name for delete actions
-    pub delete_macro_ids: HashMap<muda::MenuId, String>,
+    /// Map from menu item ID to macro UUID for delete actions
+    pub delete_macro_ids: HashMap<muda::MenuId, Uuid>,
 }
 
 /// Load the normal application icon.
@@ -52,6 +54,9 @@ fn load_icon_from_bytes(bytes: &[u8]) -> Icon {
 ///     - Macro Name (Ctrl+Shift+K) > Delete
 ///   - [Ungrouped] > (for macros without group)
 ///     - Macro Name (hotkey) > Delete
+/// - Warnings (N) > (submenu if there are validation warnings)
+///   - Warning 1
+///   - Warning 2
 /// - ---
 /// - Edit Config File...
 /// - Export Macros...
@@ -60,9 +65,13 @@ fn load_icon_from_bytes(bytes: &[u8]) -> Icon {
 /// - Quit
 ///
 /// Returns the menu and the menu item IDs for event handling.
-pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, MenuIds) {
+pub fn build_menu(
+    enabled: bool,
+    macros: &[config::MacroDefinition],
+    warnings: &[ValidationWarning],
+) -> (Menu, MenuIds) {
     let menu = Menu::new();
-    let mut delete_macro_ids: HashMap<muda::MenuId, String> = HashMap::new();
+    let mut delete_macro_ids: HashMap<muda::MenuId, Uuid> = HashMap::new();
 
     // Create the toggle item as a CheckMenuItem (no keyboard accelerator)
     let toggle_item = CheckMenuItem::new("Enable", true, enabled, None::<Accelerator>);
@@ -114,7 +123,7 @@ pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, M
 
             let delete_item = MenuItem::new("Delete", true, None::<Accelerator>);
             let delete_id = delete_item.id().clone();
-            delete_macro_ids.insert(delete_id, macro_def.name.clone());
+            delete_macro_ids.insert(delete_id, macro_def.id);
 
             macro_submenu.append(&delete_item).expect("Failed to add delete item");
             group_submenu.append(&macro_submenu).expect("Failed to add macro submenu");
@@ -124,6 +133,20 @@ pub fn build_menu(enabled: bool, macros: &[config::MacroDefinition]) -> (Menu, M
     }
 
     menu.append(&macros_submenu).expect("Failed to add macros submenu");
+
+    // Add Warnings submenu if there are validation warnings
+    if !warnings.is_empty() {
+        let warnings_submenu = Submenu::new(format!("Warnings ({})", warnings.len()), true);
+
+        for warning in warnings {
+            let label = warning.to_string();
+            let item = MenuItem::new(&label, false, None::<Accelerator>);
+            warnings_submenu.append(&item).expect("Failed to add warning item");
+        }
+
+        menu.append(&warnings_submenu).expect("Failed to add warnings submenu");
+    }
+
     menu.append(&PredefinedMenuItem::separator()).expect("Failed to add separator");
 
     // Management actions
