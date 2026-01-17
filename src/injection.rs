@@ -3,6 +3,7 @@
 /// Provides safe keystroke injection that properly handles modifier keys
 /// held from hotkey activation and supports configurable typing delay.
 
+use arboard::Clipboard;
 use enigo::{Direction, Enigo, InputError, Key, Keyboard, NewConError, Settings};
 use std::thread;
 use std::time::Duration;
@@ -180,8 +181,26 @@ impl KeystrokeInjector {
                     self.enigo.key(*key, Direction::Release)?;
                 }
                 MacroSegment::Paste => {
-                    // Clipboard paste requires arboard - will be implemented in 08-02
-                    // For now, this is a no-op to allow compilation
+                    // Read clipboard and type contents
+                    let mut clipboard = Clipboard::new()
+                        .map_err(|e| InjectionError(format!("Clipboard error: {}", e)))?;
+
+                    match clipboard.get_text() {
+                        Ok(text) => {
+                            if delay_ms == 0 {
+                                self.enigo.text(&text)?;
+                            } else {
+                                for c in text.chars() {
+                                    self.enigo.text(&c.to_string())?;
+                                    thread::sleep(Duration::from_millis(delay_ms));
+                                }
+                            }
+                        }
+                        Err(e) => {
+                            // Log but don't fail - clipboard might be empty or inaccessible
+                            eprintln!("Warning: Could not read clipboard: {}", e);
+                        }
+                    }
                 }
             }
         }
@@ -231,8 +250,19 @@ impl KeystrokeInjector {
                 self.enigo.key(*key, Direction::Release)?;
             }
             MacroSegment::Paste => {
-                // Clipboard paste requires arboard - will be implemented in 08-02
-                // For now, this is a no-op to allow compilation
+                // Read clipboard and type contents
+                let mut clipboard = Clipboard::new()
+                    .map_err(|e| InjectionError(format!("Clipboard error: {}", e)))?;
+
+                match clipboard.get_text() {
+                    Ok(text) => {
+                        self.enigo.text(&text)?;
+                    }
+                    Err(e) => {
+                        // Log but don't fail - clipboard might be empty or inaccessible
+                        eprintln!("Warning: Could not read clipboard: {}", e);
+                    }
+                }
             }
         }
         Ok(())
