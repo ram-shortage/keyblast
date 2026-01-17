@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
-**Current focus:** v2.0 Complete
+**Current focus:** v2.1 Windows Polish
 
 ## Current Position
 
-Phase: 10 of 10 (UX Polish)
-Plan: 4 of 4 complete
-Status: Complete
-Last activity: 2026-01-17 — Completed 10-04-PLAN.md
+Phase: Not started (run /gsd:create-roadmap)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-17 — Milestone v2.1 started
 
-Progress: ██████████ 100% (22/22 plans complete)
+Progress: Not started
 
 ## Performance Metrics
 
@@ -23,25 +23,10 @@ Progress: ██████████ 100% (22/22 plans complete)
 - Average duration: ~7.5 min
 - Total execution time: ~1.6 hours
 
-**By Phase (v1.0):**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 1. Foundation | 1 | ~15 min | ~15 min |
-| 2. Global Hotkeys | 2 | ~14 min | ~7 min |
-| 3. Keystroke Injection | 2 | ~23 min | ~11 min |
-| 4. Configuration | 2 | ~5 min | ~2.5 min |
-| 5. Configuration UI | 3 | ~21 min | ~7 min |
-| 6. Platform Polish | 2 | ~10 min | ~5 min |
-
-**v2.0 Progress:**
-
-| Phase | Plans | Completed | Status |
-|-------|-------|-----------|--------|
-| 7. Async Execution | 2 | 2 | Complete |
-| 8. Expanded DSL | 2 | 2 | Complete |
-| 9. Robustness | 2 | 2 | Complete |
-| 10. UX Polish | 4 | 4 | Complete |
+**v2.0 Velocity:**
+- Total plans completed: 9
+- Phases: 4
+- All phases complete
 
 ## Accumulated Context
 
@@ -83,5 +68,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 10-04-PLAN.md (v2.0 complete)
+Stopped at: Milestone v2.1 initialized
 Resume file: None
