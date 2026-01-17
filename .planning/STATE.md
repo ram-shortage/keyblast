@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 7 of 10 (Async Execution)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-17 — Completed 07-01-PLAN.md (Async Infrastructure)
+Last activity: 2026-01-17 — Completed 07-02-PLAN.md (Wire Async Execution)
 
-Progress: ██████░░░░ 63% (v1.0 complete, v2.0 Phase 7 Plan 1 done)
+Progress: ███████░░░ 68% (v1.0 complete, v2.0 Phase 7 Plan 2 done)
 
 ## Performance Metrics
 
@@ -38,7 +38,7 @@ Progress: ██████░░░░ 63% (v1.0 complete, v2.0 Phase 7 Plan 1
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 7. Async Execution | 3 | 1 | In progress |
+| 7. Async Execution | 3 | 2 | In progress |
 | 8. Stop Hotkey | 2 | 0 | Not started |
 | 9. Execution Status | 3 | 0 | Not started |
 | 10. Polish | 3 | 0 | Not started |
@@ -52,6 +52,8 @@ Progress: ██████░░░░ 63% (v1.0 complete, v2.0 Phase 7 Plan 1
 | Unbounded crossbeam channel | 07-01 | Avoid deadlock scenarios with bounded channels |
 | 50ms stop flag check interval | 07-01 | Balance responsiveness and efficiency during delays |
 | ExecutionCommand enum pattern | 07-01 | Clean worker-to-main communication (Inject/Complete/Cancelled) |
+| Sync fast path for short macros | 07-02 | Avoid async overhead for <= 10 segments with no delay |
+| Collect-then-process pattern | 07-02 | Satisfy Rust borrow checker when processing commands |
 
 ### Pending Todos
 
@@ -64,6 +66,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 07-01-PLAN.md (Async Infrastructure)
+Stopped at: Completed 07-02-PLAN.md (Wire Async Execution)
 Resume file: None
-Next plan: .planning/phases/07-async-execution/07-02-PLAN.md
+Next plan: .planning/phases/07-async-execution/07-03-PLAN.md
