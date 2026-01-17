@@ -1,11 +1,12 @@
 # Requirements: KeyBlast
 
 **Defined:** 2026-01-16
+**Updated:** 2026-01-17 (v2.0 requirements added)
 **Core Value:** Press a hotkey, get consistent keystrokes injected instantly — no clipboard, no context switching, works in any application.
 
-## v1 Requirements
+## v1 Requirements (Complete)
 
-Requirements for initial release. Each maps to roadmap phases.
+All v1.0 requirements delivered and shipped.
 
 ### System Tray
 
@@ -45,17 +46,38 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **PLAT-03**: User can enable auto-start at login
 - [x] **PLAT-04**: macOS user is guided through Accessibility permission grant
 
-## v2 Requirements
+## v2 Requirements (Active)
 
-Deferred to future release. Tracked but not in current roadmap.
+Requirements for v2.0 Quality & Power release.
 
-### Configuration
+### UX Improvements
 
-- **CONF-07**: Config auto-reloads when edited externally
+- [ ] **UX-01**: User can search/filter macros by name in tray menu
+- [ ] **UX-02**: User can run macro by clicking menu item (not just hotkey)
+- [ ] **UX-03**: User can access file logs via "Open Logs..." menu item
+- [ ] **UX-04**: User's enabled/disabled state persists across restarts
+- [ ] **UX-05**: App has a unique, recognizable icon (tray and app)
 
-### Organization
+### Async Execution
 
-- **ORGN-02**: User can search/filter macros by name
+- [ ] **ASYNC-01**: Macro execution runs off event loop thread (non-blocking)
+- [ ] **ASYNC-02**: User can stop a running macro via hotkey or menu
+- [ ] **ASYNC-03**: Tray menu stays responsive during long macro execution
+
+### Expanded DSL
+
+- [ ] **DSL-01**: User can insert `{Delay 500}` to pause mid-macro (milliseconds)
+- [ ] **DSL-02**: User can use `{KeyDown Ctrl}` / `{KeyUp Ctrl}` for modifier combos
+- [ ] **DSL-03**: User can use `{Paste}` to paste clipboard contents
+- [ ] **DSL-04**: User can use `{{` / `}}` for literal brace characters
+
+### Robustness
+
+- [ ] **ROBUST-01**: App validates config and detects duplicate names/hotkeys
+- [ ] **ROBUST-02**: Conflicts are surfaced in tray menu (not just println)
+- [ ] **ROBUST-03**: Macro delete uses stable IDs instead of names
+- [ ] **ROBUST-04**: Import merge correctly de-dupes within imported file
+- [ ] **ROBUST-05**: Windows config save works (fix fs::rename overwrite)
 
 ## Out of Scope
 
@@ -70,10 +92,13 @@ Explicitly excluded. Documented to prevent scope creep.
 | Scripting/conditionals | Simple sequence playback only |
 | Cloud sync | Offline-only by design |
 | Rich text/images | Keystroke injection is plain text |
+| GUI config editor | Tray menu + TOML file editing sufficient for v2 |
 
 ## Traceability
 
 Which phases cover which requirements. Updated by create-roadmap.
+
+### v1.0 (Complete)
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
@@ -98,11 +123,33 @@ Which phases cover which requirements. Updated by create-roadmap.
 | PLAT-03 | Phase 6 | Complete |
 | PLAT-04 | Phase 6 | Complete |
 
+### v2.0 (Pending)
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| UX-01 | TBD | Pending |
+| UX-02 | TBD | Pending |
+| UX-03 | TBD | Pending |
+| UX-04 | TBD | Pending |
+| UX-05 | TBD | Pending |
+| ASYNC-01 | TBD | Pending |
+| ASYNC-02 | TBD | Pending |
+| ASYNC-03 | TBD | Pending |
+| DSL-01 | TBD | Pending |
+| DSL-02 | TBD | Pending |
+| DSL-03 | TBD | Pending |
+| DSL-04 | TBD | Pending |
+| ROBUST-01 | TBD | Pending |
+| ROBUST-02 | TBD | Pending |
+| ROBUST-03 | TBD | Pending |
+| ROBUST-04 | TBD | Pending |
+| ROBUST-05 | TBD | Pending |
+
 **Coverage:**
-- v1 requirements: 20 total
-- Mapped to phases: 20 ✓
-- Unmapped: 0
+- v1 requirements: 20 total (Complete)
+- v2 requirements: 17 total (Pending)
+- Mapped to phases: v2 TBD (run /gsd:create-roadmap)
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after Phase 6 completion*
+*Last updated: 2026-01-17 after v2.0 requirements definition*
