@@ -393,7 +393,8 @@ impl ApplicationHandler<AppEvent> for KeyBlastApp {
                                 macro_def.name, mode_name, macro_def.text
                             );
 
-                            if macro_def.delay_ms == 0 && segments.len() <= 10 {
+                            let has_delay = segments.iter().any(|s| matches!(s, injection::MacroSegment::Delay(_)));
+                            if macro_def.delay_ms == 0 && segments.len() <= 10 && !has_delay {
                                 // Fast path: short macros with no delay run synchronously
                                 // This avoids overhead for simple text expansion
                                 match injector.execute_sequence(&segments, 0) {
