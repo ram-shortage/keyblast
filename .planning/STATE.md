@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 12 of 14 (Error Notifications)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — Added Phase 14 (macOS App Bundle)
+Plan: 01 of 01 complete
+Status: Phase complete
+Last activity: 2026-01-17 — Completed 12-01-PLAN.md (Error Notifications)
 
-Progress: ██████████████░░░░░░ 79% (11/14 phases complete)
+Progress: ████████████████░░░░ 86% (12/14 phases complete)
 
 ## Performance Metrics
 
@@ -27,6 +27,11 @@ Progress: ██████████████░░░░░░ 79% (11/1
 - Total plans completed: 9
 - Phases: 4
 - All phases complete
+
+**v2.1 Velocity:**
+- Plans completed: 2
+- Phases started: 2 (11-windows-polish, 12-error-notifications)
+- Phases complete: 2
 
 ## Accumulated Context
 
@@ -59,6 +64,9 @@ Progress: ██████████████░░░░░░ 79% (11/1
 | Multi-size ICO (16,32,48,256) | 11-01 | Covers all Windows display contexts |
 | CARGO_CFG_TARGET_OS check | 11-01 | build.rs runs on host, use env var for cross-compilation |
 | windows_subsystem attribute | 11-01 | Standard Rust approach for GUI apps |
+| 3s notification debounce | 12-01 | Prevent spam on rapid failures, permission errors bypass |
+| 5s injection timeout, persistent permission | 12-01 | Injection failures informational, permission requires action |
+| Notifications supplement logging | 12-01 | Keep eprintln!/error! for logs, add toast for user visibility |
 
 ### Pending Todos
 
@@ -70,6 +78,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-17T11:44:19Z
-Stopped at: Completed 11-01-PLAN.md (Phase 11 complete)
+Last session: 2026-01-17T12:04:00Z
+Stopped at: Completed 12-01-PLAN.md (Phase 12 complete)
 Resume file: None
