@@ -85,6 +85,22 @@ v1.0 shipped and is functional. v2.0 focuses on:
 
 The codebase is ~600 lines of Rust across 7 modules. Well-structured for extension.
 
+## Build Instructions
+
+**macOS (native):**
+```bash
+cargo build --release
+# Output: target/release/keyblast
+```
+
+**Windows (cross-compile from macOS):**
+```bash
+cargo build --release --target x86_64-pc-windows-gnu
+# Output: target/x86_64-pc-windows-gnu/release/keyblast.exe
+```
+
+Requires: `rustup target add x86_64-pc-windows-gnu` and MinGW toolchain.
+
 ## Constraints
 
 - **Tech stack**: Pure Rust — no web frontend, system tray menu only for UI
