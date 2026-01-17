@@ -103,6 +103,24 @@ pub fn validate_config(config: &Config) -> Vec<ValidationWarning> {
     warnings
 }
 
+/// Application-level settings persisted across restarts.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct AppSettings {
+    /// Whether macros are enabled (default: true for new installs)
+    #[serde(default = "default_enabled")]
+    pub enabled: bool,
+}
+
+fn default_enabled() -> bool {
+    true
+}
+
+impl Default for AppSettings {
+    fn default() -> Self {
+        Self { enabled: true }
+    }
+}
+
 /// A single macro definition.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct MacroDefinition {
@@ -132,6 +150,9 @@ pub struct Config {
     /// List of macro definitions.
     #[serde(default)]
     pub macros: Vec<MacroDefinition>,
+    /// Application settings (enabled state, etc.)
+    #[serde(default)]
+    pub settings: AppSettings,
 }
 
 fn default_version() -> u32 {
@@ -143,6 +164,7 @@ impl Default for Config {
         Self {
             version: 1,
             macros: Vec::new(),
+            settings: AppSettings::default(),
         }
     }
 }
@@ -220,6 +242,7 @@ pub fn export_macros(macros: &[MacroDefinition], path: &std::path::Path) -> Resu
     let export_config = Config {
         version: 1,
         macros: macros.to_vec(),
+        settings: AppSettings::default(),
     };
     let content = toml::to_string_pretty(&export_config)?;
     fs::write(path, content)?;
@@ -391,6 +414,7 @@ mod tests {
         let config = Config::default();
         assert_eq!(config.version, 1);
         assert!(config.macros.is_empty());
+        assert!(config.settings.enabled); // Default is enabled
     }
 
     #[test]
@@ -415,6 +439,7 @@ mod tests {
                     group: Some("Work".to_string()),
                 },
             ],
+            settings: AppSettings { enabled: false },
         };
 
         // Serialize to TOML
@@ -676,5 +701,53 @@ text = "unique"
         assert_eq!(imported[0].name, "test");
         assert_eq!(imported[0].text, "first"); // First one wins
         assert_eq!(imported[1].name, "unique");
+    }
+
+    #[test]
+    fn test_settings_default_enabled() {
+        // Config without settings field should deserialize with enabled=true
+        let toml_str = r#"
+version = 1
+[[macros]]
+name = "test"
+hotkey = "ctrl+k"
+text = "hello"
+"#;
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert!(config.settings.enabled, "Default should be enabled=true");
+    }
+
+    #[test]
+    fn test_settings_disabled_deserialize() {
+        // Config with settings.enabled=false should deserialize correctly
+        let toml_str = r#"
+version = 1
+
+[settings]
+enabled = false
+
+[[macros]]
+name = "test"
+hotkey = "ctrl+k"
+text = "hello"
+"#;
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert!(!config.settings.enabled, "Should deserialize enabled=false");
+    }
+
+    #[test]
+    fn test_settings_roundtrip() {
+        // Roundtrip serialization should preserve settings
+        let config = Config {
+            version: 1,
+            macros: vec![],
+            settings: AppSettings { enabled: false },
+        };
+
+        let toml_str = toml::to_string_pretty(&config).unwrap();
+        let parsed: Config = toml::from_str(&toml_str).unwrap();
+
+        assert_eq!(config.settings.enabled, parsed.settings.enabled);
+        assert!(!parsed.settings.enabled, "Roundtrip should preserve enabled=false");
     }
 }
