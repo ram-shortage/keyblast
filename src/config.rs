@@ -270,6 +270,46 @@ pub fn dedupe_macros(macros: Vec<MacroDefinition>) -> Vec<MacroDefinition> {
     macros.into_iter().filter(|m| seen.insert(m.name.clone())).collect()
 }
 
+/// Create default example macros for new users.
+///
+/// Returns 3 example macros demonstrating KeyBlast's DSL features:
+/// 1. Hello World - Basic text with Enter key
+/// 2. Form Navigation - Tab for field navigation
+/// 3. Signature Block - Delay for pacing, multi-line text
+///
+/// Hotkeys use Ctrl+Shift+letter to avoid conflicts with common shortcuts.
+pub fn default_example_macros() -> Vec<MacroDefinition> {
+    vec![
+        // Basic intro: simple text and Enter
+        MacroDefinition {
+            id: Uuid::new_v4(),
+            name: "Hello World".to_string(),
+            hotkey: "ctrl+shift+h".to_string(),
+            text: "Hello from KeyBlast!{Enter}".to_string(),
+            delay_ms: 0,
+            group: Some("Examples".to_string()),
+        },
+        // Special keys: Tab for field navigation
+        MacroDefinition {
+            id: Uuid::new_v4(),
+            name: "Form Navigation".to_string(),
+            hotkey: "ctrl+shift+n".to_string(),
+            text: "John Doe{Tab}john@example.com{Tab}{Tab}{Enter}".to_string(),
+            delay_ms: 0,
+            group: Some("Examples".to_string()),
+        },
+        // DSL features: Delay for pacing, multi-line
+        MacroDefinition {
+            id: Uuid::new_v4(),
+            name: "Signature Block".to_string(),
+            hotkey: "ctrl+shift+s".to_string(),
+            text: "Best regards,{Enter}{Delay 100}-- {Enter}Your Name{Enter}your@email.com".to_string(),
+            delay_ms: 0,
+            group: Some("Examples".to_string()),
+        },
+    ]
+}
+
 /// Import macros from a TOML file.
 ///
 /// Parses a config file and returns the macros array.
