@@ -3,6 +3,7 @@
 /// Provides persistent storage of macro definitions in a TOML configuration file.
 /// Handles cross-platform config paths and serialization/deserialization.
 
+use std::collections::HashMap;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
@@ -48,6 +49,57 @@ impl From<toml::ser::Error> for ConfigError {
     fn from(e: toml::ser::Error) -> Self {
         ConfigError::Serialize(e)
     }
+}
+
+/// Warnings found during config validation.
+#[derive(Debug, Clone)]
+pub enum ValidationWarning {
+    DuplicateName(String),
+    DuplicateHotkey { hotkey: String, names: Vec<String> },
+}
+
+impl std::fmt::Display for ValidationWarning {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ValidationWarning::DuplicateName(name) => {
+                write!(f, "Duplicate macro name: '{}'", name)
+            }
+            ValidationWarning::DuplicateHotkey { hotkey, names } => {
+                write!(f, "Hotkey '{}' used by multiple macros: {}", hotkey, names.join(", "))
+            }
+        }
+    }
+}
+
+/// Validate config and return any warnings.
+/// Does NOT modify the config - caller decides what to do with warnings.
+pub fn validate_config(config: &Config) -> Vec<ValidationWarning> {
+    let mut warnings = Vec::new();
+
+    // Check for duplicate names
+    let mut seen_names: HashMap<String, usize> = HashMap::new();
+    for macro_def in &config.macros {
+        *seen_names.entry(macro_def.name.clone()).or_insert(0) += 1;
+    }
+    for (name, count) in &seen_names {
+        if *count > 1 {
+            warnings.push(ValidationWarning::DuplicateName(name.clone()));
+        }
+    }
+
+    // Check for duplicate hotkeys
+    let mut hotkey_to_names: HashMap<String, Vec<String>> = HashMap::new();
+    for macro_def in &config.macros {
+        let normalized = macro_def.hotkey.to_lowercase();
+        hotkey_to_names.entry(normalized).or_default().push(macro_def.name.clone());
+    }
+    for (hotkey, names) in hotkey_to_names {
+        if names.len() > 1 {
+            warnings.push(ValidationWarning::DuplicateHotkey { hotkey, names });
+        }
+    }
+
+    warnings
 }
 
 /// A single macro definition.
