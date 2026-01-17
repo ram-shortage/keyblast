@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 /// KeyBlast - A lightweight macro playback application.
 ///
 /// Sits in the system tray and provides hotkey-triggered keystroke injection.
